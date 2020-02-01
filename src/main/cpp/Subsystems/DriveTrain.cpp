@@ -152,3 +152,26 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
 double DriveTrain::GetHeading() {
   return std::remainder(m_gyro.GetAngle(), 360);
 }
+
+void DriveTrain::ResetEncoders() {
+    m_leftEncoder.SetPosition(0.0);
+    m_rightEncoder.SetPosition(0.0);
+}
+
+void DriveTrain::ResetOdometry(frc::Pose2d pose) {
+    ResetEncoders();
+    m_odometry.ResetPosition(pose,
+                frc::Rotation2d(units::degree_t(GetHeading())));
+}
+
+void DriveTrain::SetMaxOutput(double maxOutput) {
+    m_Drive.SetMaxOutput(maxOutput);
+}
+
+double DriveTrain::GetHeading() {
+    return std::remainder(m_gyro.GetAngle(), 360) * (kGyroReverse ? -1.0 : 1.0);
+}
+
+double DriveTrain::GetTurnRate() {
+    return m_gyro.GetRate() * (kGyroReverse ? -1.0 : 1.0);
+}
