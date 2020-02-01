@@ -52,7 +52,15 @@ AddChild("PowerDistributionPanel", powerDistributionPanel);
     m_pidControllerL.SetSmartMotionMaxAccel(maxAccelPerSec);
     m_pidControllerR.SetSmartMotionMaxAccel(maxAccelPerSec);
     
+    // Set kFF and kP ( after tuning, since gains have been already been determined )
+    m_pidControllerL.SetP(kP);
+    m_pidControllerR.SetP(kP);
 
+    m_pidControllerL.SetFF(kFF);
+    m_pidControllerR.SetFF(kFF);
+
+
+    
 }
 
 void DriveTrain::InitDefaultCommand() {
