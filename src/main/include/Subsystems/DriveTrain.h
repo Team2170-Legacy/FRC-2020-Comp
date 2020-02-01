@@ -66,10 +66,11 @@ std::shared_ptr<frc::PowerDistributionPanel> powerDistributionPanel;
 	const double maxRPM = 5600;
 	const double maxFeetPerSec;
 	const double maxAccelPerSec;
+	const bool kGyroReverse = false;
 
 
 
-	frc::DifferentialDrive m_robotDrive{m_leftLead, m_rightLead};
+	frc::DifferentialDrive m_Drive{m_leftLead, m_rightLead};
 	frc::DifferentialDriveOdometry m_odometry{frc::Rotation2d(units::degree_t(GetHeading()))};
 	frc::ADXRS450_Gyro m_gyro;
 public:
