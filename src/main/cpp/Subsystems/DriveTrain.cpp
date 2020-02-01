@@ -149,9 +149,6 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
 
 // Put methods for controlling this subsystem
 // here. Call these from Commands.
-double DriveTrain::GetHeading() {
-  return std::remainder(m_gyro.GetAngle(), 360);
-}
 
 void DriveTrain::ResetEncoders() {
     m_leftEncoder.SetPosition(0.0);
