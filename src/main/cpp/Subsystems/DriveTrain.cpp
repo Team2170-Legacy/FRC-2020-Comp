@@ -38,11 +38,20 @@ AddChild("PowerDistributionPanel", powerDistributionPanel);
     m_leftFollow.Follow(m_leftLead);
     m_rightFollow.Follow(m_rightLead);
 
-    //Encoder Converting factors 
+    // Set encoder converting factors 
     m_leftEncoder.SetPositionConversionFactor((M_PI * kWheelDiameter / (kGearRatio * 60.0 * 12.0)));
     m_rightEncoder.SetPositionConversionFactor((M_PI * kWheelDiameter / (kGearRatio * 60.0 * 12.0)));
     m_leftEncoder.SetPositionConversionFactor((M_PI * kWheelDiameter) / (kGearRatio * 12.0));
     m_rightEncoder.SetPositionConversionFactor((M_PI * kWheelDiameter) / (kGearRatio * 12.0));
+
+    // Set min/max power
+    m_pidControllerL.SetOutputRange(kMinOutput, kMaxOutput);
+    m_pidControllerR.SetOutputRange(kMinOutput, kMaxOutput);
+    m_pidControllerL.SetSmartMotionMaxVelocity(maxFeetPerSec);
+    m_pidControllerR.SetSmartMotionMaxVelocity(maxFeetPerSec);
+    m_pidControllerL.SetSmartMotionMaxAccel(maxAccelPerSec);
+    m_pidControllerR.SetSmartMotionMaxAccel(maxAccelPerSec);
+    
 
 }
 
@@ -181,16 +190,12 @@ double DriveTrain::GetTurnRate() {
 
 frc::Pose2d DriveTrain::GetPose() {return m_odometry.GetPose();}
 frc::DifferentialDriveWheelSpeeds DriveTrain::GetWheelSpeeds(){
-    return {units::meters_per_second_t(m_leftEncoder.GetVelocity(),
-    units::meters_per_second_t(m_rightEncoder.GetVelocity()))};
+    return {units::feet_per_second_t(m_leftEncoder.GetVelocity(),
+    units::feet_per_second_t(m_rightEncoder.GetVelocity()))};
 }
 double DriveTrain::GetAverageEncoderDistance( ) {
     return(m_leftEncoder.GetPosition() + m_rightEncoder.GetPosition()) /2.0;
 }
-
-
-
-
 
 
 
