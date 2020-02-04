@@ -22,6 +22,12 @@ void TeleopDrive::Execute() {
   double xAxis = Robot::oi->getDriverJoystick()->GetRawAxis(1);
   double yAxis = Robot::oi->getDriverJoystick()->GetRawAxis(4);
 
+  double speedPos = Robot::oi->getDriverJoystick()->GetRawAxis(3);
+  double speedNeg = Robot::oi->getDriverJoystick()->GetRawAxis(2);
+
+  double speedVoltage = 0.0;
+  double speedVelocity = 0.0;
+
   Robot::driveTrain->VelocityArcadeDrive(-xAxis, -yAxis, true);
 }
 
