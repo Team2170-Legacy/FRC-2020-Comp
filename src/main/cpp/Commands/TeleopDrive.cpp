@@ -18,32 +18,27 @@ TeleopDrive::TeleopDrive() {
 void TeleopDrive::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void TeleopDrive::Execute() {
+void TeleopDrive::Execute()
+{
   double xAxis = Robot::oi->getDriverJoystick()->GetRawAxis(1);
-  double yAxis = Robot::oi->getDriverJoystick()->GetRawAxis(4);
+  //double yAxis = Robot::oi->getDriverJoystick()->GetRawAxis(4);
 
   double speedPos = Robot::oi->getDriverJoystick()->GetRawAxis(3);
   double speedNeg = Robot::oi->getDriverJoystick()->GetRawAxis(2);
 
-  double speedVoltage = 0.0;
   double speedVelocity = 0.0;
 
-
-  {
-    if(speedNeg > 0.05){
-            speedVelocity = -speedNeg;
-        } else if(speedPos > 0.05){
-            speedVelocity = speedPos;
-        } else {
-            speedVelocity = 0.0;
-        }
-    
-
-  
-
+  if (speedNeg > 0.05) {
+    speedVelocity = -speedNeg;
+  }
+  else if (speedPos > 0.05) {
+    speedVelocity = speedPos;
+  }
+  else {
+    speedVelocity = 0.0;
   }
 
-  Robot::driveTrain->VelocityArcadeDrive(-xAxis, -yAxis, true);
+  Robot::driveTrain->VelocityArcadeDrive(-xAxis, -speedVelocity, true);
 }
 
 // Make this return true when this Command no longer needs to run execute()
