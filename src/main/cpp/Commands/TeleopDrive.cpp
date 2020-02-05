@@ -28,6 +28,21 @@ void TeleopDrive::Execute() {
   double speedVoltage = 0.0;
   double speedVelocity = 0.0;
 
+
+  {
+    if(speedNeg > 0.05){
+            speedVelocity = -speedNeg;
+        } else if(speedPos > 0.05){
+            speedVelocity = speedPos;
+        } else {
+            speedVelocity = 0.0;
+        }
+    
+
+  
+
+  }
+
   Robot::driveTrain->VelocityArcadeDrive(-xAxis, -yAxis, true);
 }
 
