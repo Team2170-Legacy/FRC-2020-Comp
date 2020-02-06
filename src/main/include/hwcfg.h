@@ -5,12 +5,15 @@ enum CANIDs {
 	kLeftFollowID = 3,
 	kRightLeadID = 1,
     kRightFollowID = 2,
-	kShooterMotorID = 5
+	kShooterMotorID = 5,
+	kIntakeMotorID = 6
 };
 
 enum PCMIDs {
     kHoodSolFwd = 0,
-    kHoodSolRev = 1
+    kHoodSolRev = 1,
+	kIntakeSolFwd = 2,
+	kIntakeSolRev = 3
 };
 
 enum PWMIDs {
