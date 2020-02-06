@@ -48,7 +48,7 @@ private:
 	double CommandedVelocity = 0.0;
 	bool ShooterEnabled = false;
 
-	frc::DoubleSolenoid m_solHood{0, 1};
+	frc::DoubleSolenoid m_solHood{PCMIDs::kHoodSolFwd, PCMIDs::kHoodSolRev};
 
 public:
 Shooter();
