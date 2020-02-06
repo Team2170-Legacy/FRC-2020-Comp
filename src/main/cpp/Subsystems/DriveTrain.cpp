@@ -167,9 +167,19 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
     m_pidControllerR.SetReference(rightMotorSpeed, rev::ControlType::kSmartVelocity);
 }
 
-void DriveTrain::TankDriveVolts(double leftVoltage, double rightVoltage) {
+/**
+ * @brief Set voltage for left and right wheel motors (open loop)
+ * 
+ * @param leftVoltage voltage command for left wheel
+ * @param rightVoltage voltage command for right wheel
+ */
+void DriveTrain::SetWheelVolts(double leftVoltage, double rightVoltage) {
     m_pidControllerL.SetReference(leftVoltage, rev::ControlType::kVoltage);
     m_pidControllerR.SetReference(rightVoltage, rev::ControlType::kVoltage);
+}
+
+void DriveTrain::SetWheelVolts(double voltage) {
+    SetWheelVolts(voltage, voltage);
 }
 
 void DriveTrain::ResetEncoders() {
@@ -203,6 +213,7 @@ frc::DifferentialDriveWheelSpeeds DriveTrain::GetWheelSpeeds(){
 double DriveTrain::GetAverageEncoderDistance( ) {
     return(m_leftEncoder.GetPosition() + m_rightEncoder.GetPosition()) /2.0;
 }
+
 /**
  * @brief Set wheel velocity of left and right wheels (FPS)
  * 

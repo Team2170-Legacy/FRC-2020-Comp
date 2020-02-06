@@ -80,7 +80,8 @@ DriveTrain();
 
 	// drive control methods
 	void VelocityArcadeDrive(double xSpeed, double zRotation, bool squaredInputs = true);
-	void TankDriveVolts(double left, double right);
+	void SetWheelVolts(double left, double right);
+	void SetWheelVolts(double voltage);
 	void SetWheelVelocity(double left, double right);
 	void SetWheelVelocity(double velocity);
 
