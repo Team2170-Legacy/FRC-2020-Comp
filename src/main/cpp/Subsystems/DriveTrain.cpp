@@ -205,6 +205,7 @@ double DriveTrain::GetTurnRate() {
 }
 
 frc::Pose2d DriveTrain::GetPose() {return m_odometry.GetPose();}
+
 frc::DifferentialDriveWheelSpeeds DriveTrain::GetWheelSpeeds(){
     return {units::feet_per_second_t(m_leftEncoder.GetVelocity(),
     units::feet_per_second_t(m_rightEncoder.GetVelocity()))};
