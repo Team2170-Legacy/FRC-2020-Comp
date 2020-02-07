@@ -11,7 +11,7 @@
 TeleopDrive::TeleopDrive() {
   // Use Requires() here to declare subsystem dependencies
   // eg. Requires(Robot::chassis.get());
-  Requires(Robot::driveTrain.get());
+//  Requires(Robot::driveTrain.get());
 }
 
 // Called just before this Command runs the first time
@@ -47,8 +47,4 @@ bool TeleopDrive::IsFinished() {
   }
 
 // Called once after isFinished returns true
-void TeleopDrive::End() {}
-
-// Called when another command which requires one or more of the same
-// subsystems is scheduled to run
-void TeleopDrive::Interrupted() {}
+void TeleopDrive::End(bool interrupted) {}
