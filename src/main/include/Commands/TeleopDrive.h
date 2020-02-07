@@ -7,15 +7,14 @@
 
 #pragma once
 
-#include <frc/commands/Command.h>
+#include <frc2/command/Command.h>
 #include "Robot.h"
 
-class TeleopDrive : public frc::Command {
+class TeleopDrive :  public frc2::CommandHelper<frc2::CommandBase, TeleopDrive> {
  public:
   TeleopDrive();
   void Initialize() override;
   void Execute() override;
   bool IsFinished() override;
-  void End() override;
-  void Interrupted() override;
+  void End(bool interrupted) override;
 };
