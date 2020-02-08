@@ -177,6 +177,7 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
 void DriveTrain::SetWheelVolts(double leftVoltage, double rightVoltage) {
     m_pidControllerL.SetReference(leftVoltage, rev::ControlType::kVoltage);
     m_pidControllerR.SetReference(rightVoltage, rev::ControlType::kVoltage);
+    m_Drive.FeedWatchdog();
 }
 
 void DriveTrain::SetWheelVolts(double voltage) {
@@ -225,6 +226,7 @@ double DriveTrain::GetAverageEncoderDistance( ) {
 void DriveTrain::SetWheelVelocity(double left, double right) {
     m_pidControllerL.SetReference(left, rev::ControlType::kVelocity);
     m_pidControllerR.SetReference(right, rev::ControlType::kVelocity);
+    m_Drive.FeedWatchdog();
 }
 
 /**
