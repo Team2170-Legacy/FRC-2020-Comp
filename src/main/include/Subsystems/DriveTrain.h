@@ -90,6 +90,7 @@ DriveTrain();
 	void SetMaxOutput(double maxOutput);
 	double GetHeading();
 	double GetTurnRate();
+	void InitDefaultCommand();
 	frc::Pose2d GetPose();
 	frc::DifferentialDriveWheelSpeeds GetWheelSpeeds();
 	void ResetOdometry(frc::Pose2d pose);

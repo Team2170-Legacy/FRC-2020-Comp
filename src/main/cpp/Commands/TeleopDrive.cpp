@@ -11,7 +11,7 @@
 TeleopDrive::TeleopDrive() {
   // Use Requires() here to declare subsystem dependencies
   // eg. Requires(Robot::chassis.get());
-//  Requires(Robot::driveTrain.get());
+ // Requires(Robot::driveTrain.get());
 }
 
 // Called just before this Command runs the first time
@@ -20,8 +20,9 @@ void TeleopDrive::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void TeleopDrive::Execute()
 {
+  std::cout << "print" << std::endl;
   double xAxis = Robot::oi->getDriverJoystick()->GetRawAxis(1);
-  double yAxis = Robot::oi->getDriverJoystick()->GetRawAxis(4);
+  //double yAxis = Robot::oi->getDriverJoystick()->GetRawAxis(4);
 
   double speedPos = Robot::oi->getDriverJoystick()->GetRawAxis(3);
   double speedNeg = Robot::oi->getDriverJoystick()->GetRawAxis(2);
@@ -38,7 +39,8 @@ void TeleopDrive::Execute()
     speedVelocity = 0.0;
   }
 
-  Robot::driveTrain->VelocityArcadeDrive(-yAxis, -speedVelocity, true);
+  Robot::driveTrain->VelocityArcadeDrive(xAxis, speedVelocity, true);
+ // Robot::driveTrian->VelocityArcadeDrive(speedVelocity, yAxis, true);
 }
 
 // Make this return true when this Command no longer needs to run execute()

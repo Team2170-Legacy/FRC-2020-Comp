@@ -34,7 +34,7 @@ Shooter::Shooter() :
     m_pidShooterMotor.SetP(kP);
     m_pidShooterMotor.SetFF(kFF);
 
-    SetHoodHigh();
+   // SetHoodHigh();
 }
 
 void Shooter::Periodic() {
