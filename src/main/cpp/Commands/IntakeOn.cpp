@@ -13,12 +13,12 @@ IntakeOn::IntakeOn(Intake* subsystem) : m_intake{subsystem} {
 }
 
 // Called when the command is initially scheduled.
-void IntakeOn::Initialize() {
-  m_intake->IntakeOn();
-}
+void IntakeOn::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void IntakeOn::Execute() {}
+void IntakeOn::Execute() {
+m_intake->IntakeOn();
+}
 
 // Called once the command ends or is interrupted.
 void IntakeOn::End(bool interrupted) {

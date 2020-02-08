@@ -13,12 +13,12 @@ IntakeReverse::IntakeReverse(Intake* subsystem) : m_intake{subsystem}{
 }
 
 // Called when the command is initially scheduled.
-void IntakeReverse::Initialize() {
-  m_intake->IntakeReverse();
-}
+void IntakeReverse::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void IntakeReverse::Execute() {}
+void IntakeReverse::Execute() {
+m_intake->IntakeReverse();
+}
 
 // Called once the command ends or is interrupted.
 void IntakeReverse::End(bool interrupted) {
