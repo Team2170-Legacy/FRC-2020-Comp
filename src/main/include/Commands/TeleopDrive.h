@@ -7,14 +7,18 @@
 
 #pragma once
 
-#include <frc2/command/Command.h>
-#include "Robot.h"
+#include <frc2/command/CommandBase.h>
+#include <frc2/command/CommandHelper.h>
+#include "Subsystems/DriveTrain.h"
 
 class TeleopDrive :  public frc2::CommandHelper<frc2::CommandBase, TeleopDrive> {
  public:
-  TeleopDrive();
+  TeleopDrive(DriveTrain* subsystem);
   void Initialize() override;
   void Execute() override;
   bool IsFinished() override;
   void End(bool interrupted) override;
+
+private:
+  DriveTrain* m_driveTrain;
 };

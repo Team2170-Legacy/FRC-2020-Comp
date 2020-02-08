@@ -8,6 +8,8 @@
 #include "RobotContainer.h"
 
 RobotContainer::RobotContainer() {
+  m_driveTrain.SetDefaultCommand(TeleopDrive(&m_driveTrain));
+
   // Initialize all of your commands and subsystems here
 
   // Configure the button bindings
