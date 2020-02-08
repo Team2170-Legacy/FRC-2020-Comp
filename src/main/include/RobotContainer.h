@@ -22,7 +22,8 @@
 #include "Commands/TeleopDrive.h"
 #include "Commands/IntakeOn.h"
 #include "Commands/IntakeReverse.h"
-
+#include "Commands/SpinStorage.h"
+#include "Commands/SpinStorageCCW.h"
 #include "frc/XboxController.h"
 
 #include "hwcfg.h"
