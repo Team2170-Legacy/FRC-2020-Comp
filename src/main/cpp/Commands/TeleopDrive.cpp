@@ -21,7 +21,6 @@ void TeleopDrive::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void TeleopDrive::Execute()
 {
-  std::cout << "print" << std::endl;
   double xAxis = Robot::oi->getDriverJoystick()->GetRawAxis(1);
   //double yAxis = Robot::oi->getDriverJoystick()->GetRawAxis(4);
 
@@ -40,7 +39,7 @@ void TeleopDrive::Execute()
     speedVelocity = 0.0;
   }
 
-  m_driveTrain->VelocityArcadeDrive(xAxis, speedVelocity, true);
+  m_driveTrain->VelocityArcadeDrive(-xAxis, speedVelocity, true);
  // Robot::driveTrian->VelocityArcadeDrive(speedVelocity, yAxis, true);
 }
 

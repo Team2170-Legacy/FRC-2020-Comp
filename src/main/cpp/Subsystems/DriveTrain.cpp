@@ -75,6 +75,7 @@ void DriveTrain::Periodic() {
     m_odometry.Update(frc::Rotation2d(units::degree_t(GetHeading())),
                         units::meter_t(m_leftEncoder.GetPosition()),
                         units::meter_t(m_rightEncoder.GetPosition()));
+    m_Drive.FeedWatchdog();
 
 }
 
