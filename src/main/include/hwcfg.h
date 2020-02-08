@@ -23,3 +23,8 @@ enum PWMIDs {
 enum DIOIDs {
 
 };
+
+enum HIDIDs {
+	kDriver = 0,
+	kOperator = 1
+};

@@ -6,12 +6,13 @@
 /*----------------------------------------------------------------------------*/
 
 #include "Commands/TeleopDrive.h"
-//#include "Robot.h"
+#include "Robot.h"
 
-TeleopDrive::TeleopDrive() {
+TeleopDrive::TeleopDrive(DriveTrain* subsystem) : m_driveTrain{subsystem} {
   // Use Requires() here to declare subsystem dependencies
   // eg. Requires(Robot::chassis.get());
-//  Requires(Robot::driveTrain.get());
+ // Requires(Robot::driveTrain.get());
+ AddRequirements({subsystem});
 }
 
 // Called just before this Command runs the first time
@@ -38,7 +39,8 @@ void TeleopDrive::Execute()
     speedVelocity = 0.0;
   }
 
-  Robot::driveTrain->VelocityArcadeDrive(-xAxis, -speedVelocity, true);
+  m_driveTrain->VelocityArcadeDrive(-xAxis, speedVelocity, true);
+ // Robot::driveTrian->VelocityArcadeDrive(speedVelocity, yAxis, true);
 }
 
 // Make this return true when this Command no longer needs to run execute()
