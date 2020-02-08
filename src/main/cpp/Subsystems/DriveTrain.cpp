@@ -75,7 +75,6 @@ void DriveTrain::Periodic() {
     m_odometry.Update(frc::Rotation2d(units::degree_t(GetHeading())),
                         units::meter_t(m_leftEncoder.GetPosition()),
                         units::meter_t(m_rightEncoder.GetPosition()));
-    m_Drive.FeedWatchdog();
 
 }
 
@@ -165,6 +164,8 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
     // Send setpoints to pid controllers
     m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kSmartVelocity);
     m_pidControllerR.SetReference(rightMotorSpeed, rev::ControlType::kSmartVelocity);
+    m_Drive.FeedWatchdog();
+
 }
 
 /**
