@@ -20,10 +20,13 @@
 
 #include "Commands/AutonomousCommand.h"
 #include "Commands/TeleopDrive.h"
+#include "Commands/IntakeOn.h"
+#include "Commands/IntakeReverse.h"
 
 #include "frc/XboxController.h"
 
 #include "hwcfg.h"
+
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
