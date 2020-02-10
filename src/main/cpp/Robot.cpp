@@ -25,6 +25,7 @@ void Robot::RobotInit() {
 	// yet. Thus, their Requires() statements may grab null pointers. Bad
 	// news. Don't move it.
 	oi.reset(new OI());
+	robotContainer.reset(new RobotContainer());
 	frc::SmartDashboard::PutData("Auto Modes", &chooser);
 }
 

@@ -18,10 +18,11 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureButtonBindings() {
-  // Configure your button bindings here
+  // Configure your button bindings here6
   frc2::JoystickButton(&m_operator,1).WhileHeld(new IntakeOn(&m_intake));
   frc2::JoystickButton(&m_operator,2).WhileHeld(new IntakeReverse(&m_intake));
-  
+  frc2::JoystickButton(&m_operator,3).WhileHeld(new SpinStorage(&m_feeder));
+  frc2::JoystickButton(&m_operator,4).WhileHeld(new SpinStorageCCW(&m_feeder));
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
