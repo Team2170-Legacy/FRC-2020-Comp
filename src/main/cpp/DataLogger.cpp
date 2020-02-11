@@ -61,11 +61,11 @@ void DataLogger::VisionLogger(std::string name) {
     printf("construct\n");
 	mFilename = name;
 	tLog.open(mFilename, std::ofstream::out | std::ofstream::trunc);
-	tLog << "Time,TargetLocked,VisionDriveActive,Distance,DistanceError,AngleError,Speed,Omega" << std::endl;
+	tLog << "Time,TargetLocked,VisionDriveActive,Distance,DistanceError,AngleError,AngleError_DB,Speed,Omega" << std::endl;
 }
 
-void DataLogger::WriteVisionData(bool targetLocked, bool visionDriveActive, double distance, double distanceError, double angleError, double speed, double omega) {
-    tLog << std::to_string(LogTimer.Get()) + "," +  std::to_string(targetLocked) + "," + std::to_string(visionDriveActive) + "," + std::to_string(distance) + "," + std::to_string(distanceError) + "," + std::to_string(angleError) + "," + std::to_string(speed) + "," + std::to_string(omega) << std::endl;
+void DataLogger::WriteVisionData(bool targetLocked, bool visionDriveActive, double distance, double distanceError, double angleError, double angleError_DB, double speed, double omega) {
+    tLog << std::to_string(LogTimer.Get()) + "," +  std::to_string(targetLocked) + "," + std::to_string(visionDriveActive) + "," + std::to_string(distance) + "," + std::to_string(distanceError) + "," + std::to_string(angleError) + "," + std::to_string(angleError_DB) + "," + std::to_string(speed) + "," + std::to_string(omega) << std::endl;
 }
 
 void DataLogger::LogData(std::string data) {

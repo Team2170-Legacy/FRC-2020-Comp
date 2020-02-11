@@ -22,17 +22,16 @@ Vision::Vision() {
 	camMode = table->GetEntry("camMode");
 	setPipe = table->GetEntry("pipeline");
 	snapshot = table->GetEntry("snapshot");
-    distance = table->GetEntry("distance");
-    distance.SetDouble(0);
-    visionDrive = table->GetEntry("Vision Drive");
-    visionDrive.SetBoolean(false);
+    nt_distance = table->GetEntry("distance");
+    nt_distance.SetDouble(0);
+    nt_visionDrive = table->GetEntry("Vision Drive");
+    nt_visionDrive.SetBoolean(false);
 
-    kP_Omega_Entry = table->GetEntry("Vision kP Omega");
-    kI_Omega_Entry = table->GetEntry("Vision kI Omega");
-    kP_Distance_Entry = table->GetEntry("Vision kP Distance");
-    kI_Omega_Entry.SetDouble(kI_Omega);
-    kP_Omega_Entry.SetDouble(kP_Omega);
-    kP_Distance_Entry.SetDouble(kP_Distance);
+    nt_kP_Omega = table->GetEntry("Vision kP Omega");
+    nt_kI_Omega = table->GetEntry("Vision kI Omega");
+    nt_kP_Distance = table->GetEntry("Vision kP Distance");
+
+    visionLogger.VisionLogger("/home/lvuser/VisionLogs/Vision_Log" + DataLogger::GetTimestamp() + ".csv");
 }
 
 
@@ -40,9 +39,10 @@ void Vision::Periodic() {
     if (!TargetIsLocked()) {
         targetLocked = false;
         visionDriveActive = false;
-        distanceToTarget = 0;
+        distance = 0;
         distanceError = 0;
         angleError = 0;
+        angleError_DB = 0;
         visionSpeed = 0;
         visionOmega = 0;        
     }
@@ -50,21 +50,19 @@ void Vision::Periodic() {
         // calulate distance error
         optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
         double distanceFromTarget = GetDistanceToPowerport();
-        distance.SetDouble(distanceFromTarget);
+        nt_distance.SetDouble(distanceFromTarget);
         double distanceError =  optimalShootingDistance - distanceFromTarget;
 
-        // get angle error
-        double xAngleError = GetXAngleToTarget();
-
         targetLocked = true;
-        distanceToTarget = distanceFromTarget;
+        distance = distanceFromTarget;
         distanceError = distanceError;
-        angleError = xAngleError;
+        angleError = GetXAngleToTarget();
+        angleError_DB = angleError;
         visionSpeed = 0;
         visionOmega = 0;        
     }
-    visionLogger.WriteVisionData(targetLocked, visionDriveActive, distanceToTarget,
-                                 distanceError, angleError, visionSpeed, visionOmega);
+    visionLogger.WriteVisionData(targetLocked, visionDriveActive, distance,
+                                 distanceError, angleError, angleError_DB, visionSpeed, visionOmega);
 }
 
 /**
@@ -154,45 +152,43 @@ void Vision::SetPipeline(Pipeline pipeline) {
  }
 
 void Vision::VisionSteerInit() {
-    visionDrive.SetBoolean(true);
+    nt_visionDrive.SetBoolean(true);
     omegaIntegrator = 0.0;
 }
 
 std::pair<double, double> Vision::SteerToLockedTarget() {
-    // Publish automove flag to true while this code is running
-    visionDrive.SetBoolean(true);
-
+ 
     // calulate distance error
     optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
     double distanceFromTarget = GetDistanceToPowerport();
-    distance.SetDouble(distanceFromTarget);
     double distanceError = optimalShootingDistance - distanceFromTarget;
 
     // get angle error
-    double angleError = GetXAngleToTarget();
+    angleError = GetXAngleToTarget();
+    angleError_DB = angleError;
 
     // deadband angle error
     if (angleError < angleErrorDeadband && angleError > -angleErrorDeadband)
     {
-        angleError = 0;
+        angleError_DB = 0;
     }
     else if (angleError > angleErrorDeadband)
     {
-        angleError -= angleErrorDeadband;
+        angleError_DB = angleError - angleErrorDeadband;
     }
     else
     {
-        angleError += angleErrorDeadband;
+        angleError_DB = angleError + angleErrorDeadband;
     }
 
-    kP_Omega = kP_Omega_Entry.GetDouble(kP_Omega);
-    kI_Omega = kI_Omega_Entry.GetDouble(kI_Omega);
-    kP_Distance = kP_Distance_Entry.GetDouble(kP_Distance);
+    kP_Omega = nt_kP_Omega.GetDouble(kP_Omega);
+    kI_Omega = nt_kI_Omega.GetDouble(kI_Omega);
+    kP_Distance = nt_kP_Distance.GetDouble(kP_Distance);
     double omega = 0.0;
     double speed = 0.0;
 
-    omegaIntegrator += angleError * deltaTime;
-    omega = kP_Omega * angleError;
+    omegaIntegrator += angleError_DB * deltaTime;
+    omega = kP_Omega * angleError_DB;
     omega += omegaIntegrator * kI_Omega;
 
     if (omega > omegaLimiter)
@@ -206,12 +202,14 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
 
     speed = kP_Distance * distanceError;
 
-    // Logger variable updates
+    // Logger and network table variable updates
+    nt_visionDrive.SetBoolean(true);
+    nt_distance.SetDouble(distanceFromTarget);
     targetLocked = true;
     visionDriveActive = true;
-    distanceToTarget = distanceFromTarget;
+    distance = distanceFromTarget;
     distanceError = distanceError;
-    angleError = angleError;
+    angleError = angleError_DB;
     visionSpeed = speed;
     visionOmega = omega;
  
@@ -219,12 +217,12 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
 }
 
 void Vision::VisionSteerEnd() {
-    visionDrive.SetBoolean(false);
+    nt_visionDrive.SetBoolean(false);
     visionDriveActive = false;
 }
 
 void Vision::EnableLogging() {
-    visionLogger.VisionLogger("/home/lvuser/VisionLogs/Vision_Log" + DataLogger::GetTimestamp() + ".csv");
+    visionLogger.StartSession();
 }
 
 void Vision::DisableLogging() {

@@ -43,37 +43,39 @@ private:
 	nt::NetworkTableEntry camMode;
 	nt::NetworkTableEntry setPipe;
 	nt::NetworkTableEntry snapshot;
-	nt::NetworkTableEntry visionDrive;
-	nt::NetworkTableEntry distance;
+	nt::NetworkTableEntry nt_visionDrive;
+	nt::NetworkTableEntry nt_distance;
 	
 	const double powerportVisionTargetHeight= (6 + 9.25/12) + (1 + 5.0/12)/2; // height of the center of the vision target (ft)
 	const double cameraHeight = 21.0/12; // height that the camera is mounted at (ft)
 	const double cameraAngle = 35; // angle camera is mounted at from horizontal (degrees)
 	const double cameraDistanceFromFrontBumper = 15.0/12; // ft
 
-	// globals from Robot.cpp
-	bool targetLocked = false;
-	bool visionDriveActive = false;
-	double distanceToTarget = 0;		//old "distance" interfears with NT distance
-	double distanceError = 0;
-	double angleError = 0;
-	double visionSpeed = 0;
-	double visionOmega = 0;
-
 	DataLogger visionLogger;
-public:
-	nt::NetworkTableEntry kP_Omega_Entry;
-	nt::NetworkTableEntry kI_Omega_Entry;
-	nt::NetworkTableEntry kP_Distance_Entry;
 
 	// For VisionDrive PID controller
+	nt::NetworkTableEntry nt_kP_Omega;
+	nt::NetworkTableEntry nt_kI_Omega;
+	nt::NetworkTableEntry nt_kP_Distance;
 	double angleErrorDeadband = 2;	// deg
 	double kP_Omega = -0.025; 
 	double kI_Omega = -0.02;
-	double omegaLimiter = 0.5;
 	double kP_Distance = 0.0;
+	double omegaLimiter = 0.5;
 	double omegaIntegrator = 0;
 	const double deltaTime = 0.02;
+
+	// globals from Robot.cpp
+	bool targetLocked = false;
+	bool visionDriveActive = false;
+	double distance = 0;	
+	double distanceError = 0;
+	double angleError = 0;
+	double angleError_DB = 0;
+	double visionSpeed = 0;
+	double visionOmega = 0;
+public:
+
 
 	double optimalShootingDistance = 10; // optimal distance from powerport to shoot from (ft)
     enum Pipeline {powerport = 0};
