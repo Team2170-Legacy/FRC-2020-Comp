@@ -9,12 +9,10 @@
 // it from being updated in the future.
 
 
-#ifndef VISIONDRIVE_H
-#define VISIONDRIVE_H
+#pragma once
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include "Robot.h"
 #include "networktables/NetworkTable.h"
 #include "networktables/NetworkTableEntry.h"
 #include "networktables/NetworkTableInstance.h"
@@ -42,5 +40,3 @@ private:
 	Vision* m_vision;
 	DriveTrain* m_drive;
 };
-
-#endif
