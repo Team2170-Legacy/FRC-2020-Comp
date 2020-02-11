@@ -42,6 +42,9 @@ class RobotContainer {
 
   frc2::Command* GetAutonomousCommand();
 
+  void StartDataLogging(void);
+  void EndDataLogging(void);
+
  private:
   // The robot's subsystems and commands are defined here...
   DriveTrain m_driveTrain;

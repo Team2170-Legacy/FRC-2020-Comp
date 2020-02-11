@@ -29,3 +29,11 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
   return &m_autonomousCommand;
 }
+
+void RobotContainer::StartDataLogging() {
+  m_vision.EnableLogging();
+}
+
+void RobotContainer::EndDataLogging() {
+  m_vision.DisableLogging();
+}
