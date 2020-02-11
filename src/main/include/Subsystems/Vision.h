@@ -72,8 +72,8 @@ private:
 	double distanceError = 0;
 	double angleError = 0;
 	double angleError_DB = 0;
-	double visionSpeed = 0;
-	double visionOmega = 0;
+	double speed = 0;
+	double omega = 0;
 public:
 
 

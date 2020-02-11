@@ -39,7 +39,7 @@ void TeleopDrive::Execute()
     speedVelocity = 0.0;
   }
 
-  m_driveTrain->VelocityArcadeDrive(-xAxis, speedVelocity, true);
+  m_driveTrain->VelocityArcadeDrive(-xAxis, -speedVelocity, true);
  // Robot::driveTrian->VelocityArcadeDrive(speedVelocity, yAxis, true);
 }
 

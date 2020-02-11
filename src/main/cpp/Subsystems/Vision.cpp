@@ -43,26 +43,23 @@ void Vision::Periodic() {
         distanceError = 0;
         angleError = 0;
         angleError_DB = 0;
-        visionSpeed = 0;
-        visionOmega = 0;        
+        speed = 0;
+        omega = 0;        
     }
     else if (!visionDriveActive) {
         // calulate distance error
         optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
-        double distanceFromTarget = GetDistanceToPowerport();
-        nt_distance.SetDouble(distanceFromTarget);
-        double distanceError =  optimalShootingDistance - distanceFromTarget;
-
+        distance = GetDistanceToPowerport();
+        nt_distance.SetDouble(distance);
+        distanceError =  optimalShootingDistance - distance;
         targetLocked = true;
-        distance = distanceFromTarget;
-        distanceError = distanceError;
         angleError = GetXAngleToTarget();
         angleError_DB = angleError;
-        visionSpeed = 0;
-        visionOmega = 0;        
+        speed = 0;
+        omega = 0;        
     }
     visionLogger.WriteVisionData(targetLocked, visionDriveActive, distance,
-                                 distanceError, angleError, angleError_DB, visionSpeed, visionOmega);
+                                 distanceError, angleError, angleError_DB, speed, omega);
 }
 
 /**
@@ -160,8 +157,8 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
  
     // calulate distance error
     optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
-    double distanceFromTarget = GetDistanceToPowerport();
-    double distanceError = optimalShootingDistance - distanceFromTarget;
+    distance = GetDistanceToPowerport();
+    distanceError = optimalShootingDistance - distance;
 
     // get angle error
     angleError = GetXAngleToTarget();
@@ -184,8 +181,8 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
     kP_Omega = nt_kP_Omega.GetDouble(kP_Omega);
     kI_Omega = nt_kI_Omega.GetDouble(kI_Omega);
     kP_Distance = nt_kP_Distance.GetDouble(kP_Distance);
-    double omega = 0.0;
-    double speed = 0.0;
+    omega = 0.0;
+    speed = 0.0;
 
     omegaIntegrator += angleError_DB * deltaTime;
     omega = kP_Omega * angleError_DB;
@@ -204,14 +201,9 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
 
     // Logger and network table variable updates
     nt_visionDrive.SetBoolean(true);
-    nt_distance.SetDouble(distanceFromTarget);
+    nt_distance.SetDouble(distance);
     targetLocked = true;
     visionDriveActive = true;
-    distance = distanceFromTarget;
-    distanceError = distanceError;
-    angleError = angleError_DB;
-    visionSpeed = speed;
-    visionOmega = omega;
  
     return std::make_pair(speed, omega);
 }
