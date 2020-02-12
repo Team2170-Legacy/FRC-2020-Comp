@@ -5,24 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/LoaderUp.h"
+#include "Commands/LoaderOff.h"
 
-LoaderUp::LoaderUp(Loader* subsystem) : m_loader{subsystem} {
+// NOTE:  Consider using this command inline, rather than writing a subclass.
+// For more information, see:
+// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
+LoaderOff::LoaderOff(Loader* subsystem) : m_loader{subsystem} {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements({subsystem});
 }
 
 // Called when the command is initially scheduled.
-void LoaderUp::Initialize() {}
-
-// Called repeatedly when this Command is scheduled to run
-void LoaderUp::Execute() {
-  m_loader->LoaderUp();
+void LoaderOff::Initialize() {
+  m_loader->LoaderStop();
 }
-
-// Called once the command ends or is interrupted.
-void LoaderUp::End(bool interrupted) {
-  }
-
-// Returns true when the command should end.
-bool LoaderUp::IsFinished() { return true; }
