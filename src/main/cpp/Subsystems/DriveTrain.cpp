@@ -230,6 +230,20 @@ void DriveTrain::SetWheelVelocity(double left, double right) {
 }
 
 /**
+ * @brief Set wheel velocity of left and right wheels (FPS)
+ * 
+ * @param left wheel velocity in feet per second
+ * @param right wheel velocity in feet per second
+ */
+void DriveTrain::SetWheelVelocity(units::meters_per_second_t left, units::meters_per_second_t right) {
+    units::feet_per_second_t leftFPS = left;
+    units::feet_per_second_t rightFPS = right;
+    m_pidControllerL.SetReference(units::unit_cast<double>(left), rev::ControlType::kVelocity);
+    m_pidControllerR.SetReference(units::unit_cast<double>(right), rev::ControlType::kVelocity);
+    m_Drive.FeedWatchdog();
+}
+
+/**
  * @brief Set left and right to same velocity
  * 
  * @param velocity left and right velocity in feet per second
