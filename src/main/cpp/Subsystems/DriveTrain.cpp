@@ -59,7 +59,7 @@ powerDistributionPanel.reset(new frc::PowerDistributionPanel(0));
     m_pidControllerR.SetFF(kFF);    
     //SetDefaultCommand(new TeleopDrive());
     
-    driveTrainLogger.DriveTrainLogger("/home/lvuser/VisionLogs/DriveTrain_Log_" + DataLogger::GetTimestamp() + ".csv");
+    driveTrainLogger.DriveTrainLogger("/home/lvuser/DriveTrainLogs/DriveTrainLog_" + DataLogger::GetTimestamp() + ".csv");
 }
 
 void DriveTrain::InitDefaultCommand() {
