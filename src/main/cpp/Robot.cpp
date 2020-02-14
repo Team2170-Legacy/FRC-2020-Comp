@@ -33,7 +33,7 @@ void Robot::RobotInit() {
  * You can use it to reset subsystems before shutting down.
  */
 void Robot::DisabledInit(){
-
+	m_container.EndDataLogging();
 }
 
 void Robot::DisabledPeriodic() {
@@ -60,6 +60,8 @@ void Robot::TeleopInit() {
 	// these lines or comment it out.
 	if (autonomousCommand != nullptr)
 		autonomousCommand->Cancel();
+
+	m_container.StartDataLogging();
 }
 
 void Robot::TeleopPeriodic() {
