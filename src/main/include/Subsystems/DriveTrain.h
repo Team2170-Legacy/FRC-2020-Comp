@@ -24,6 +24,7 @@
 #include <frc/geometry/Pose2d.h>
 #include <frc/ADXRS450_Gyro.h>
 #include <frc/geometry/Rotation2d.h>
+#include "DataLogger.h"
 
 
 /**
@@ -69,6 +70,12 @@ std::shared_ptr<frc::PowerDistributionPanel> powerDistributionPanel;
 	frc::DifferentialDrive m_Drive{m_leftLead, m_rightLead};
 	frc::DifferentialDriveOdometry m_odometry{frc::Rotation2d(units::degree_t(GetHeading()))};
 	frc::ADXRS450_Gyro m_gyro;
+
+	// for data logging
+	DataLogger driveTrainLogger;
+	double leftVelocityCommand = 0;
+	double rightVelocityCommand = 0;
+
 public:
 DriveTrain();
 	void Periodic() override;
@@ -94,6 +101,8 @@ DriveTrain();
 	frc::Pose2d GetPose();
 	frc::DifferentialDriveWheelSpeeds GetWheelSpeeds();
 	void ResetOdometry(frc::Pose2d pose);
+	void EnableLogging();
+	void DisableLogging();
 
 
 

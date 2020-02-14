@@ -17,6 +17,8 @@ public:
 	void LogData(std::string data);
     void VisionLogger(std::string name);
     void WriteVisionData(bool targetLocked, bool visionDriveActive, double distance, double distanceError, double angleError, double angleError_DB, double speed, double omega);
+	void DriveTrainLogger(std::string name);
+	void WriteDriveTrainData(double leftVelocityCommand, double rightVelocityCommand, double leftActualVelocity, double rightActualVelocity, double leftLeadVoltage, double leftFollowVoltage, double rightLeadVoltage, double rightFollowVoltage, double leftLeadCurrent, double leftFollowCurrent, double rightLeadCurrent, double rightFollowCurrent);
 	virtual ~DataLogger();
 private:
 	std::ofstream tLog;

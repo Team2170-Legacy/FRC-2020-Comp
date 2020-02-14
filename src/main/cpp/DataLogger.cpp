@@ -68,6 +68,20 @@ void DataLogger::WriteVisionData(bool targetLocked, bool visionDriveActive, doub
     tLog << std::to_string(LogTimer.Get()) + "," +  std::to_string(targetLocked) + "," + std::to_string(visionDriveActive) + "," + std::to_string(distance) + "," + std::to_string(distanceError) + "," + std::to_string(angleError) + "," + std::to_string(angleError_DB) + "," + std::to_string(speed) + "," + std::to_string(omega) << std::endl;
 }
 
+void DataLogger::DriveTrainLogger(std::string name) {
+    printf("construct\n");
+	mFilename = name;
+	tLog.open(mFilename, std::ofstream::out | std::ofstream::trunc);
+	tLog << "Time,LeftVelocityCommand,RightVelocityCommand,LeftActualVelocity,RightActualVelocity,LeftLeadVoltage,LeftFollowVoltage,RightLeadVoltage,RightFollowVoltage,LeftLeadCurrent,LeftFollowCurrent,RightLeadCurrent,RightFollowCurrent" << std::endl;
+}
+
+void DataLogger::WriteDriveTrainData(double leftVelocityCommand, double rightVelocityCommand, double leftActualVelocity, double rightActualVelocity, double leftLeadVoltage, double leftFollowVoltage, double rightLeadVoltage, double rightFollowVoltage, double leftLeadCurrent, double leftFollowCurrent, double rightLeadCurrent, double rightFollowCurrent)
+{
+	 tLog << std::to_string(LogTimer.Get()) + "," +  std::to_string(leftVelocityCommand) + "," + std::to_string(rightVelocityCommand) + "," + std::to_string(leftActualVelocity) + "," + std::to_string(rightActualVelocity) + "," + std::to_string(leftLeadVoltage) + "," + 
+	 std::to_string(leftFollowVoltage) + "," + std::to_string(rightLeadVoltage) + "," + std::to_string(rightFollowVoltage) + "," 
+	 + std::to_string(leftLeadCurrent) + "," + std::to_string(leftFollowCurrent) + "," + std::to_string(rightLeadCurrent) + "," + std::to_string(rightFollowCurrent) + "," << std::endl;
+}
+
 void DataLogger::LogData(std::string data) {
     tLog << std::to_string(LogTimer.Get()) + ", " +  data << std::endl;
 }

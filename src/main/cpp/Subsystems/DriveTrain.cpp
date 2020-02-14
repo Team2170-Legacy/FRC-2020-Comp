@@ -59,6 +59,7 @@ powerDistributionPanel.reset(new frc::PowerDistributionPanel(0));
     m_pidControllerR.SetFF(kFF);    
     //SetDefaultCommand(new TeleopDrive());
     
+    driveTrainLogger.DriveTrainLogger("/home/lvuser/VisionLogs/DriveTrain_Log_" + DataLogger::GetTimestamp() + ".csv");
 }
 
 void DriveTrain::InitDefaultCommand() {
@@ -75,6 +76,18 @@ void DriveTrain::Periodic() {
     m_odometry.Update(frc::Rotation2d(units::degree_t(GetHeading())),
                         units::meter_t(m_leftEncoder.GetPosition()),
                         units::meter_t(m_rightEncoder.GetPosition()));
+
+    double leftVelocity = m_leftEncoder.GetVelocity() * m_leftEncoder.GetVelocityConversionFactor();
+    double rightVelocity = m_leftEncoder.GetVelocity() * m_rightEncoder.GetVelocityConversionFactor();
+    double leftLeadVoltage = m_leftLead.GetBusVoltage();
+    double leftFollowVoltage = m_leftFollow.GetBusVoltage();
+    double rightLeadVoltage = m_rightLead.GetBusVoltage();
+    double rightFollowVoltage = m_rightFollow.GetBusVoltage();
+    double leftLeadCurrent = m_leftLead.GetOutputCurrent();
+    double leftFollowCurrent = m_leftFollow.GetOutputCurrent();
+    double rightLeadCurrent = m_rightLead.GetOutputCurrent();
+    double rightFollowCurrent = m_rightFollow.GetOutputCurrent();
+    driveTrainLogger.WriteDriveTrainData(leftVelocityCommand, rightVelocityCommand, leftVelocity, rightVelocity, leftLeadVoltage, leftFollowVoltage, rightLeadVoltage, rightFollowVoltage, leftLeadCurrent, leftFollowCurrent, rightLeadCurrent, rightFollowCurrent);
 
 }
 
@@ -161,6 +174,9 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
     double leftMotorSpeed = leftMotorOutput * maxFeetPerSec;
     double rightMotorSpeed = rightMotorOutput * -maxFeetPerSec;
 
+    leftVelocityCommand = leftMotorSpeed;
+    rightVelocityCommand = rightMotorSpeed;
+
     // Send setpoints to pid controllers
     m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kSmartVelocity);
     m_pidControllerR.SetReference(rightMotorSpeed, rev::ControlType::kSmartVelocity);
@@ -226,6 +242,8 @@ double DriveTrain::GetAverageEncoderDistance( ) {
 void DriveTrain::SetWheelVelocity(double left, double right) {
     m_pidControllerL.SetReference(left, rev::ControlType::kVelocity);
     m_pidControllerR.SetReference(right, rev::ControlType::kVelocity);
+    leftVelocityCommand = left;
+    rightVelocityCommand = right;
     m_Drive.FeedWatchdog();
 }
 
@@ -236,4 +254,18 @@ void DriveTrain::SetWheelVelocity(double left, double right) {
  */
 void DriveTrain::SetWheelVelocity(double velocity) {
     SetWheelVelocity(velocity, velocity);
+}
+
+/**
+ * @brief starts or resumes vision data logging
+ */
+void DriveTrain::EnableLogging() {
+    driveTrainLogger.StartSession();
+}
+
+/**
+ * @brief ends or pauses vision data logging
+ */
+void DriveTrain::DisableLogging() {
+    driveTrainLogger.EndSession();
 }
