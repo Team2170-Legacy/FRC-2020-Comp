@@ -34,6 +34,8 @@ class Vision: public frc2::SubsystemBase {
 private:
 	// It's desirable that everything possible is private except
 	// for methods that implement subsystem capabilities
+	
+	// network table entries for limelight communication 
 	nt::NetworkTableEntry tx;
 	nt::NetworkTableEntry ty;
 	nt::NetworkTableEntry tv;
@@ -43,30 +45,33 @@ private:
 	nt::NetworkTableEntry camMode;
 	nt::NetworkTableEntry setPipe;
 	nt::NetworkTableEntry snapshot;
+
+	// network table entries for vision drive
 	nt::NetworkTableEntry nt_visionDrive;
 	nt::NetworkTableEntry nt_distance;
-	
-	const double powerportVisionTargetHeight= (6 + 9.25/12) + (1 + 5.0/12)/2; // height of the center of the vision target (ft)
-	const double cameraHeight = 21.0/12; // height that the camera is mounted at (ft)
-	const double cameraAngle = 35; // angle camera is mounted at from horizontal (degrees)
-	const double cameraDistanceFromFrontBumper = 15.0/12; // ft
-
-	DataLogger visionLogger;
-
-	// For VisionDrive PID controller
 	nt::NetworkTableEntry nt_kP_Omega;
 	nt::NetworkTableEntry nt_kI_Omega;
 	nt::NetworkTableEntry nt_kP_Distance;
-	double angleErrorDeadband = 2;	// deg
+	
+	// for distance calculation
+	const double powerportVisionTargetHeight = (6 + 9.25/12) + (1 + 5.0/12)/2; // height of the center of the vision target (ft)
+	const double cameraHeight = 21.0/12; // height that the camera is mounted at (ft)
+	const double cameraAngle = 35; // angle camera is mounted at from horizontal (degrees)
+	const double cameraDistanceFromFrontBumper = 15.0/12; // ft
+	double optimalShootingDistance = 10; // optimal distance from powerport to shoot from (ft)
+
+	// For VisionDrive PID controller
+	double angleErrorDeadband = 2;	// degrees
 	double kP_Omega = -0.025; 
 	double kI_Omega = -0.02;
 	double kP_Distance = 0.0;
 	double omegaLimiter = 0.5;
 	double omegaIntegrator = 0;
+	double speedLimiter = 0.5;
 	const double deltaTime = 0.02;
 
-	// globals from Robot.cpp
-	bool targetLocked = false;
+	// data logging
+	DataLogger visionLogger;
 	bool visionDriveActive = false;
 	double distance = 0;	
 	double distanceError = 0;
@@ -74,14 +79,12 @@ private:
 	double angleError_DB = 0;
 	double speed = 0;
 	double omega = 0;
+
 public:
-
-
-	double optimalShootingDistance = 10; // optimal distance from powerport to shoot from (ft)
+  Vision();
     enum Pipeline {powerport = 0};
 	enum LEDMode {currentPipelineMode = 0, forceOff = 1, forceBlink = 2, forceOn = 3};
 
-Vision();
 	void Periodic() override;
 
 	bool TargetIsLocked();
@@ -92,7 +95,6 @@ Vision();
 	void SetCamMode(bool visionProcessingEnabled);
 	void SetPipeline(Pipeline pipeline);
 	void TakeSnapshot();
-	std::tuple<double, double> VisionSteerController(double distanceError, double angleError);
 	void VisionSteerInit();
 	std::pair<double, double> SteerToLockedTarget(void);
 	void VisionSteerEnd();

@@ -31,13 +31,13 @@ Vision::Vision() {
     nt_kI_Omega = table->GetEntry("Vision kI Omega");
     nt_kP_Distance = table->GetEntry("Vision kP Distance");
 
-    visionLogger.VisionLogger("/home/lvuser/VisionLogs/Vision_Log" + DataLogger::GetTimestamp() + ".csv");
+    visionLogger.VisionLogger("/home/lvuser/VisionLogs/Vision_Log_" + DataLogger::GetTimestamp() + ".csv");
 }
 
 
 void Vision::Periodic() {
-    if (!TargetIsLocked()) {
-        targetLocked = false;
+    bool targetLocked = TargetIsLocked();
+    if (!targetLocked) {
         visionDriveActive = false;
         distance = 0;
         distanceError = 0;
@@ -48,11 +48,10 @@ void Vision::Periodic() {
     }
     else if (!visionDriveActive) {
         // calulate distance error
-        optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
         distance = GetDistanceToPowerport();
         nt_distance.SetDouble(distance);
+         optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
         distanceError =  optimalShootingDistance - distance;
-        targetLocked = true;
         angleError = GetXAngleToTarget();
         angleError_DB = angleError;
         speed = 0;
@@ -142,23 +141,32 @@ void Vision::SetPipeline(Pipeline pipeline) {
 
 /**
  * @brief Saves a snapshot to the limelight.
- * 
  */
  void Vision::TakeSnapshot() {
      snapshot.SetDouble(1);
  }
 
+/**
+ * @brief prepares for vision steer
+ */
 void Vision::VisionSteerInit() {
+    visionDriveActive = true;
     nt_visionDrive.SetBoolean(true);
     omegaIntegrator = 0.0;
 }
 
+/**
+ * @brief calcuates speed and omega to steer to face the target and be the optimal distance away
+ * 
+ * @returns a pair of speed and omega to be passed to VelocityArcadeDrive method in drivetrain
+ */
 std::pair<double, double> Vision::SteerToLockedTarget() {
  
     // calulate distance error
     optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
     distance = GetDistanceToPowerport();
     distanceError = optimalShootingDistance - distance;
+    nt_distance.SetDouble(distance);
 
     // get angle error
     angleError = GetXAngleToTarget();
@@ -178,16 +186,19 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
         angleError_DB = angleError + angleErrorDeadband;
     }
 
+    // fetch gains from network tables
     kP_Omega = nt_kP_Omega.GetDouble(kP_Omega);
     kI_Omega = nt_kI_Omega.GetDouble(kI_Omega);
     kP_Distance = nt_kP_Distance.GetDouble(kP_Distance);
     omega = 0.0;
     speed = 0.0;
 
+    // omega PID calculations
     omegaIntegrator += angleError_DB * deltaTime;
     omega = kP_Omega * angleError_DB;
     omega += omegaIntegrator * kI_Omega;
 
+    // limit omega
     if (omega > omegaLimiter)
     {
         omega = omegaLimiter;
@@ -197,26 +208,41 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
         omega = -omegaLimiter;
     }
 
+    // speed PID calculations
     speed = kP_Distance * distanceError;
 
-    // Logger and network table variable updates
-    nt_visionDrive.SetBoolean(true);
-    nt_distance.SetDouble(distance);
-    targetLocked = true;
-    visionDriveActive = true;
+    // limit speed
+    if (speed > speedLimiter)
+    {
+        speed = speedLimiter;
+    }
+    else if (speed < -speedLimiter)
+    {
+        speed = -speedLimiter;
+    }
  
     return std::make_pair(speed, omega);
 }
 
+/**
+ * @brief ends the vision steer
+ */
 void Vision::VisionSteerEnd() {
+    visionDriveActive = false;
     nt_visionDrive.SetBoolean(false);
     visionDriveActive = false;
 }
 
+/**
+ * @brief starts or resumes vision data logging
+ */
 void Vision::EnableLogging() {
     visionLogger.StartSession();
 }
 
+/**
+ * @brief ends or pauses vision data logging
+ */
 void Vision::DisableLogging() {
     visionLogger.EndSession();
 }
