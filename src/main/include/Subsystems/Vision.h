@@ -93,6 +93,7 @@ public:
 	double GetLatency();
 	void SetLEDMode(LEDMode ledModeToSet);
 	void SetCamMode(bool visionProcessingEnabled);
+	void ToggleCamMode();
 	void SetPipeline(Pipeline pipeline);
 	void TakeSnapshot();
 	void VisionSteerInit();

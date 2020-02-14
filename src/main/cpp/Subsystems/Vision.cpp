@@ -130,6 +130,20 @@ void Vision::SetCamMode(bool visionProcessingEnabled) {
 }
 
 /**
+ * @brief Toggles between vision processing and drive mode
+ */
+void Vision::ToggleCamMode() {
+    if (camMode.GetDouble(1))
+    {
+        camMode.SetDouble(0);
+    }
+    else
+    {
+        camMode.SetDouble(1);
+    }
+}
+
+/**
  * @brief Sets the current vision processing pipeline
  * 
  * @param pipeline the pipeline to use
