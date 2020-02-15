@@ -62,12 +62,12 @@ private:
 
 	// For VisionDrive PID controller
 	double angleErrorDeadband = 2;	// degrees
-	double kP_Omega = -0.025; 
-	double kI_Omega = -0.02;
-	double kP_Distance = 0.0;
-	double omegaLimiter = 0.5;
+	double kP_Omega = -0.075; 
+	double kI_Omega = -0.023;
+	double kP_Distance = -0.5;
+	double omegaLimiter = 0.46;
 	double omegaIntegrator = 0;
-	double speedLimiter = 0.5;
+	double speedLimiter = 0.7;
 	const double deltaTime = 0.02;
 
 	// data logging

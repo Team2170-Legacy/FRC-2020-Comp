@@ -29,6 +29,9 @@ Vision::Vision() {
     nt_kP_Omega = table->GetEntry("Vision kP Omega");
     nt_kI_Omega = table->GetEntry("Vision kI Omega");
     nt_kP_Distance = table->GetEntry("Vision kP Distance");
+    nt_kP_Omega.SetDouble(kP_Omega);
+    nt_kI_Omega.SetDouble(kI_Omega);
+    nt_kP_Distance.SetDouble(kP_Distance);
 
     visionLogger.VisionLogger("/home/lvuser/VisionLogs/VisionLog_" + DataLogger::GetTimestamp() + ".csv");
 }
@@ -220,18 +223,22 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
         omega = -omegaLimiter;
     }
 
-    // speed PID calculations
-    speed = kP_Distance * distanceError;
+    if (angleError >  -5 && angleError < 5)
+    {
+        // speed PID calculations
+        speed = kP_Distance * distanceError;
 
-    // limit speed
-    if (speed > speedLimiter)
-    {
-        speed = speedLimiter;
+        // limit speed
+        if (speed > speedLimiter)
+        {
+            speed = speedLimiter;
+        }
+        else if (speed < -speedLimiter)
+        {
+            speed = -speedLimiter;
+        }
     }
-    else if (speed < -speedLimiter)
-    {
-        speed = -speedLimiter;
-    }
+
  
     return std::make_pair(speed, omega);
 }

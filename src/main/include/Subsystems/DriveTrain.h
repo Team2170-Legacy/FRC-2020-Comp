@@ -57,7 +57,7 @@ std::shared_ptr<frc::PowerDistributionPanel> powerDistributionPanel;
 	const double d = (25.75/12); 
 
 	// PID Gains for closed-loop velocity control
-	const double kP, kI = 0, kD = 0, kIz = 0, kFF, kMaxOutput = 1, kMinOutput = -1;	
+	const double kP, kI = 0.3, kD = 0, kIz = 0, kFF, kMaxOutput = 1, kMinOutput = -1;	
 
 	// Max RPM for motors
 	const double maxRPM = 5600;
