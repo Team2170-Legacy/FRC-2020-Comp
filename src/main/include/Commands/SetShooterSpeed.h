@@ -12,8 +12,7 @@
 #include "Subsystems/Shooter.h"
 
 class SetShooterSpeed
-    : public frc2::CommandHelper<frc2::InstantCommand,
-                                 SetShooterSpeed> {
+    : public frc2::CommandHelper<frc2::InstantCommand,SetShooterSpeed> {
  public:
   SetShooterSpeed(Shooter* subsystem, double rpm = 0.0);
 
