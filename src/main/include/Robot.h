@@ -32,7 +32,7 @@ class Robot : public frc::TimedRobot {
 public:
 	frc2::Command* autonomousCommand = nullptr;
 	static std::unique_ptr<OI> oi;
-	static std::unique_put<RobotContainer> robotContainer;
+	static std::unique_ptr<RobotContainer> robotContainer;
 	frc::LiveWindow *lw = frc::LiveWindow::GetInstance();
 	frc::SendableChooser<frc2::Command*> chooser;
 	void RobotInit() override;

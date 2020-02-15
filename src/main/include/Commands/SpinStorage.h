@@ -30,4 +30,7 @@ class SpinStorage
   void End(bool interrupted) override;
 
   bool IsFinished() override;
+
+private:
+  Feeder* m_feeder;
 };
