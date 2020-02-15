@@ -17,5 +17,5 @@ SetHoodLow::SetHoodLow(Shooter* subsystem) {
 
 // Called when the command is initially scheduled.
 void SetHoodLow::Initialize() {
-  m_shooter->SetHoodLow;
+  m_shooter->SetHoodLow();
 }

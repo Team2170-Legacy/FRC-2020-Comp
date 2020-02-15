@@ -60,7 +60,7 @@ void Shooter::ShooterOn(double velocity) {
     ShooterEnabled = true;
     CommandedVelocity = velocity;
 }
-
+/**
 void Shooter::SetHoodHigh() {
     m_solHood.Set(frc::DoubleSolenoid::kForward);
 }
@@ -88,3 +88,5 @@ bool Shooter::IsHoodLow() {
 
     return retVal;
 }
+**/
+ 
