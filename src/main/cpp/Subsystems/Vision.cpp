@@ -8,7 +8,6 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
-
 #include "Subsystems/Vision.h"
 
 Vision::Vision() {
@@ -31,9 +30,8 @@ Vision::Vision() {
     nt_kI_Omega = table->GetEntry("Vision kI Omega");
     nt_kP_Distance = table->GetEntry("Vision kP Distance");
 
-    visionLogger.VisionLogger("/home/lvuser/VisionLogs/Vision_Log_" + DataLogger::GetTimestamp() + ".csv");
+    visionLogger.VisionLogger("/home/lvuser/VisionLogs/VisionLog_" + DataLogger::GetTimestamp() + ".csv");
 }
-
 
 void Vision::Periodic() {
     bool targetLocked = TargetIsLocked();
@@ -50,7 +48,7 @@ void Vision::Periodic() {
         // calulate distance error
         distance = GetDistanceToPowerport();
         nt_distance.SetDouble(distance);
-         optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
+        optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
         distanceError =  optimalShootingDistance - distance;
         angleError = GetXAngleToTarget();
         angleError_DB = angleError;
