@@ -62,9 +62,9 @@ Shooter();
 	bool IsShooterOn() {return ShooterEnabled;}
 	double GetShooterSpeed() {return CommandedVelocity;}
 
-	void SetHoodHigh(){m_solHood.Set(frc::DoubleSolenoid::kForward);}
+	void SetHoodHigh();
 
-	void SetHoodLow(){m_solHood.Set(frc::DoubleSolenoid::kReverse);}
+	void SetHoodLow();
 
 	bool IsHoodHigh();
 	bool IsHoodLow();
