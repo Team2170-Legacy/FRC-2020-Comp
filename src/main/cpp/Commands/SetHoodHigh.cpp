@@ -10,9 +10,12 @@
 // NOTE:  Consider using this command inline, rather than writing a subclass.
 // For more information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-SetHoodHigh::SetHoodHigh() {
+SetHoodHigh::SetHoodHigh(Shooter* subsystem) {
   // Use addRequirements() here to declare subsystem dependencies.
+  AddRequirements({subsystem});
 }
 
 // Called when the command is initially scheduled.
-void SetHoodHigh::Initialize() {}
+void SetHoodHigh::Initialize() {
+  m_shooter->SetHoodHigh;
+}
