@@ -10,6 +10,8 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include "Subsystems/Intake.h"
+#include "hwcfg.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 
 /**
  * An example command.

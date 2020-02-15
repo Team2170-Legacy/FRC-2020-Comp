@@ -13,11 +13,13 @@ IntakeOn::IntakeOn(Intake* subsystem) : m_intake{subsystem} {
 }
 
 // Called when the command is initially scheduled.
-void IntakeOn::Initialize() {}
+void IntakeOn::Initialize() {
+  frc::SmartDashboard::PutNumber("LED Code",LEDCodes::LoadingBalls);
+}
 
 // Called repeatedly when this Command is scheduled to run
 void IntakeOn::Execute() {
-m_intake->IntakeOn();
+  m_intake->IntakeOn();
 }
 
 // Called once the command ends or is interrupted.
