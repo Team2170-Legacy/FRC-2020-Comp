@@ -77,8 +77,8 @@ void DriveTrain::Periodic() {
                         units::meter_t(m_leftEncoder.GetPosition()),
                         units::meter_t(m_rightEncoder.GetPosition()));
 
-    double leftVelocity = m_leftEncoder.GetVelocity() * m_leftEncoder.GetVelocityConversionFactor();
-    double rightVelocity = m_leftEncoder.GetVelocity() * m_rightEncoder.GetVelocityConversionFactor();
+    double leftVelocity = m_leftEncoder.GetVelocity(); 
+    double rightVelocity = m_leftEncoder.GetVelocity(); 
     double leftLeadVoltage = m_leftLead.GetBusVoltage();
     double leftFollowVoltage = m_leftFollow.GetBusVoltage();
     double rightLeadVoltage = m_rightLead.GetBusVoltage();
