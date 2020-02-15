@@ -9,12 +9,16 @@
 
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/InstantCommand.h>
+#include "Subsystems/Shooter.h"
+
 
 class SetHoodHigh
-    : public frc2::CommandHelper<frc2::InstantCommand,
-                                 SetHoodHigh> {
+    : public frc2::CommandHelper<frc2::InstantCommand, SetHoodHigh> {
  public:
-  SetHoodHigh();
+  SetHoodHigh(Shooter* subsystem);
 
   void Initialize() override;
+
+private:
+  Shooter* m_shooter;
 };

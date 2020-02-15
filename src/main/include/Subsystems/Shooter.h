@@ -47,7 +47,7 @@ private:
 	const double maxAccelPerSec;
 	double CommandedVelocity = 0.0;
 	bool ShooterEnabled = false;
-
+	//double solenoid for the hood
 	frc::DoubleSolenoid m_solHood{PCMIDs::kHoodSolFwd, PCMIDs::kHoodSolRev};
 
 public:
@@ -63,6 +63,7 @@ Shooter();
 	double GetShooterSpeed() {return CommandedVelocity;}
 
 	void SetHoodHigh();
+
 	void SetHoodLow();
 
 	bool IsHoodHigh();
