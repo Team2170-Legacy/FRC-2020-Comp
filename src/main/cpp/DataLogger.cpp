@@ -72,12 +72,12 @@ void DataLogger::DriveTrainLogger(std::string name) {
     printf("construct\n");
 	mFilename = name;
 	tLog.open(mFilename, std::ofstream::out | std::ofstream::trunc);
-	tLog << "Time,LeftVelocityCommand,RightVelocityCommand,LeftActualVelocity,RightActualVelocity,LeftLeadVoltage,LeftFollowVoltage,RightLeadVoltage,RightFollowVoltage,LeftLeadCurrent,LeftFollowCurrent,RightLeadCurrent,RightFollowCurrent" << std::endl;
+	tLog << "Time,LeftVelocityCommand,RightVelocityCommand,LeftActualVelocity,RightActualVelocity,LeftLeadAppliedOutput,LeftFollowAppliedOutput,RightLeadAppliedOutput,RightFollowAppliedOutput,LeftLeadVoltage,LeftFollowVoltage,RightLeadVoltage,RightFollowVoltage,LeftLeadCurrent,LeftFollowCurrent,RightLeadCurrent,RightFollowCurrent" << std::endl;
 }
 
-void DataLogger::WriteDriveTrainData(double leftVelocityCommand, double rightVelocityCommand, double leftActualVelocity, double rightActualVelocity, double leftLeadVoltage, double leftFollowVoltage, double rightLeadVoltage, double rightFollowVoltage, double leftLeadCurrent, double leftFollowCurrent, double rightLeadCurrent, double rightFollowCurrent)
+	void DataLogger::WriteDriveTrainData(double leftVelocityCommand, double rightVelocityCommand, double leftActualVelocity, double rightActualVelocity, double leftLeadAppliedOutput, double leftFollowAppliedOutput, double rightLeadAppliedOutput, double rightFollowAppliedOutput, double leftLeadVoltage, double leftFollowVoltage, double rightLeadVoltage, double rightFollowVoltage, double leftLeadCurrent, double leftFollowCurrent, double rightLeadCurrent, double rightFollowCurrent)
 {
-	 tLog << std::to_string(LogTimer.Get()) + "," +  std::to_string(leftVelocityCommand) + "," + std::to_string(rightVelocityCommand) + "," + std::to_string(leftActualVelocity) + "," + std::to_string(rightActualVelocity) + "," + std::to_string(leftLeadVoltage) + "," + 
+	 tLog << std::to_string(LogTimer.Get()) + "," +  std::to_string(leftVelocityCommand) + "," + std::to_string(rightVelocityCommand) + "," + std::to_string(leftActualVelocity) + "," + std::to_string(rightActualVelocity) + "," + std::to_string(leftLeadAppliedOutput) + "," + std::to_string(leftFollowAppliedOutput) + "," + std::to_string(rightLeadAppliedOutput) + "," + std::to_string(rightFollowAppliedOutput) + "," + std::to_string(leftLeadVoltage) + "," + 
 	 std::to_string(leftFollowVoltage) + "," + std::to_string(rightLeadVoltage) + "," + std::to_string(rightFollowVoltage) + "," 
 	 + std::to_string(leftLeadCurrent) + "," + std::to_string(leftFollowCurrent) + "," + std::to_string(rightLeadCurrent) + "," + std::to_string(rightFollowCurrent) + "," << std::endl;
 }

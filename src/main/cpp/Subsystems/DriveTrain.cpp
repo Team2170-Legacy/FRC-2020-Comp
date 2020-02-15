@@ -38,8 +38,8 @@ powerDistributionPanel.reset(new frc::PowerDistributionPanel(0));
     m_rightFollow.Follow(m_rightLead);
 
     // Set encoder converting factors 
-    m_leftEncoder.SetPositionConversionFactor((M_PI * kWheelDiameter / (kGearRatio * 60.0 * 12.0)));
-    m_rightEncoder.SetPositionConversionFactor((M_PI * kWheelDiameter / (kGearRatio * 60.0 * 12.0)));
+    m_leftEncoder.SetVelocityConversionFactor((M_PI * kWheelDiameter / (kGearRatio * 60.0 * 12.0)));
+    m_rightEncoder.SetVelocityConversionFactor((M_PI * kWheelDiameter / (kGearRatio * 60.0 * 12.0)));
     m_leftEncoder.SetPositionConversionFactor((M_PI * kWheelDiameter) / (kGearRatio * 12.0));
     m_rightEncoder.SetPositionConversionFactor((M_PI * kWheelDiameter) / (kGearRatio * 12.0));
 
@@ -78,7 +78,12 @@ void DriveTrain::Periodic() {
                         units::meter_t(m_rightEncoder.GetPosition()));
 
     double leftVelocity = m_leftEncoder.GetVelocity(); 
-    double rightVelocity = m_leftEncoder.GetVelocity(); 
+    double rightVelocity = m_rightEncoder.GetVelocity(); 
+    double leftLeadAppliedOutput = m_leftLead.GetAppliedOutput();
+    double leftFollowAppliedOutput = m_leftFollow.GetAppliedOutput();
+    double rightLeadAppliedOutput = m_rightLead.GetAppliedOutput();
+    double rightFollowAppliedOutput = m_rightFollow.GetAppliedOutput();
+
     double leftLeadVoltage = m_leftLead.GetBusVoltage();
     double leftFollowVoltage = m_leftFollow.GetBusVoltage();
     double rightLeadVoltage = m_rightLead.GetBusVoltage();
@@ -87,7 +92,7 @@ void DriveTrain::Periodic() {
     double leftFollowCurrent = m_leftFollow.GetOutputCurrent();
     double rightLeadCurrent = m_rightLead.GetOutputCurrent();
     double rightFollowCurrent = m_rightFollow.GetOutputCurrent();
-    driveTrainLogger.WriteDriveTrainData(leftVelocityCommand, rightVelocityCommand, leftVelocity, rightVelocity, leftLeadVoltage, leftFollowVoltage, rightLeadVoltage, rightFollowVoltage, leftLeadCurrent, leftFollowCurrent, rightLeadCurrent, rightFollowCurrent);
+    driveTrainLogger.WriteDriveTrainData(leftVelocityCommand, rightVelocityCommand, leftVelocity, rightVelocity, leftLeadAppliedOutput, leftFollowAppliedOutput, rightLeadAppliedOutput, rightFollowAppliedOutput, leftLeadVoltage, leftFollowVoltage, rightLeadVoltage, rightFollowVoltage, leftLeadCurrent, leftFollowCurrent, rightLeadCurrent, rightFollowCurrent);
 
 }
 
