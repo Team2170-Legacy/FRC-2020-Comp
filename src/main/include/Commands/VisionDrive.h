@@ -18,6 +18,7 @@
 #include "networktables/NetworkTableInstance.h"
 #include <tuple>
 #include "DataLogger.h"
+#include "hwcfg.h"
 
 #include "Subsystems/Vision.h"
 #include "Subsystems/DriveTrain.h"

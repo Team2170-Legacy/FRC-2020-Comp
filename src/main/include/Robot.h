@@ -11,6 +11,7 @@
 #pragma once
 
 #include "frc/TimedRobot.h"
+#include "frc/DigitalOutput.h"
 #include "frc2/command/Command.h"
 #include "frc/livewindow/LiveWindow.h"
 #include "frc/smartdashboard/SendableChooser.h"
@@ -42,6 +43,14 @@ public:
 	void TeleopInit() override;
 	void TeleopPeriodic() override;
 
+	// LED Strip functions
+	void sendLEDCode(int code);
+
 private:
 	RobotContainer m_container;
+
+	// LED Strip DIOs
+	std::shared_ptr<frc::DigitalOutput> dataOutPin1;
+  	std::shared_ptr<frc::DigitalOutput> dataOutPin2;
+  	std::shared_ptr<frc::DigitalOutput> dataOutPin3;
 };

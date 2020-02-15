@@ -30,3 +30,15 @@ enum HIDIDs {
 	kDriver = 0,
 	kOperator = 1
 };
+
+enum LEDCodes 
+{
+	Off = 0,
+	Fwd = 1,
+	Bwd = 2,
+	VLock = 3,
+	VDrive= 4,
+	ShootingBalls = 5,
+	LoadingBalls = 6, 
+	Climbing = 7,
+};

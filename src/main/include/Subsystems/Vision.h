@@ -11,6 +11,7 @@
 #pragma once
 
 #include "frc2/command/SubsystemBase.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 #include "networktables/NetworkTable.h"
 #include "networktables/NetworkTableEntry.h"
 #include "networktables/NetworkTableInstance.h"
@@ -18,6 +19,7 @@
 #include "frc/Preferences.h"
 
 #include "DataLogger.h"
+#include "hwcfg.h"
 
 #include <math.h>
 #include <cmath>

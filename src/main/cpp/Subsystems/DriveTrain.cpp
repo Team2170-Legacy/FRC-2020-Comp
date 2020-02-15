@@ -161,8 +161,14 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
     double leftMotorSpeed = leftMotorOutput * maxFeetPerSec;
     double rightMotorSpeed = rightMotorOutput * -maxFeetPerSec;
 
-    if (leftMotorSpeed == 5) {
-        // blah
+    bool turning = rotateValue != 0.0;
+    if (!turning && leftMotorSpeed > 0.0 && rightMotorSpeed > 0.0) {
+        // Driving Forward
+        frc::SmartDashboard::PutNumber("LED Code", LEDCodes::Fwd);
+    }
+    if (!turning && leftMotorSpeed < 0.0 && rightMotorSpeed < 0.0) {
+        // Driving Backward
+        frc::SmartDashboard::PutNumber("LED Code", LEDCodes::Bwd);
     }
 
     // Send setpoints to pid controllers
