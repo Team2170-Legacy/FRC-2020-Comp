@@ -161,6 +161,10 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
     double leftMotorSpeed = leftMotorOutput * maxFeetPerSec;
     double rightMotorSpeed = rightMotorOutput * -maxFeetPerSec;
 
+    if (leftMotorSpeed == 5) {
+        // blah
+    }
+
     // Send setpoints to pid controllers
     m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kSmartVelocity);
     m_pidControllerR.SetReference(rightMotorSpeed, rev::ControlType::kSmartVelocity);
