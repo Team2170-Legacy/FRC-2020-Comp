@@ -161,15 +161,9 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
     double leftMotorSpeed = leftMotorOutput * maxFeetPerSec;
     double rightMotorSpeed = rightMotorOutput * -maxFeetPerSec;
 
-    bool turning = rotateValue != 0.0;
-    if (!turning && leftMotorSpeed > 0.0 && rightMotorSpeed > 0.0) {
-        // Driving Forward
-        frc::SmartDashboard::PutNumber("LED Code", LEDCodes::Fwd);
-    }
-    if (!turning && leftMotorSpeed < 0.0 && rightMotorSpeed < 0.0) {
-        // Driving Backward
-        frc::SmartDashboard::PutNumber("LED Code", LEDCodes::Bwd);
-    }
+    // Send proper LED code to LED strip 
+    // i.e make sure forward LED code and vision lock code are not sent at the same time
+    sendProperLEDCode(leftMotorSpeed, rightMotorSpeed, rotateValue);
 
     // Send setpoints to pid controllers
     m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kSmartVelocity);
@@ -246,4 +240,23 @@ void DriveTrain::SetWheelVelocity(double left, double right) {
  */
 void DriveTrain::SetWheelVelocity(double velocity) {
     SetWheelVelocity(velocity, velocity);
+}
+
+/**
+ * @brief Send correct LED code to Arduino
+ */
+void DriveTrain::sendProperLEDCode(double leftSpeed, double rightSpeed, double rotateValue) {
+    bool turning = rotateValue != 0.0;
+    auto table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+    bool visionDriveActive = table->GetEntry("Vision Drive").GetBoolean(false);
+    bool targetLocked = table->GetEntry("tv").GetDouble(0) == 1;
+
+    if (!turning && !visionDriveActive && !targetLocked && leftSpeed > 0.0 && rightSpeed > 0.0) {
+        // Driving Forward
+        frc::SmartDashboard::PutNumber("LED Code", LEDCodes::Fwd);
+    }
+    if (!turning && !visionDriveActive && !targetLocked && leftSpeed < 0.0 && rightSpeed < 0.0) {
+        // Driving Backward
+        frc::SmartDashboard::PutNumber("LED Code", LEDCodes::Bwd);
+    }
 }
