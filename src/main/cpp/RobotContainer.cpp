@@ -36,8 +36,10 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
 
 void RobotContainer::StartDataLogging() {
   m_vision.EnableLogging();
+  m_driveTrain.EnableLogging();
 }
 
 void RobotContainer::EndDataLogging() {
   m_vision.DisableLogging();
+  m_driveTrain.DisableLogging();
 }
