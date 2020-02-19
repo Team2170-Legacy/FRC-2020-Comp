@@ -25,7 +25,11 @@ void Robot::RobotInit() {
 	// yet. Thus, their Requires() statements may grab null pointers. Bad
 	// news. Don't move it.
 	oi.reset(new OI());
+	dataOutPin1.reset(new frc::DigitalOutput(1));
+	dataOutPin2.reset(new frc::DigitalOutput(2));
+	dataOutPin3.reset(new frc::DigitalOutput(3));
 	frc::SmartDashboard::PutData("Auto Modes", &chooser);
+	frc::SmartDashboard::PutNumber("LED Code",0);
 }
 
 /**
@@ -38,6 +42,7 @@ void Robot::DisabledInit(){
 
 void Robot::DisabledPeriodic() {
 	frc2::CommandScheduler::GetInstance().Run();
+	sendLEDCode(LEDCodes::Off);
 }
 
 void Robot::AutonomousInit() {
@@ -66,6 +71,21 @@ void Robot::TeleopInit() {
 
 void Robot::TeleopPeriodic() {
 	frc2::CommandScheduler::GetInstance().Run();
+	int code = frc::SmartDashboard::GetNumber("LED Code",0);
+	sendLEDCode(code);
+}
+
+void Robot::sendLEDCode(int code) {
+	// Convert integer code to 3 binary bits to send on DIOs
+	// Last digit (index 2) is 2^0 spot
+	int dataOut[3];
+    dataOut[2] = code % 2;
+    dataOut[1] = (code / 2) % 2;
+    dataOut[0] = (code / 4) % 2;
+
+    dataOutPin1->Set(dataOut[0]);   // Yellow wire
+    dataOutPin2->Set(dataOut[1]);   // Orange wire
+    dataOutPin3->Set(dataOut[2]);   // Black wire
 }
 
 #ifndef RUNNING_FRC_TESTS

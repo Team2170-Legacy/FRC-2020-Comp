@@ -189,6 +189,8 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
     leftVelocityCommand = leftMotorSpeed;
     rightVelocityCommand = rightMotorSpeed;
 
+    sendProperLEDCode(leftMotorSpeed, rightMotorSpeed, rotateValue);
+
     // Send setpoints to pid controllers
     m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kSmartVelocity);
     m_pidControllerR.SetReference(rightMotorSpeed, rev::ControlType::kSmartVelocity);
@@ -280,4 +282,23 @@ void DriveTrain::EnableLogging() {
  */
 void DriveTrain::DisableLogging() {
     driveTrainLogger.EndSession();
+}
+
+/**
+ * @brief Send correct LED code to Arduino
+ */
+void DriveTrain::sendProperLEDCode(double leftSpeed, double rightSpeed, double rotateValue) {
+    bool turning = rotateValue != 0.0;
+    auto table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+    bool visionDriveActive = table->GetEntry("Vision Drive").GetBoolean(false);
+    bool targetLocked = table->GetEntry("tv").GetDouble(0) == 1;
+
+    if (!turning && !visionDriveActive && !targetLocked && leftSpeed > 0.0 && -rightSpeed > 0.0) {
+        // Driving Forward
+        frc::SmartDashboard::PutNumber("LED Code", LEDCodes::Fwd);
+    }
+    if (!turning && !visionDriveActive && !targetLocked && leftSpeed < 0.0 && -rightSpeed < 0.0) {
+        // Driving Backward
+        frc::SmartDashboard::PutNumber("LED Code", LEDCodes::Bwd);
+    }
 }

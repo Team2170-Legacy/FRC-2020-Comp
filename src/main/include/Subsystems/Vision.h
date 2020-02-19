@@ -15,9 +15,12 @@
 #include "networktables/NetworkTableEntry.h"
 #include "networktables/NetworkTableInstance.h"
 #include "networktables/EntryListenerFlags.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 #include "frc/Preferences.h"
 
 #include "DataLogger.h"
+#include "hwcfg.h"
+
 
 #include <math.h>
 #include <cmath>

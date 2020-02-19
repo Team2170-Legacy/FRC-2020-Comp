@@ -38,6 +38,10 @@ Vision::Vision() {
 
 void Vision::Periodic() {
     bool targetLocked = TargetIsLocked();
+    if(targetLocked) {
+        frc::SmartDashboard::PutNumber("LED Code",LEDCodes::VLock);
+    }
+
     if (!targetLocked) {
         visionDriveActive = false;
         distance = 0;

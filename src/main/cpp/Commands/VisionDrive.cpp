@@ -31,7 +31,7 @@ void VisionDrive::Initialize() {
  * 
  */
 void VisionDrive::Execute() {
- 
+    frc::SmartDashboard::PutNumber("LED Code",LEDCodes::VDrive);
     if (m_vision->TargetIsLocked())
     {
         std::pair<double, double> result = m_vision->SteerToLockedTarget();

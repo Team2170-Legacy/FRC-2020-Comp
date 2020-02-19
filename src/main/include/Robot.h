@@ -14,6 +14,8 @@
 #include "frc2/command/Command.h"
 #include "frc/livewindow/LiveWindow.h"
 #include "frc/smartdashboard/SendableChooser.h"
+#include "frc/smartdashboard/SmartDashboard.h"
+#include "frc/DigitalOutput.h"
 
 #include "Commands/AutonomousCommand.h"
 #include "Subsystems/Climber.h"
@@ -25,6 +27,7 @@
 #include "Subsystems/Vision.h"
 
 #include "RobotContainer.h"
+#include "hwcfg.h"
 
 #include "OI.h"
 
@@ -41,7 +44,13 @@ public:
 	void AutonomousPeriodic() override;
 	void TeleopInit() override;
 	void TeleopPeriodic() override;
+	void sendLEDCode(int code);
 
 private:
 	RobotContainer m_container;
+
+	// LED Strip DIOs
+	std::shared_ptr<frc::DigitalOutput> dataOutPin1;
+  	std::shared_ptr<frc::DigitalOutput> dataOutPin2;
+  	std::shared_ptr<frc::DigitalOutput> dataOutPin3;
 };
