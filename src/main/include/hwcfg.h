@@ -9,8 +9,7 @@ enum CANIDs {
 	kIntakeMotorID = 6,
 	kFeederMotorID = 7,
 	kClimberMotorID = 8,
-	kLoaderMotorID = 9,
-	kFeederMotorID = 10
+	kLoaderMotorID = 9
 };
 
 enum PCMIDs {
