@@ -42,5 +42,5 @@ enum LEDCodes
 	Shoooter_Shooting = 3,
 	VLock = 4,
 	VDrive = 5,
-	IntakeBalls = 6, 
+	IntakeBalls = 6
 };
