@@ -17,7 +17,8 @@ void IntakeOn::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void IntakeOn::Execute() {
-m_intake->IntakeOn();
+  frc::SmartDashboard::PutNumber("LED Code",LEDCodes::IntakeBalls);
+  m_intake->IntakeOn();
 }
 
 // Called once the command ends or is interrupted.
