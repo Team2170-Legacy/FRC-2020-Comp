@@ -17,7 +17,6 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 std::unique_ptr<OI> Robot::oi;
-std::unique_ptr<RobotContainer> Robot::robotContainer;
 
 void Robot::RobotInit() {
 	// This MUST be here. If the OI creates Commands (which it very likely
