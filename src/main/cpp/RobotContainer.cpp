@@ -27,9 +27,20 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_operator,6).WhileHeld(new ClimbGenDown(&m_climber));
   frc2::JoystickButton(&m_operator,7).WhileHeld(new ExtendWinch(&m_climber));
   frc2::JoystickButton(&m_operator,8).WhileHeld(new RetractWinch(&m_climber));
+  frc2::JoystickButton(&m_operator,9).WhileHeld(new SetHoodHigh(&m_shooter));
+  frc2::JoystickButton(&m_operator,10).WhileHeld(new SetHoodLow(&m_shooter));
+  frc2::JoystickButton(&m_driver, 3).WhileHeld(new VisionDrive(&m_vision, &m_driveTrain));
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
   return &m_autonomousCommand;
+}
+
+void RobotContainer::StartDataLogging() {
+  m_vision.EnableLogging();
+}
+
+void RobotContainer::EndDataLogging() {
+  m_vision.DisableLogging();
 }

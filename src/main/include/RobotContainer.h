@@ -24,6 +24,11 @@
 #include "Commands/IntakeReverse.h"
 #include "Commands/SpinStorage.h"
 #include "Commands/SpinStorageCCW.h"
+#include "Commands/VisionDrive.h"
+#include "Commands/SetHoodHigh.h"
+#include "Commands/SetHoodLow.h"
+
+
 #include "frc/XboxController.h"
 #include "Commands/ClimbGenUp.h"
 #include "Commands/ClimbGenDown.h"
@@ -44,6 +49,9 @@ class RobotContainer {
   RobotContainer();
 
   frc2::Command* GetAutonomousCommand();
+
+  void StartDataLogging(void);
+  void EndDataLogging(void);
 
  private:
   // The robot's subsystems and commands are defined here...
