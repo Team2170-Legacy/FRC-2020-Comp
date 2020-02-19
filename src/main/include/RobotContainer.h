@@ -30,7 +30,10 @@
 
 
 #include "frc/XboxController.h"
-
+#include "Commands/ClimbGenUp.h"
+#include "Commands/ClimbGenDown.h"
+#include "Commands/ExtendWinch.h"
+#include "Commands/RetractWinch.h"
 #include "hwcfg.h"
 
 
