@@ -8,7 +8,6 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
-
 #include "Subsystems/Vision.h"
 
 Vision::Vision() {
@@ -30,13 +29,19 @@ Vision::Vision() {
     nt_kP_Omega = table->GetEntry("Vision kP Omega");
     nt_kI_Omega = table->GetEntry("Vision kI Omega");
     nt_kP_Distance = table->GetEntry("Vision kP Distance");
+    nt_kP_Omega.SetDouble(kP_Omega);
+    nt_kI_Omega.SetDouble(kI_Omega);
+    nt_kP_Distance.SetDouble(kP_Distance);
 
-    visionLogger.VisionLogger("/home/lvuser/VisionLogs/Vision_Log_" + DataLogger::GetTimestamp() + ".csv");
+    visionLogger.VisionLogger("/home/lvuser/VisionLogs/VisionLog_" + DataLogger::GetTimestamp() + ".csv");
 }
-
 
 void Vision::Periodic() {
     bool targetLocked = TargetIsLocked();
+    if(targetLocked) {
+        frc::SmartDashboard::PutNumber("LED Code",LEDCodes::VLock);
+    }
+
     if (!targetLocked) {
         visionDriveActive = false;
         distance = 0;
@@ -50,7 +55,7 @@ void Vision::Periodic() {
         // calulate distance error
         distance = GetDistanceToPowerport();
         nt_distance.SetDouble(distance);
-         optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
+        optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
         distanceError =  optimalShootingDistance - distance;
         angleError = GetXAngleToTarget();
         angleError_DB = angleError;
@@ -222,18 +227,22 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
         omega = -omegaLimiter;
     }
 
-    // speed PID calculations
-    speed = kP_Distance * distanceError;
+    if (angleError >  -5 && angleError < 5)
+    {
+        // speed PID calculations
+        speed = kP_Distance * distanceError;
 
-    // limit speed
-    if (speed > speedLimiter)
-    {
-        speed = speedLimiter;
+        // limit speed
+        if (speed > speedLimiter)
+        {
+            speed = speedLimiter;
+        }
+        else if (speed < -speedLimiter)
+        {
+            speed = -speedLimiter;
+        }
     }
-    else if (speed < -speedLimiter)
-    {
-        speed = -speedLimiter;
-    }
+
  
     return std::make_pair(speed, omega);
 }

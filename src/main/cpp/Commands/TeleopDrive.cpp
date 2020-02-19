@@ -16,12 +16,28 @@ TeleopDrive::TeleopDrive(DriveTrain* subsystem) : m_driveTrain{subsystem} {
 }
 
 // Called just before this Command runs the first time
-void TeleopDrive::Initialize() {}
+void TeleopDrive::Initialize() 
+{
+	xAxis_prev 	= 0.0;
+}
 
 // Called repeatedly when this Command is scheduled to run
 void TeleopDrive::Execute()
 {
   double xAxis = Robot::oi->getDriverJoystick()->GetRawAxis(1);
+
+  double delta_xAxis = xAxis - xAxis_prev;
+
+  if ( delta_xAxis > 0.02 ) {
+	xAxis_prev 	= xAxis_prev +  0.02;
+  }
+  else if ( delta_xAxis < 0.02 ) {
+ 	xAxis_prev 	= xAxis_prev - 0.02;
+  }
+  else {
+      xAxis_prev 	= xAxis;
+  };
+
   //double yAxis = Robot::oi->getDriverJoystick()->GetRawAxis(4);
 
   double speedPos = Robot::oi->getDriverJoystick()->GetRawAxis(3);
@@ -39,7 +55,7 @@ void TeleopDrive::Execute()
     speedVelocity = 0.0;
   }
 
-  m_driveTrain->VelocityArcadeDrive(-xAxis, -speedVelocity, true);
+  m_driveTrain->VelocityArcadeDrive(-xAxis_prev, -speedVelocity, true);
  // Robot::driveTrian->VelocityArcadeDrive(speedVelocity, yAxis, true);
 }
 
@@ -49,4 +65,7 @@ bool TeleopDrive::IsFinished() {
   }
 
 // Called once after isFinished returns true
-void TeleopDrive::End(bool interrupted) {}
+void TeleopDrive::End(bool interrupted) 
+ {
+      xAxis_prev = 0.0;
+ }
