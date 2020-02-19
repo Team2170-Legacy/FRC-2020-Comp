@@ -9,7 +9,7 @@
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include "Subsystems/Feeder.h"
+#include "Subsystems/Climber.h"
 
 /**
  * An example command.
@@ -18,10 +18,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class SpinStorageCCW
-    : public frc2::CommandHelper<frc2::CommandBase, SpinStorageCCW> {
+class ClimbGenUp
+    : public frc2::CommandHelper<frc2::CommandBase, ClimbGenUp> {
  public:
-  SpinStorageCCW(Feeder* subsystem);
+  ClimbGenUp(Climber* subsystem);
 
   void Initialize() override;
 
@@ -32,5 +32,5 @@ class SpinStorageCCW
   bool IsFinished() override;
 
 private:
-  Feeder* m_feeder;
+  Climber* m_climber;
 };

@@ -5,17 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/SetHoodLow.h"
+#include "Commands/RetractWinch.h"
+#include "Robot.h"
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.
-// For more information, see:
-// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-SetHoodLow::SetHoodLow(Shooter* subsystem) {
+RetractWinch::RetractWinch(Climber* subsystem): m_climber{subsystem} {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements({subsystem});
 }
 
 // Called when the command is initially scheduled.
-void SetHoodLow::Initialize() {
-  m_shooter->SetHoodLow();
+void RetractWinch::Initialize() {}
+
+// Called repeatedly when this Command is scheduled to run
+void RetractWinch::Execute() {
+  m_climber->WinchRetract();
 }
+
+// Called once the command ends or is interrupted.
+void RetractWinch::End(bool interrupted) {}
+
+// Returns true when the command should end.
+bool RetractWinch::IsFinished() { return false; }

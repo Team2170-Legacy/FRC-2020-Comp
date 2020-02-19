@@ -88,3 +88,5 @@ bool Shooter::IsHoodLow() {
 
     return retVal;
 }
+
+ 

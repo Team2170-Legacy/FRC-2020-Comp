@@ -5,17 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/SetHoodLow.h"
+#include "Commands/ClimbGenUp.h"
+#include "Robot.h"
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.
-// For more information, see:
-// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-SetHoodLow::SetHoodLow(Shooter* subsystem) {
+ClimbGenUp::ClimbGenUp(Climber* subsystem): m_climber{subsystem} {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements({subsystem});
 }
 
 // Called when the command is initially scheduled.
-void SetHoodLow::Initialize() {
-  m_shooter->SetHoodLow();
+void ClimbGenUp::Initialize() {}
+
+// Called repeatedly when this Command is scheduled to run
+void ClimbGenUp::Execute() {
+  m_climber->ClimberUp();
 }
+
+// Called once the command ends or is interrupted.
+void ClimbGenUp::End(bool interrupted) {}
+
+// Returns true when the command should end.
+bool ClimbGenUp::IsFinished() { return false; }

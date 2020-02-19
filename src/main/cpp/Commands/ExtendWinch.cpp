@@ -5,17 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/SetHoodLow.h"
+#include "Commands/ExtendWinch.h"
+#include "Robot.h"
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.
-// For more information, see:
-// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-SetHoodLow::SetHoodLow(Shooter* subsystem) {
+ExtendWinch::ExtendWinch(Climber* subsystem): m_climber{subsystem} {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements({subsystem});
 }
 
 // Called when the command is initially scheduled.
-void SetHoodLow::Initialize() {
-  m_shooter->SetHoodLow();
+void ExtendWinch::Initialize() {}
+
+// Called repeatedly when this Command is scheduled to run
+void ExtendWinch::Execute() {
+  m_climber->WinchExtend();
 }
+
+// Called once the command ends or is interrupted.
+void ExtendWinch::End(bool interrupted) {}
+
+// Returns true when the command should end.
+bool ExtendWinch::IsFinished() { return false; }

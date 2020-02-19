@@ -189,8 +189,6 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
     leftVelocityCommand = leftMotorSpeed;
     rightVelocityCommand = rightMotorSpeed;
 
-    //sendProperLEDCode(leftMotorSpeed, rightMotorSpeed, rotateValue);
-
     // Send setpoints to pid controllers
     m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kSmartVelocity);
     m_pidControllerR.SetReference(rightMotorSpeed, rev::ControlType::kSmartVelocity);

@@ -25,9 +25,15 @@
 #include "Commands/SpinStorage.h"
 #include "Commands/SpinStorageCCW.h"
 #include "Commands/VisionDrive.h"
+#include "Commands/SetHoodHigh.h"
+#include "Commands/SetHoodLow.h"
+
 
 #include "frc/XboxController.h"
-
+#include "Commands/ClimbGenUp.h"
+#include "Commands/ClimbGenDown.h"
+#include "Commands/ExtendWinch.h"
+#include "Commands/RetractWinch.h"
 #include "hwcfg.h"
 
 
