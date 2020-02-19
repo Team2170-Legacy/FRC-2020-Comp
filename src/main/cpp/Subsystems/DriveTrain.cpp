@@ -270,6 +270,20 @@ void DriveTrain::SetWheelVelocity(double velocity) {
 }
 
 /**
+ * @brief starts or resumes vision data logging
+ */
+void DriveTrain::EnableLogging() {
+    driveTrainLogger.StartSession();
+}
+
+/**
+ * @brief ends or pauses vision data logging
+ */
+void DriveTrain::DisableLogging() {
+    driveTrainLogger.EndSession();
+}
+
+/**
  * @brief Send correct LED code to Arduino
  */
 void DriveTrain::sendProperLEDCode(double leftSpeed, double rightSpeed, double rotateValue) {

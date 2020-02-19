@@ -27,6 +27,7 @@
 #include "Commands/VisionDrive.h"
 #include "Commands/SetHoodHigh.h"
 #include "Commands/SetHoodLow.h"
+#include "DataLogger.h"
 
 
 #include "frc/XboxController.h"

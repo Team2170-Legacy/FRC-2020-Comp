@@ -26,6 +26,7 @@ void Robot::RobotInit() {
 	// news. Don't move it.
 	oi.reset(new OI());
 	frc::SmartDashboard::PutData("Auto Modes", &chooser);
+	frc::SmartDashboard::PutNumber("LED Code", 0);
 }
 
 /**
