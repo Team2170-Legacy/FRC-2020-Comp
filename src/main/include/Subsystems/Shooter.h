@@ -38,6 +38,10 @@ private:
 	rev::CANEncoder m_shooterEncoder{m_shooterMotor.GetEncoder()};
 	rev::CANPIDController m_pidShooterMotor{m_shooterMotor.GetPIDController()};
 
+	rev::CANSparkMax m_shooterMotor2{CANIDs::kShooterMotorID2, rev::CANSparkMax::MotorType::kBrushless};
+	rev::CANEncoder m_shooterEncoder2{m_shooterMotor2.GetEncoder()};
+	rev::CANPIDController m_pidShooterMotor2{m_shooterMotor2.GetPIDController()};
+
 	// PID Gains for closed-loop velocity control
 	const double kP, kI = 0, kD = 0, kIz = 0, kFF, kMaxOutput = 1, kMinOutput = -1;	
 
@@ -61,6 +65,7 @@ Shooter();
 	void ShooterOn(double velocity = DEFAULT_SHOOTER_VELOCITY);
 	bool IsShooterOn() {return ShooterEnabled;}
 	double GetShooterSpeed() {return CommandedVelocity;}
+	double GetMotorVelocity();
 
 	void SetHoodHigh();
 
