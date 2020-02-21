@@ -38,32 +38,30 @@ Vision::Vision() {
 
 void Vision::Periodic() {
     bool targetLocked = TargetIsLocked();
-    if(targetLocked) {
-        frc::SmartDashboard::PutNumber("LED Code",LEDCodes::VLock);
-    }
-
     if (!targetLocked) {
         visionDriveActive = false;
         distance = 0;
         distanceError = 0;
+        distanceError_DB = 0;
         angleError = 0;
         angleError_DB = 0;
         speed = 0;
         omega = 0;        
     }
     else if (!visionDriveActive) {
-        // calulate distance error
+        frc::SmartDashboard::PutNumber("LED Code",LEDCodes::VLock);
         distance = GetDistanceToPowerport();
         nt_distance.SetDouble(distance);
         optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
         distanceError =  optimalShootingDistance - distance;
+        distanceError_DB = distanceError;
         angleError = GetXAngleToTarget();
         angleError_DB = angleError;
         speed = 0;
         omega = 0;        
     }
     visionLogger.WriteVisionData(targetLocked, visionDriveActive, distance,
-                                 distanceError, angleError, angleError_DB, speed, omega);
+                                 distanceError, distanceError_DB, angleError, angleError_DB, speed, omega);
 }
 
 /**
@@ -181,6 +179,8 @@ void Vision::VisionSteerInit() {
  */
 std::pair<double, double> Vision::SteerToLockedTarget() {
  
+    frc::SmartDashboard::PutNumber("LED Code",LEDCodes::VDrive);
+
     // calulate distance error
     optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
     distance = GetDistanceToPowerport();
@@ -229,8 +229,24 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
 
     if (angleError >  -5 && angleError < 5)
     {
+
+        // deadband angle error
+        if (distanceError < distanceErrorDeadband && distanceError > -distanceErrorDeadband)
+        {
+            distanceError_DB = 0;
+        }
+        else if (angleError > angleErrorDeadband)
+        {
+            distanceError_DB = distanceError - distanceErrorDeadband;
+        }
+        else
+        {
+            distanceError_DB = distanceError + distanceErrorDeadband;
+        }
+
+
         // speed PID calculations
-        speed = kP_Distance * distanceError;
+        speed = kP_Distance * distanceError_DB;
 
         // limit speed
         if (speed > speedLimiter)
@@ -241,6 +257,7 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
         {
             speed = -speedLimiter;
         }
+
     }
 
  

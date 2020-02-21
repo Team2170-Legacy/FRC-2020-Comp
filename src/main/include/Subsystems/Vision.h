@@ -26,7 +26,8 @@
 #include <cmath>
 #include <tuple>
 
-#define  Deg2Rad 3.14159/180
+#define Deg2Rad 3.14159/180
+#define inches 1.0/12
 
 /**
  *
@@ -57,10 +58,10 @@ private:
 	nt::NetworkTableEntry nt_kP_Distance;
 	
 	// for distance calculation
-	const double powerportVisionTargetHeight = (6 + 9.25/12) + (1 + 5.0/12)/2; // height of the center of the vision target (ft)
-	const double cameraHeight = 21.0/12; // height that the camera is mounted at (ft)
+	const double powerportVisionTargetHeight = (6 + 9.25 * inches) + (1 + 5.0 * inches)/2; // height of the center of the vision target (ft)
+	const double cameraHeight = 21.0 * inches; // height that the camera is mounted at (ft)
 	const double cameraAngle = 35; // angle camera is mounted at from horizontal (degrees)
-	const double cameraDistanceFromFrontBumper = 15.0/12; // ft
+	const double cameraDistanceFromFrontBumper = 15.0 * inches; // ft
 	double optimalShootingDistance = 10; // optimal distance from powerport to shoot from (ft)
 
 	// For VisionDrive PID controller
@@ -68,16 +69,18 @@ private:
 	double kP_Omega = -0.075; 
 	double kI_Omega = -0.023;
 	double kP_Distance = -0.5;
+	double distanceErrorDeadband = 0; // feet 
 	double omegaLimiter = 0.46;
 	double omegaIntegrator = 0;
 	double speedLimiter = 0.7;
 	const double deltaTime = 0.02;
 
-	// data logging
+	// for data logging
 	DataLogger visionLogger;
 	bool visionDriveActive = false;
 	double distance = 0;	
 	double distanceError = 0;
+	double distanceError_DB = 0;
 	double angleError = 0;
 	double angleError_DB = 0;
 	double speed = 0;

@@ -16,7 +16,7 @@ public:
 	void EndSession();
 	void LogData(std::string data);
     void VisionLogger(std::string name);
-    void WriteVisionData(bool targetLocked, bool visionDriveActive, double distance, double distanceError, double angleError, double angleError_DB, double speed, double omega);
+    void WriteVisionData(bool targetLocked, bool visionDriveActive, double distance, double distanceError, double distanceError_DB, double angleError, double angleError_DB, double speed, double omega);
 	void DriveTrainLogger(std::string name);
 	void WriteDriveTrainData(double leftVelocityCommand, double rightVelocityCommand, double leftActualVelocity, double rightActualVelocity, double leftLeadAppliedOutput, double leftFollowAppliedOutput, double rightLeadAppliedOutput, double rightFollowAppliedOutput, double leftLeadVoltage, double leftFollowVoltage, double rightLeadVoltage, double rightFollowVoltage, double leftLeadCurrent, double leftFollowCurrent, double rightLeadCurrent, double rightFollowCurrent);
 	virtual ~DataLogger();
