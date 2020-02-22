@@ -10,7 +10,9 @@
 // NOTE:  Consider using this command inline, rather than writing a subclass.
 // For more information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-ConfigShooterHigh::ConfigShooterHigh() {
+ConfigShooterHigh::ConfigShooterHigh(Shooter* mrnoll):
+  shooterSpeedHigh(frc::Preferences::GetInstance()->GetDouble("High Shooter Speed", 1750.0)) {
   // Add your commands here, e.g.
   // AddCommands(FooCommand(), BarCommand());
+  AddCommands(SetHoodHigh(mrnoll), SetShooterSpeed(mrnoll, shooterSpeedHigh));
 }
