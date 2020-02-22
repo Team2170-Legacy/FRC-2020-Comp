@@ -31,25 +31,17 @@ void VisionDrive::Initialize() {
  * 
  */
 void VisionDrive::Execute() {
-    if (m_vision->TargetIsLocked())
-    {
         std::pair<double, double> result = m_vision->SteerToLockedTarget();
         m_drive->VelocityArcadeDrive(result.first, result.second);
-    }
-    else
-    {
-        m_vision->TakeSnapshot();
-    }
+ 
 }
 
 /**
  * @brief Make this return true when this Command no longer needs to run execute()
- * 
- * @return true when no target is locked
- * @return false when a target is locked
+
  */
 bool VisionDrive::IsFinished() {
-    return !m_vision->TargetIsLocked();
+    return false;
 }
 
 /**

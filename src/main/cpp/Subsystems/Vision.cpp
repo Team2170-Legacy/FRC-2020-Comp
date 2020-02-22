@@ -29,11 +29,16 @@ Vision::Vision() {
     nt_kP_Omega = table->GetEntry("Vision kP Omega");
     nt_kI_Omega = table->GetEntry("Vision kI Omega");
     nt_kP_Distance = table->GetEntry("Vision kP Distance");
+    nt_angle_DB = table->GetEntry("Vision Angle Deadband");
     nt_kP_Omega.SetDouble(kP_Omega);
     nt_kI_Omega.SetDouble(kI_Omega);
     nt_kP_Distance.SetDouble(kP_Distance);
+    nt_angle_DB.SetDouble(angleErrorDeadband);
 
     visionLogger.VisionLogger("/home/lvuser/VisionLogs/VisionLog_" + DataLogger::GetTimestamp() + ".csv");
+
+    SetCamMode(false);
+    SetLEDMode(forceOff);
 }
 
 void Vision::Periodic() {
@@ -167,6 +172,8 @@ void Vision::SetPipeline(Pipeline pipeline) {
  * @brief prepares for vision steer
  */
 void Vision::VisionSteerInit() {
+    SetCamMode(true);
+    SetLEDMode(currentPipelineMode);
     visionDriveActive = true;
     nt_visionDrive.SetBoolean(true);
     omegaIntegrator = 0.0;
@@ -180,6 +187,9 @@ void Vision::VisionSteerInit() {
 std::pair<double, double> Vision::SteerToLockedTarget() {
  
     frc::SmartDashboard::PutNumber("LED Code",LEDCodes::VDrive);
+
+   // SetCamMode(true);
+   // SetLEDMode(currentPipelineMode);
 
     // calulate distance error
     optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
@@ -208,6 +218,7 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
     // fetch gains from network tables
     kP_Omega = nt_kP_Omega.GetDouble(kP_Omega);
     kI_Omega = nt_kI_Omega.GetDouble(kI_Omega);
+    angleErrorDeadband = nt_angle_DB.GetDouble(angleErrorDeadband);
     kP_Distance = nt_kP_Distance.GetDouble(kP_Distance);
     omega = 0.0;
     speed = 0.0;
@@ -268,6 +279,8 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
  * @brief ends the vision steer
  */
 void Vision::VisionSteerEnd() {
+    SetCamMode(false);
+    SetLEDMode(forceOff);
     visionDriveActive = false;
     nt_visionDrive.SetBoolean(false);
     visionDriveActive = false;
