@@ -5,26 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/IntakeOn.h"
+#include "Commands/ClimbGenUp.h"
+#include "Robot.h"
 
-IntakeOn::IntakeOn(Intake* subsystem) : m_intake{subsystem} {
+ClimbGenUp::ClimbGenUp(Climber* subsystem): m_climber{subsystem} {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements({subsystem});
 }
 
 // Called when the command is initially scheduled.
-void IntakeOn::Initialize() {}
+void ClimbGenUp::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void IntakeOn::Execute() {
-  frc::SmartDashboard::PutNumber("LED Code",LEDCodes::IntakeBalls);
-  m_intake->IntakeOn();
+void ClimbGenUp::Execute() {
+  m_climber->ClimberUp();
 }
 
 // Called once the command ends or is interrupted.
-void IntakeOn::End(bool interrupted) {
-  m_intake->IntakeOff();
-}
+void ClimbGenUp::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool IntakeOn::IsFinished() { return false; }
+bool ClimbGenUp::IsFinished() { return false; }

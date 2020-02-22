@@ -5,26 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/IntakeOn.h"
+#include "Commands/ToggleVision.h"
 
-IntakeOn::IntakeOn(Intake* subsystem) : m_intake{subsystem} {
+// NOTE:  Consider using this command inline, rather than writing a subclass.
+// For more information, see:
+// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
+ToggleVision::ToggleVision(Vision* subsystem) : m_vision{subsystem} {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements({subsystem});
 }
 
 // Called when the command is initially scheduled.
-void IntakeOn::Initialize() {}
-
-// Called repeatedly when this Command is scheduled to run
-void IntakeOn::Execute() {
-  frc::SmartDashboard::PutNumber("LED Code",LEDCodes::IntakeBalls);
-  m_intake->IntakeOn();
+void ToggleVision::Initialize() {
+  m_vision->ToggleCamMode();
 }
-
-// Called once the command ends or is interrupted.
-void IntakeOn::End(bool interrupted) {
-  m_intake->IntakeOff();
-}
-
-// Returns true when the command should end.
-bool IntakeOn::IsFinished() { return false; }

@@ -7,30 +7,17 @@
 
 #pragma once
 
-#include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include "Subsystems/Feeder.h"
+#include <frc2/command/InstantCommand.h>
+#include "Subsystems/Vision.h"
 
-/**
- * An example command.
- *
- * <p>Note that this extends CommandHelper, rather extending CommandBase
- * directly; this is crucially important, or else the decorator functions in
- * Command will *not* work!
- */
-class SpinStorageCCW
-    : public frc2::CommandHelper<frc2::CommandBase, SpinStorageCCW> {
+class ToggleVision
+    : public frc2::CommandHelper<frc2::InstantCommand,
+                                 ToggleVision> {
  public:
-  SpinStorageCCW(Feeder* subsystem);
+  ToggleVision(Vision* subsystem);
 
   void Initialize() override;
-
-  void Execute() override;
-
-  void End(bool interrupted) override;
-
-  bool IsFinished() override;
-
-private:
-  Feeder* m_feeder;
+ private:
+  Vision* m_vision;
 };

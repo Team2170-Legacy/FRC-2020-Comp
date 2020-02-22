@@ -22,8 +22,7 @@ void LoaderUp::Execute() {
 
 // Called once the command ends or is interrupted.
 void LoaderUp::End(bool interrupted) {
-  m_loader->LoaderStop();
-}
+  }
 
 // Returns true when the command should end.
-bool LoaderUp::IsFinished() { return false; }
+bool LoaderUp::IsFinished() { return true; }

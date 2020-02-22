@@ -5,26 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/IntakeOn.h"
+#include "Commands/RetractWinch.h"
+#include "Robot.h"
 
-IntakeOn::IntakeOn(Intake* subsystem) : m_intake{subsystem} {
+RetractWinch::RetractWinch(Climber* subsystem): m_climber{subsystem} {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements({subsystem});
 }
 
 // Called when the command is initially scheduled.
-void IntakeOn::Initialize() {}
+void RetractWinch::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void IntakeOn::Execute() {
-  frc::SmartDashboard::PutNumber("LED Code",LEDCodes::IntakeBalls);
-  m_intake->IntakeOn();
+void RetractWinch::Execute() {
+  m_climber->WinchRetract();
 }
 
 // Called once the command ends or is interrupted.
-void IntakeOn::End(bool interrupted) {
-  m_intake->IntakeOff();
-}
+void RetractWinch::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool IntakeOn::IsFinished() { return false; }
+bool RetractWinch::IsFinished() { return false; }

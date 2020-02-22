@@ -5,26 +5,18 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/IntakeOn.h"
+#include "Commands/SetShooterSpeed.h"
 
-IntakeOn::IntakeOn(Intake* subsystem) : m_intake{subsystem} {
+// NOTE:  Consider using this command inline, rather than writing a subclass.
+// For more information, see:
+// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
+SetShooterSpeed::SetShooterSpeed(Shooter* subsystem, double speed) {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements({subsystem});
+  shooterSpeed = speed;
 }
 
 // Called when the command is initially scheduled.
-void IntakeOn::Initialize() {}
-
-// Called repeatedly when this Command is scheduled to run
-void IntakeOn::Execute() {
-  frc::SmartDashboard::PutNumber("LED Code",LEDCodes::IntakeBalls);
-  m_intake->IntakeOn();
+void SetShooterSpeed::Initialize() {
+  m_shooter->ShooterOn(shooterSpeed);
 }
-
-// Called once the command ends or is interrupted.
-void IntakeOn::End(bool interrupted) {
-  m_intake->IntakeOff();
-}
-
-// Returns true when the command should end.
-bool IntakeOn::IsFinished() { return false; }
