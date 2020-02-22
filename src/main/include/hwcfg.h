@@ -8,8 +8,8 @@ enum CANIDs {
 	kLeftLeadID = 4,
 	kShooterMotorID = 5,
 	kIntakeMotorID = 6,
-	kFeederMotorID = 7,
-	kLoaderMotorID = 8,
+	kFeederMotorID = 8,
+	kLoaderMotorID = 7,
 	kShooterMotorID2 = 9,
 	kClimberMotorID = 10
 };

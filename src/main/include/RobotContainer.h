@@ -28,6 +28,7 @@
 #include "Commands/VisionDrive.h"
 #include "Commands/ConfigShooterHigh.h"
 #include "Commands/ConfigShooterLow.h"
+#include "Commands/SetShooterSpeed.h"
 
 
 #include "frc/XboxController.h"
