@@ -187,10 +187,7 @@ void Vision::VisionSteerInit() {
 std::pair<double, double> Vision::SteerToLockedTarget() {
  
     frc::SmartDashboard::PutNumber("LED Code",LEDCodes::VDrive);
-
-   // SetCamMode(true);
-   // SetLEDMode(currentPipelineMode);
-
+    
     // calulate distance error
     optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
     distance = GetDistanceToPowerport();
