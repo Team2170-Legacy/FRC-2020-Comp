@@ -32,6 +32,20 @@ void Robot::RobotInit() {
 	frc::SmartDashboard::PutNumber("LED Code",0);
 }
 
+void Robot::SetupAutoOptions() {
+	oi.reset(new OI());
+
+/*
+	double StartDelay = frc::Preferences::GetInstance()->GetDouble("Auto Start Delay", 3.0);
+
+	// Add commands to Autonomous Sendable Chooser
+	chooser.AddDefault("A Do Nothing", nullptr);
+	chooser.AddObject("B Drive Straight",
+			new AutonomousMotionProfile(&AutoMove_Straight_L, &AutoMove_Straight_R));
+	*/
+	
+}
+
 void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
 
 /**

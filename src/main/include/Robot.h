@@ -55,4 +55,6 @@ private:
 	std::shared_ptr<frc::DigitalOutput> dataOutPin1;
   	std::shared_ptr<frc::DigitalOutput> dataOutPin2;
   	std::shared_ptr<frc::DigitalOutput> dataOutPin3;
+
+	void SetupAutoOptions();
 };
