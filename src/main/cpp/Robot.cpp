@@ -70,9 +70,6 @@ void Robot::TeleopInit() {
 }
 
 void Robot::TeleopPeriodic() {
-}
-
-void Robot::TeleopPeriodic() {
 	int code = frc::SmartDashboard::GetNumber("LED Code",0);
 	sendLEDCode(code);
 }
