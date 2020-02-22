@@ -10,10 +10,13 @@
 // NOTE:  Consider using this command inline, rather than writing a subclass.
 // For more information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-SetShooterSpeed::SetShooterSpeed(Shooter* subsystem, double rpm) {
+SetShooterSpeed::SetShooterSpeed(Shooter* subsystem, double speed) {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements({subsystem});
+  shooterSpeed = speed;
 }
 
 // Called when the command is initially scheduled.
-void SetShooterSpeed::Initialize() {}
+void SetShooterSpeed::Initialize() {
+  m_shooter->ShooterOn(shooterSpeed);
+}

@@ -9,10 +9,15 @@
 
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/SequentialCommandGroup.h>
+#include "Subsystems/Shooter.h"
+#include "Commands/SetHoodLow.h"
+#include "Commands/SetShooterSpeed.h"
+#include "frc/Preferences.h"
 
 class ConfigShooterLow
     : public frc2::CommandHelper<frc2::SequentialCommandGroup,
                                  ConfigShooterLow> {
  public:
-  ConfigShooterLow();
+  ConfigShooterLow(Shooter* mrnoll);
+  double shooterSpeedLow;
 };

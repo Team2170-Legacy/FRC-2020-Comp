@@ -9,10 +9,15 @@
 
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/SequentialCommandGroup.h>
+#include "Commands/SetHoodHigh.h"
+#include "Commands/SetShooterSpeed.h"
+#include "Subsystems/Shooter.h"
+#include "frc/Preferences.h"
 
 class ConfigShooterHigh
     : public frc2::CommandHelper<frc2::SequentialCommandGroup,
                                  ConfigShooterHigh> {
  public:
-  ConfigShooterHigh();
+  ConfigShooterHigh(Shooter* subsystem);
+  double shooterSpeedHigh;
 };

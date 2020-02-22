@@ -10,12 +10,13 @@
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/InstantCommand.h>
 #include "Subsystems/Shooter.h"
+#include "frc/Preferences.h"
 
 class SetShooterSpeed
     : public frc2::CommandHelper<frc2::InstantCommand,SetShooterSpeed> {
  public:
-  SetShooterSpeed(Shooter* subsystem, double rpm = 0.0);
-
+  SetShooterSpeed(Shooter* subsystem, double speed);
+  double shooterSpeed;
   void Initialize() override;
 
 private:
