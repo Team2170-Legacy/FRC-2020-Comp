@@ -19,6 +19,8 @@ public:
     void WriteVisionData(bool targetLocked, bool visionDriveActive, double distance, double distanceError, double distanceError_DB, double angleError, double angleError_DB, double speed, double omega);
 	void DriveTrainLogger(std::string name);
 	void WriteDriveTrainData(double leftVelocityCommand, double rightVelocityCommand, double leftActualVelocity, double rightActualVelocity, double leftLeadAppliedOutput, double leftFollowAppliedOutput, double rightLeadAppliedOutput, double rightFollowAppliedOutput, double leftLeadVoltage, double leftFollowVoltage, double rightLeadVoltage, double rightFollowVoltage, double leftLeadCurrent, double leftFollowCurrent, double rightLeadCurrent, double rightFollowCurrent);
+	void ShooterLogger(std::string name);
+	void WriteShooterData(double leadRPM, double followRPM, double leadAppliedOutput, double followAppliedOutput, double leadBusVoltage, double followBusVoltage, double leadCurrent, double followCurrent);
 	virtual ~DataLogger();
 private:
 	std::ofstream tLog;

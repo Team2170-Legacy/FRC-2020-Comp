@@ -82,6 +82,18 @@ void DataLogger::DriveTrainLogger(std::string name) {
 	 + std::to_string(leftLeadCurrent) + "," + std::to_string(leftFollowCurrent) + "," + std::to_string(rightLeadCurrent) + "," + std::to_string(rightFollowCurrent) + "," << std::endl;
 }
 
+void DataLogger::ShooterLogger(std::string name) {
+    printf("construct\n");
+	mFilename = name;
+	tLog.open(mFilename, std::ofstream::out | std::ofstream::trunc);
+	tLog << "Time,LeftRPM,RightRPM,LeadAppliedOutput,RightAppliedOutput,LeadBusVoltage,FollowBusVoltage,LeadCurrent,FollowCurrent" << std::endl;
+}
+
+void DataLogger::WriteShooterData(double leadRPM, double followRPM, double leadAppliedOutput, double followAppliedOutput, double leadBusVoltage, double followBusVoltage, double leadCurrent, double followCurrent) {
+	tLog << std::to_string(LogTimer.Get()) + "," +  std::to_string(leadRPM) + "," + std::to_string(followRPM) + "," + std::to_string(leadAppliedOutput) + "," + std::to_string(followAppliedOutput) + "," + std::to_string(leadBusVoltage) + "," + std::to_string(followBusVoltage) + "," + std::to_string(leadCurrent) + "," + std::to_string(followCurrent) + "," << std::endl;
+}
+
+
 void DataLogger::LogData(std::string data) {
     tLog << std::to_string(LogTimer.Get()) + ", " +  data << std::endl;
 }
