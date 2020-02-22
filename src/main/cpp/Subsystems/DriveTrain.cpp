@@ -72,6 +72,9 @@ void DriveTrain::Periodic() {
                         units::meter_t(m_leftEncoder.GetPosition()),
                         units::meter_t(m_rightEncoder.GetPosition()));
 
+    frc::SmartDashboard::PutNumber("Left Wheel Velocity", m_leftEncoder.GetVelocity());
+    frc::SmartDashboard::PutNumber("Right Wheel Velocity", m_rightEncoder.GetVelocity());    
+
     double leftVelocity = m_leftEncoder.GetVelocity(); 
     double rightVelocity = m_rightEncoder.GetVelocity(); 
     double leftLeadAppliedOutput = m_leftLead.GetAppliedOutput();
