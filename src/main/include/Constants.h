@@ -17,7 +17,7 @@ namespace DriveConstants {
 }
 
 namespace ShooterContants {
-  constexpr double kGearRatio (1.0 / 9.0);
+  constexpr double kGearRatio (9.0);
   constexpr double kChainReduction = (18.0 / 273.0);
 }
 

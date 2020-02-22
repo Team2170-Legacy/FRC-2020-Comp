@@ -97,6 +97,8 @@ DriveTrain();
 	void SetWheelVelocity(double left, double right);
 	void SetWheelVelocity(double velocity);
 	void SetWheelVelocity(units::meters_per_second_t left, units::meters_per_second_t right);
+	void SetWheelPosition(double left, double right);
+	void SetWheelPosition(units::meter_t left, units::meter_t right);
 
 	// odometry/kinematics
 	void ResetEncoders();

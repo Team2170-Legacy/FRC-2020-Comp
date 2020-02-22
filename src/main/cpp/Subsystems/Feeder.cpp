@@ -20,8 +20,8 @@ Feeder::Feeder() :
     kMaxAccel(frc::Preferences::GetInstance()->GetDouble("Feeder Accel", 10.0))
 
   {
-    m_storageEncoder.SetVelocityConversionFactor(ShooterContants::kGearRatio 
-        * ShooterContants::kChainReduction);
+    m_storageEncoder.SetVelocityConversionFactor(ShooterContants::kChainReduction 
+        / ShooterContants::kGearRatio);
     m_pidStorageController.SetFF(kFF);
     m_pidStorageController.SetP(kP);
     m_pidStorageController.SetSmartMotionMaxVelocity(30.0);
