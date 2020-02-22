@@ -27,7 +27,7 @@ DriveTrain::DriveTrain() :
     m_leftFollow.Follow(m_leftLead);
     m_rightFollow.Follow(m_rightLead);
 
-    // Set encoder converting factors 
+    // Set encoder converting factors Inches/Sec, Inches
     m_leftEncoder.SetVelocityConversionFactor((M_PI * kWheelDiameter / (kGearRatio * 60.0 * 12.0)));
     m_rightEncoder.SetVelocityConversionFactor((M_PI * kWheelDiameter / (kGearRatio * 60.0 * 12.0)));
     m_leftEncoder.SetPositionConversionFactor((M_PI * kWheelDiameter) / (kGearRatio * 12.0));
