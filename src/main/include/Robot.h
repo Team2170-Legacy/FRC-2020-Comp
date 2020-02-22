@@ -38,6 +38,7 @@ public:
 	frc::LiveWindow *lw = frc::LiveWindow::GetInstance();
 	frc::SendableChooser<frc2::Command*> chooser;
 	void RobotInit() override;
+	void RobotPeriodic() override;
 	void DisabledInit() override;
 	void DisabledPeriodic() override;
 	void AutonomousInit() override;
@@ -47,6 +48,7 @@ public:
 	void sendLEDCode(int code);
 
 private:
+	frc2::Command* m_autonomousCommand = nullptr;
 	RobotContainer m_container;
 
 	// LED Strip DIOs

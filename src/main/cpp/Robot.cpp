@@ -32,6 +32,8 @@ void Robot::RobotInit() {
 	frc::SmartDashboard::PutNumber("LED Code",0);
 }
 
+void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
+
 /**
  * This function is called when the disabled button is hit.
  * You can use it to reset subsystems before shutting down.
@@ -41,21 +43,18 @@ void Robot::DisabledInit(){
 }
 
 void Robot::DisabledPeriodic() {
-	frc2::CommandScheduler::GetInstance().Run();
 	sendLEDCode(LEDCodes::Off);
 }
 
 void Robot::AutonomousInit() {
-#if 0
+	m_autonomousCommand = m_container.GetAutonomousCommand();
 
-	autonomousCommand = chooser.GetSelected();
-	if (autonomousCommand != nullptr)
-		autonomousCommand->Start();
-#endif
+	if (m_autonomousCommand != nullptr) {
+		m_autonomousCommand->Schedule();
+	}
 }
 
 void Robot::AutonomousPeriodic() {
-	frc2::CommandScheduler::GetInstance().Run();
 }
 
 void Robot::TeleopInit() {
@@ -63,14 +62,17 @@ void Robot::TeleopInit() {
 	// teleop starts running. If you want the autonomous to
 	// continue until interrupted by another command, remove
 	// these lines or comment it out.
-	if (autonomousCommand != nullptr)
-		autonomousCommand->Cancel();
-
+	if (m_autonomousCommand != nullptr) {
+		m_autonomousCommand->Cancel();
+		m_autonomousCommand = nullptr;
+	}
 	m_container.StartDataLogging();
 }
 
 void Robot::TeleopPeriodic() {
-	frc2::CommandScheduler::GetInstance().Run();
+}
+
+void Robot::TeleopPeriodic() {
 	int code = frc::SmartDashboard::GetNumber("LED Code",0);
 	sendLEDCode(code);
 }
