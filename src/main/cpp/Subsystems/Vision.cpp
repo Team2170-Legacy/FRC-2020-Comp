@@ -43,17 +43,10 @@ Vision::Vision() {
 
 void Vision::Periodic() {
     bool targetLocked = TargetIsLocked();
-    if (!targetLocked) {
-        visionDriveActive = false;
-        distance = 0;
-        distanceError = 0;
-        distanceError_DB = 0;
-        angleError = 0;
-        angleError_DB = 0;
-        speed = 0;
-        omega = 0;        
+    if (visionDriveActive) {
+
     }
-    else if (!visionDriveActive) {
+    else if (targetLocked) {
         frc::SmartDashboard::PutNumber("LED Code",LEDCodes::VLock);
         distance = GetDistanceToPowerport();
         nt_distance.SetDouble(distance);
@@ -62,6 +55,15 @@ void Vision::Periodic() {
         distanceError_DB = distanceError;
         angleError = GetXAngleToTarget();
         angleError_DB = angleError;
+        speed = 0;
+        omega = 0;    
+    }
+    else {
+        distance = 0;
+        distanceError = 0;
+        distanceError_DB = 0;
+        angleError = 0;
+        angleError_DB = 0;
         speed = 0;
         omega = 0;        
     }
@@ -222,23 +224,26 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
 
     // omega PID calculations
     omegaIntegrator += angleError_DB * deltaTime;
-    omega = kP_Omega * angleError_DB;
-    omega += omegaIntegrator * kI_Omega;
+    double omegaP = kP_Omega * angleError_DB;
+    double omegaI = omegaIntegrator * kI_Omega;
+    omega = omegaP + omegaI;
 
     // limit omega
     if (omega > omegaLimiter)
     {
         omega = omegaLimiter;
+        omegaIntegrator -= angleError_DB * deltaTime; // PI anti-windup
     }
     else if (omega < -omegaLimiter)
     {
         omega = -omegaLimiter;
+        omegaIntegrator -= angleError_DB * deltaTime; // PI anti-windup
     }
 
     if (angleError >  -5 && angleError < 5)
     {
 
-        // deadband angle error
+        // deadband distance error
         if (distanceError < distanceErrorDeadband && distanceError > -distanceErrorDeadband)
         {
             distanceError_DB = 0;
@@ -280,7 +285,6 @@ void Vision::VisionSteerEnd() {
     SetLEDMode(forceOff);
     visionDriveActive = false;
     nt_visionDrive.SetBoolean(false);
-    visionDriveActive = false;
 }
 
 /**
