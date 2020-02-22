@@ -1,15 +1,16 @@
 #pragma once
 
 enum CANIDs {
-	kLeftLeadID = 4,
-	kLeftFollowID = 3,
 	kRightLeadID = 1,
-  kRightFollowID = 2,
+	kRightFollowID = 2,
+	kLeftFollowID = 3,
+	kLeftLeadID = 4,
 	kShooterMotorID = 5,
 	kIntakeMotorID = 6,
 	kFeederMotorID = 7,
-	kClimberMotorID = 8,
-	kLoaderMotorID = 9
+	kLoaderMotorID = 8,
+	kShooterMotorID2 = 9,
+	kClimberMotorID = 10
 };
 
 enum PCMIDs {
