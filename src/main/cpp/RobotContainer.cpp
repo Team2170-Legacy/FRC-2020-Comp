@@ -27,8 +27,8 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_operator,6).WhileHeld(new ClimbGenDown(&m_climber));
   frc2::JoystickButton(&m_operator,7).WhileHeld(new ExtendWinch(&m_climber));
   frc2::JoystickButton(&m_operator,8).WhileHeld(new RetractWinch(&m_climber));
-  frc2::JoystickButton(&m_operator,9).WhileHeld(new SetHoodHigh(&m_shooter));
-  frc2::JoystickButton(&m_operator,10).WhileHeld(new SetHoodLow(&m_shooter));
+  frc2::JoystickButton(&m_operator,9).WhileHeld(new ConfigShooterHigh(&m_shooter));
+  frc2::JoystickButton(&m_operator,10).WhileHeld(new ConfigShooterLow(&m_shooter));
   frc2::JoystickButton(&m_driver, 3).WhileHeld(new VisionDrive(&m_vision, &m_driveTrain));
 }
 

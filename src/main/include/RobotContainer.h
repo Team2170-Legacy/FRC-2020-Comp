@@ -25,8 +25,8 @@
 #include "Commands/SpinStorage.h"
 #include "Commands/SpinStorageCCW.h"
 #include "Commands/VisionDrive.h"
-#include "Commands/SetHoodHigh.h"
-#include "Commands/SetHoodLow.h"
+#include "Commands/ConfigShooterHigh.h"
+#include "Commands/ConfigShooterLow.h"
 
 
 #include "frc/XboxController.h"
