@@ -100,5 +100,6 @@
     "xtr1common": "cpp",
     "xtree": "cpp",
     "*.inc": "cpp"
-  }
+  },
+  "wpilib.autoStartRioLog": false
 }

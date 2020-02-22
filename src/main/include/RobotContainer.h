@@ -9,6 +9,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/button/JoystickButton.h>
+#include <frc2/command/RamseteCommand.h>
 
 #include "Subsystems/Climber.h"
 #include "Subsystems/DriveTrain.h"
@@ -27,6 +28,9 @@
 #include "Commands/VisionDrive.h"
 #include "Commands/ConfigShooterHigh.h"
 #include "Commands/ConfigShooterLow.h"
+#include "Commands/SetShooterSpeed.h"
+#include "Commands/PullIntakeDown.h"
+#include "Commands/PullIntakeUp.h"
 
 
 #include "frc/XboxController.h"
@@ -35,7 +39,7 @@
 #include "Commands/ExtendWinch.h"
 #include "Commands/RetractWinch.h"
 #include "hwcfg.h"
-
+#include "Constants.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since

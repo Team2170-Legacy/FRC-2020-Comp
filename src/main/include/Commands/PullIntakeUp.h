@@ -7,18 +7,30 @@
 
 #pragma once
 
+#include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc2/command/InstantCommand.h>
-#include "Subsystems/Shooter.h"
-#include "frc/Preferences.h"
+#include "Subsystems/Intake.h"
 
-class SetShooterSpeed
-    : public frc2::CommandHelper<frc2::InstantCommand,SetShooterSpeed> {
+/**
+ * An example command.
+ *
+ * <p>Note that this extends CommandHelper, rather extending CommandBase
+ * directly; this is crucially important, or else the decorator functions in
+ * Command will *not* work!
+ */
+class PullIntakeUp
+    : public frc2::CommandHelper<frc2::CommandBase, PullIntakeUp> {
  public:
-  SetShooterSpeed(Shooter* subsystem, double speed = 0.0);
-  double shooterSpeed;
+  PullIntakeUp(Intake* subsystem);
+
   void Initialize() override;
 
+  void Execute() override;
+
+  void End(bool interrupted) override;
+
+  bool IsFinished() override;
+
 private:
-  Shooter* m_shooter;
+  Intake* m_intake;
 };

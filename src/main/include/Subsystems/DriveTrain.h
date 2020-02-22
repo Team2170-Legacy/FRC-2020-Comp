@@ -29,10 +29,9 @@
 #include <frc/geometry/Pose2d.h>
 #include <frc/ADXRS450_Gyro.h>
 #include <frc/geometry/Rotation2d.h>
+#include <units/units.h>
 #include "DataLogger.h"
 #include "hwcfg.h"
-
-
 
 /**
  *
@@ -97,6 +96,9 @@ DriveTrain();
 	void SetWheelVolts(double voltage);
 	void SetWheelVelocity(double left, double right);
 	void SetWheelVelocity(double velocity);
+	void SetWheelVelocity(units::meters_per_second_t left, units::meters_per_second_t right);
+	void SetWheelPosition(double left, double right);
+	void SetWheelPosition(units::meter_t left, units::meter_t right);
 
 	// odometry/kinematics
 	void ResetEncoders();

@@ -55,6 +55,7 @@ private:
 	nt::NetworkTableEntry nt_distance;
 	nt::NetworkTableEntry nt_kP_Omega;
 	nt::NetworkTableEntry nt_kI_Omega;
+	nt::NetworkTableEntry nt_angle_DB;
 	nt::NetworkTableEntry nt_kP_Distance;
 	
 	// for distance calculation
@@ -65,10 +66,10 @@ private:
 	double optimalShootingDistance = 10; // optimal distance from powerport to shoot from (ft)
 
 	// For VisionDrive PID controller
-	double angleErrorDeadband = 2;	// degrees
-	double kP_Omega = -0.075; 
-	double kI_Omega = -0.023;
-	double kP_Distance = -0.5;
+	double angleErrorDeadband = 0.5; // 0;	// degrees
+	double kP_Omega = -0.12; 
+	double kI_Omega = -0.3; // -0;
+	double kP_Distance = -0;
 	double distanceErrorDeadband = 0; // feet 
 	double omegaLimiter = 0.46;
 	double omegaIntegrator = 0;

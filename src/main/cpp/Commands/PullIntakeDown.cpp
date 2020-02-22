@@ -5,17 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/SetHoodHigh.h"
+#include "Commands/PullIntakeDown.h"
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.
-// For more information, see:
-// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-SetHoodHigh::SetHoodHigh(Shooter* subsystem): m_shooter{subsystem} {
+PullIntakeDown::PullIntakeDown(Intake* subsystem): m_intake{subsystem} {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements({subsystem});
 }
 
 // Called when the command is initially scheduled.
-void SetHoodHigh::Initialize() {
-  m_shooter->SetHoodHigh();
+void PullIntakeDown::Initialize() {}
+
+// Called repeatedly when this Command is scheduled to run
+void PullIntakeDown::Execute() {
+  m_intake->IntakeDown();
 }
+
+// Called once the command ends or is interrupted.
+void PullIntakeDown::End(bool interrupted) {}
+
+// Returns true when the command should end.
+bool PullIntakeDown::IsFinished() { return false; }

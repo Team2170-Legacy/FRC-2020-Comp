@@ -11,7 +11,7 @@
 // For more information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 ConfigShooterLow::ConfigShooterLow(Shooter* mrnoll):
-  shooterSpeedLow(frc::Preferences::GetInstance()->GetDouble("Low Shooter Speed", 560.0)) {
+  shooterSpeedLow(frc::Preferences::GetInstance()->GetDouble("Low Shooter Speed", 20.0)) {
   // Add your commands here, e.g.
   // AddCommands(FooCommand(), BarCommand());
   AddCommands(SetHoodLow(mrnoll), SetShooterSpeed(mrnoll, shooterSpeedLow));  
