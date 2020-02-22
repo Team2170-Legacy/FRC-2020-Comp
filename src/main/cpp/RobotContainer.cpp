@@ -27,8 +27,8 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_operator,1).WhileHeld(new IntakeOn(&m_intake)); // A
   frc2::JoystickButton(&m_operator,2).WhileHeld(new IntakeReverse(&m_intake)); // B
   
-  frc2::JoystickButton(&m_driver,1).WhileHeld(new PullIntakeUp(&m_shooter)); // A
-  frc2::JoystickButton(&m_driver,2).WhileHeld(new PullIntakeDown(&m_shooter)); // B
+  frc2::JoystickButton(&m_driver,1).WhileHeld(new PullIntakeUp(&m_intake)); // A
+  frc2::JoystickButton(&m_driver,2).WhileHeld(new PullIntakeDown(&m_intake)); // B
 
   frc2::JoystickButton(&m_operator,3).WhileHeld(new SpinStorage(&m_feeder)); // X
   frc2::JoystickButton(&m_operator,4).WhileHeld(new SpinStorageCCW(&m_feeder)); // Y 
@@ -38,8 +38,8 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_operator,7).WhileHeld(new ExtendWinch(&m_climber)); // Left Arrow
   frc2::JoystickButton(&m_operator,8).WhileHeld(new RetractWinch(&m_climber)); // Right Arrow
 
-  frc2::JoystickButton(&m_operator,9).WhileHeld(new ConfigShooterHigh(&m_intake)); // Left Analog
-  frc2::JoystickButton(&m_operator,10).WhileHeld(new ConfigShooterLow(&m_intake)); // Right Analog
+  frc2::JoystickButton(&m_operator,9).WhileHeld(new ConfigShooterHigh(&m_shooter)); // Left Analog
+  frc2::JoystickButton(&m_operator,10).WhileHeld(new ConfigShooterLow(&m_shooter)); // Right Analog
 
   frc2::JoystickButton(&m_driver, 3).WhileHeld(new VisionDrive(&m_vision, &m_driveTrain)); // X
 }

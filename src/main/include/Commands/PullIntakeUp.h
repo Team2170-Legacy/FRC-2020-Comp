@@ -30,4 +30,7 @@ class PullIntakeUp
   void End(bool interrupted) override;
 
   bool IsFinished() override;
+
+private:
+  Intake* m_intake;
 };
