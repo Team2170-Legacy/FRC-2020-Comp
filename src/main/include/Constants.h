@@ -16,6 +16,11 @@ namespace DriveConstants {
 	extern const frc::DifferentialDriveKinematics kDriveKinematics;
 }
 
+namespace ShooterContants {
+  constexpr double kGearRatio (9.0);
+  constexpr double kChainReduction = (18.0 / 273.0);
+}
+
 namespace AutoConstants {
   constexpr auto kMaxSpeed = 3_mps;
   constexpr auto kMaxAcceleration = 3_mps_sq;

@@ -11,7 +11,7 @@
 // For more information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 ConfigShooterHigh::ConfigShooterHigh(Shooter* mrnoll):
-  shooterSpeedHigh(frc::Preferences::GetInstance()->GetDouble("High Shooter Speed", 1750.0)) {
+  shooterSpeedHigh(frc::Preferences::GetInstance()->GetDouble("High Shooter Speed", 20.0)) {
   // Add your commands here, e.g.
   // AddCommands(FooCommand(), BarCommand());
   AddCommands(SetHoodHigh(mrnoll), SetShooterSpeed(mrnoll, shooterSpeedHigh));

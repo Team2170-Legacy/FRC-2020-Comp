@@ -35,6 +35,7 @@ Shooter::Shooter() :
 
 void Shooter::Periodic() {
     if (ShooterEnabled == true) {
+        printf("%f\n", CommandedVelocity);
         m_pidShooterMotorLead.SetReference(CommandedVelocity, rev::ControlType::kSmartVelocity);
     }
     else {
@@ -47,6 +48,7 @@ void Shooter::ShooterOff() {
 }
 
 void Shooter::ShooterOn(double velocity) {
+    printf("Shooter On\n");
     ShooterEnabled = true;
     CommandedVelocity = velocity;
 }

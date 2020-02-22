@@ -15,7 +15,7 @@
 class SetShooterSpeed
     : public frc2::CommandHelper<frc2::InstantCommand,SetShooterSpeed> {
  public:
-  SetShooterSpeed(Shooter* subsystem, double speed);
+  SetShooterSpeed(Shooter* subsystem, double speed = 0.0);
   double shooterSpeed;
   void Initialize() override;
 
