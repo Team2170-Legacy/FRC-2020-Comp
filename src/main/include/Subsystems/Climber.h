@@ -36,7 +36,7 @@ private:
 	rev::CANSparkMax m_climberMotor{CANIDs::kClimberMotorID, rev::CANSparkMax::MotorType::kBrushless};
 	rev::CANEncoder m_climberEncoder{m_climberMotor.GetEncoder()};
 	rev::CANPIDController m_pidClimberMotor{m_climberMotor.GetPIDController()};
-	VictorSPX winchMotor{WINCH_MOTOR_ID};
+	WPI_TalonSRX winchMotor{CANIDs::kClimberMotorID};
 
 	
 	

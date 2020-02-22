@@ -25,7 +25,7 @@
 class Intake: public frc2::SubsystemBase {
 private:
 	frc::DoubleSolenoid m_intakeSol{PCMIDs::kIntakeSolFwd, PCMIDs::kIntakeSolRev};
-	WPI_TalonSRX m_intakeMotor{CANIDs::kIntakeMotorID};
+	WPI_VictorSPX m_intakeMotor{CANIDs::kIntakeMotorID};
 public:
 Intake();
 	void Periodic() override;
