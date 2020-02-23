@@ -5,25 +5,32 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/SpinStorageCCW.h"
+#include "Commands/TeleopIntake.h"
+#include "Robot.h"
 
-SpinStorageCCW::SpinStorageCCW(Feeder* subsystem): m_feeder{subsystem} {
+TeleopIntake::TeleopIntake(Intake* subsystem): m_intake{subsystem} {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements({subsystem});
 }
 
 // Called when the command is initially scheduled.
-void SpinStorageCCW::Initialize() {}
+void TeleopIntake::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void SpinStorageCCW::Execute() {
-  m_feeder->RotateCCW();
+void TeleopIntake::Execute() {
+  if(Robot::oi->getOperatorJoystick()->GetRawAxis(2) > 0.5){
+    m_intake->IntakeOn();
+  } else if(Robot::oi->getOperatorJoystick()->GetRawAxis(3) > 0.5){
+    m_intake->IntakeReverse();
+  } else {
+    m_intake->IntakeOff();
+  }
 }
 
 // Called once the command ends or is interrupted.
-void SpinStorageCCW::End(bool interrupted) {
-  m_feeder->FeedStop();
+void TeleopIntake::End(bool interrupted) {
+  m_intake->IntakeOff();
 }
 
 // Returns true when the command should end.
-bool SpinStorageCCW::IsFinished() { return false; }
+bool TeleopIntake::IsFinished() { return false; }

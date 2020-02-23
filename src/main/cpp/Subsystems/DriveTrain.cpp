@@ -14,7 +14,7 @@
 
 DriveTrain::DriveTrain() : 
 
-    kWheelDiameter(frc::Preferences::GetInstance()->GetDouble("Wheel Diameter", 6.0)),
+    kWheelDiameter(frc::Preferences::GetInstance()->GetDouble("Wheel Diameter", 5.0)),
     kP(frc::Preferences::GetInstance()->GetDouble("Drive kP", 0.1)),
     kFF(frc::Preferences::GetInstance()->GetDouble("Drive kFF", 0.05)),
     maxFeetPerSec(frc::Preferences::GetInstance()->GetDouble("Drive FPS", 18.0)),

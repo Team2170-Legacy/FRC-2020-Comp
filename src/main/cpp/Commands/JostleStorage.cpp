@@ -5,18 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/SetShooterSpeed.h"
+#include "Commands/JostleStorage.h"
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.
-// For more information, see:
-// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-SetShooterSpeed::SetShooterSpeed(Shooter* subsystem, double speed): m_shooter{subsystem} {
+JostleStorage::JostleStorage(Feeder* subsystem): m_feeder{subsystem} {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements({subsystem});
-  shooterSpeed = speed;
 }
 
 // Called when the command is initially scheduled.
-void SetShooterSpeed::Initialize() {
-  m_shooter->ShooterOn(shooterSpeed);
+void JostleStorage::Initialize() {}
+
+// Called repeatedly when this Command is scheduled to run
+void JostleStorage::Execute() {
+  m_feeder->Agitate();
 }
+
+// Called once the command ends or is interrupted.
+void JostleStorage::End(bool interrupted) {}
+
+// Returns true when the command should end.
+bool JostleStorage::IsFinished() { return false; }

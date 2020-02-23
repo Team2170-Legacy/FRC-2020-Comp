@@ -7,19 +7,30 @@
 
 #pragma once
 
+#include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc2/command/SequentialCommandGroup.h>
 #include "Subsystems/Shooter.h"
-#include "Subsystems/Feeder.h"
-#include "Commands/SetHoodLow.h"
-#include "Commands/SetShooterSpeed.h"
-#include "Commands/SpinStorageCCW.h"
-#include "frc/Preferences.h"
 
-class ConfigShooterLow
-    : public frc2::CommandHelper<frc2::SequentialCommandGroup,
-                                 ConfigShooterLow> {
+/**
+ * An example command.
+ *
+ * <p>Note that this extends CommandHelper, rather extending CommandBase
+ * directly; this is crucially important, or else the decorator functions in
+ * Command will *not* work!
+ */
+class ShooterOff
+    : public frc2::CommandHelper<frc2::CommandBase, ShooterOff> {
  public:
-  ConfigShooterLow(Shooter* mrnoll, Feeder* mrfoss);
-  double shooterSpeedLow;
+  ShooterOff(Shooter* subsystem);
+
+  void Initialize() override;
+
+  void Execute() override;
+
+  void End(bool interrupted) override;
+
+  bool IsFinished() override;
+
+private:
+  Shooter* m_shooter;
 };

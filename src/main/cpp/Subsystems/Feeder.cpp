@@ -44,5 +44,11 @@ void Feeder::FeedStop(){
     m_pidStorageController.SetReference(0.0, rev::ControlType::kSmartVelocity);
 }
 
-void Feeder::Agitate(){}
+void Feeder::Agitate(){
+    if(fabs(m_storageEncoder.GetVelocity()) < 5.0){
+        RotateCCW();
+    } else {
+        RotateCW();
+    }
+}
 

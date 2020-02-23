@@ -15,6 +15,7 @@
 
 RobotContainer::RobotContainer() {
   m_driveTrain.SetDefaultCommand(TeleopDrive(&m_driveTrain));
+  m_intake.SetDefaultCommand(TeleopIntake(&m_intake));
 
   // Initialize all of your commands and subsystems here
 
@@ -24,17 +25,27 @@ RobotContainer::RobotContainer() {
 
 void RobotContainer::ConfigureButtonBindings() {
   // Configure your button bindings here6
-  frc2::JoystickButton(&m_operator,1).WhileHeld(new IntakeOn(&m_intake));
-  frc2::JoystickButton(&m_operator,2).WhileHeld(new IntakeReverse(&m_intake));
+  frc2::JoystickButton(&m_operator,1).WhileHeld(new JostleStorage(&m_feeder));
+  frc2::JoystickButton(&m_operator,2).WhileHeld(new FeederOff(&m_feeder));
+
   frc2::JoystickButton(&m_operator,3).WhileHeld(new SpinStorage(&m_feeder));
   frc2::JoystickButton(&m_operator,4).WhileHeld(new SpinStorageCCW(&m_feeder));
-  frc2::JoystickButton(&m_operator,5).WhileHeld(new ClimbGenUp(&m_climber));
-  frc2::JoystickButton(&m_operator,6).WhileHeld(new ClimbGenDown(&m_climber));
-  frc2::JoystickButton(&m_operator,7).WhileHeld(new ExtendWinch(&m_climber));
-  frc2::JoystickButton(&m_operator,8).WhileHeld(new RetractWinch(&m_climber));
-  frc2::JoystickButton(&m_operator,9).WhileHeld(new ConfigShooterHigh(&m_shooter));
-  frc2::JoystickButton(&m_operator,10).WhileHeld(new ConfigShooterLow(&m_shooter));
-  frc2::JoystickButton(&m_driver, 3).WhileHeld(new VisionDrive(&m_vision, &m_driveTrain));
+
+  frc2::JoystickButton(&m_operator,5).WhileHeld(new ClimbGenDown(&m_climber));
+  frc2::JoystickButton(&m_operator,6).WhileHeld(new ShooterOff(&m_shooter));
+
+  frc2::JoystickButton(&m_operator, 7).WhileHeld(new PullIntakeUp(&m_intake));
+  frc2::JoystickButton(&m_operator, 8).WhileHeld(new PullIntakeUp(&m_intake));
+
+  frc2::JoystickButton(&m_operator,9).WhileHeld(new ConfigShooterHigh(&m_shooter, &m_feeder));
+  frc2::JoystickButton(&m_operator,10).WhileHeld(new ConfigShooterLow(&m_shooter, &m_feeder));
+
+  frc2::JoystickButton(&m_driver,2).WhileHeld(new LoaderOff(&m_loader));
+  frc2::JoystickButton(&m_driver,3).WhileHeld(new LoaderUp(&m_loader));
+  frc2::JoystickButton(&m_driver,4).WhileHeld(new LoaderDown(&m_loader));
+
+
+  frc2::JoystickButton(&m_driver, 1).WhileHeld(new VisionDrive(&m_vision, &m_driveTrain));
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {

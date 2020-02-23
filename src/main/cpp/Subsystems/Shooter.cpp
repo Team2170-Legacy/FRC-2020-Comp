@@ -10,6 +10,7 @@
 
 
 #include "Subsystems/Shooter.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 
 Shooter::Shooter() :
     kP(frc::Preferences::GetInstance()->GetDouble("Shoot kP", 0.0)),
@@ -21,6 +22,8 @@ Shooter::Shooter() :
     m_shooterEncoderFollow.SetPositionConversionFactor(kGearRatio);
     m_shooterFollow.Follow(m_shooterLead, true);
 
+    frc::SmartDashboard::PutNumber("Shooter RPM", m_shooterEncoderLead.GetVelocity());
+
     // Set min/max power
     m_pidShooterMotorLead.SetOutputRange(kMinOutput, kMaxOutput);
     m_pidShooterMotorLead.SetSmartMotionMaxVelocity(maxRPM);
@@ -29,8 +32,6 @@ Shooter::Shooter() :
     // Set kFF and kP ( after tuning, since gains have been already been determined )
     m_pidShooterMotorLead.SetP(kP);
     m_pidShooterMotorLead.SetFF(kFF);
-
-   SetHoodHigh();
 }
 
 void Shooter::Periodic() {

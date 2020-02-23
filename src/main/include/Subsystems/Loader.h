@@ -14,7 +14,7 @@
 #include "ctre/Phoenix.h"
 #include "hwcfg.h"
 
-#define DEFAULT_LOADER_VOLTS 0.5
+#define DEFAULT_LOADER_VOLTS 1.0
 /**
  *
  *

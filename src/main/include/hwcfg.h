@@ -15,11 +15,11 @@ enum CANIDs {
 };
 
 enum PCMIDs {
-  kHoodSolFwd = 0,
+  kHoodSolFwd = 2,
   kHoodSolRev = 1,
-	kIntakeSolFwd = 2,
+	kIntakeSolFwd = 0,
 	kIntakeSolRev = 3,
-	kClimberSol = 4
+	kClimberSol = 5
 };
 
 enum PWMIDs {

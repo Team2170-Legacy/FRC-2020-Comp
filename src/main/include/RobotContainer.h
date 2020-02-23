@@ -29,6 +29,15 @@
 #include "Commands/ConfigShooterHigh.h"
 #include "Commands/ConfigShooterLow.h"
 #include "Commands/SetShooterSpeed.h"
+#include "Commands/JostleStorage.h"
+#include "Commands/FeederOff.h"
+#include "Commands/LoaderDown.h"
+#include "Commands/LoaderOff.h"
+#include "Commands/LoaderUp.h"
+#include "Commands/PullIntakeDown.h"
+#include "Commands/PullIntakeUp.h"
+#include "Commands/ShooterOff.h"
+#include "Commands/TeleopIntake.h"
 
 
 #include "frc/XboxController.h"
