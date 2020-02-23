@@ -26,6 +26,7 @@ DriveTrain::DriveTrain() :
     // Set follow motors to leaders
     m_leftFollow.Follow(m_leftLead);
     m_rightFollow.Follow(m_rightLead);
+    m_rightLead.SetInverted(true);
 
     // Set encoder converting factors Inches/Sec, Inches
     m_leftEncoder.SetVelocityConversionFactor((M_PI * kWheelDiameter / (kGearRatio * 60.0 * 12.0)));
@@ -52,7 +53,12 @@ DriveTrain::DriveTrain() :
     m_rightLead.SetClosedLoopRampRate(100);
     m_leftFollow.SetClosedLoopRampRate(100);
     m_rightFollow.SetClosedLoopRampRate(100);
-    //SetDefaultCommand(new TeleopDrive());
+    
+    m_leftEncoder.SetPosition(0.0);
+    m_rightEncoder.SetPosition(0.0);
+
+    
+
     
     driveTrainLogger.DriveTrainLogger("/home/lvuser/DriveTrainLogs/DriveTrainLog_" + DataLogger::GetTimestamp() + ".csv");
 }
@@ -69,11 +75,20 @@ void DriveTrain::InitDefaultCommand() {
 void DriveTrain::Periodic() {
     // Put code here to be run every loop
     m_odometry.Update(frc::Rotation2d(units::degree_t(GetHeading())),
-                        units::meter_t(m_leftEncoder.GetPosition()),
-                        units::meter_t(m_rightEncoder.GetPosition()));
+                        units::foot_t(m_leftEncoder.GetPosition()),
+                        units::foot_t(m_rightEncoder.GetPosition()));
+    frc::SmartDashboard::PutNumber("Rotation", units::unit_cast<double>(m_odometry.GetPose().Rotation().Radians()));
+    frc::SmartDashboard::PutNumber("Translation X", units::unit_cast<double>(m_odometry.GetPose().Translation().X()));
+    frc::SmartDashboard::PutNumber("Translation Y", units::unit_cast<double>(m_odometry.GetPose().Translation().Y()));
+
 
     frc::SmartDashboard::PutNumber("Left Wheel Velocity", m_leftEncoder.GetVelocity());
-    frc::SmartDashboard::PutNumber("Right Wheel Velocity", m_rightEncoder.GetVelocity());    
+    frc::SmartDashboard::PutNumber("Right Wheel Velocity", m_rightEncoder.GetVelocity());   
+
+    frc::SmartDashboard::PutNumber("Left Wheel Position", m_leftEncoder.GetPosition());
+    frc::SmartDashboard::PutNumber("Right Wheel Position", m_rightEncoder.GetPosition());  
+
+    frc::SmartDashboard::PutNumber("Gyro Position", m_gyro.GetAngle());
 
     double leftVelocity = m_leftEncoder.GetVelocity(); 
     double rightVelocity = m_rightEncoder.GetVelocity(); 
@@ -175,7 +190,7 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
     }
 
     double leftMotorSpeed = leftMotorOutput * maxFeetPerSec;
-    double rightMotorSpeed = rightMotorOutput * -maxFeetPerSec;
+    double rightMotorSpeed = rightMotorOutput * maxFeetPerSec;
 
     leftVelocityCommand = leftMotorSpeed;
     rightVelocityCommand = rightMotorSpeed;

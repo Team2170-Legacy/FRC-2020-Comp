@@ -42,6 +42,9 @@
 #include "hwcfg.h"
 #include "Constants.h"
 
+#include "frc/trajectory/Trajectory.h"
+#include "frc/trajectory/TrajectoryGenerator.h"
+
 /**
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -54,6 +57,7 @@ class RobotContainer {
   RobotContainer();
 
   frc2::Command* GetAutonomousCommand();
+  std::vector<frc::Trajectory::State> t_states;
 
   void StartDataLogging(void);
   void EndDataLogging(void);
