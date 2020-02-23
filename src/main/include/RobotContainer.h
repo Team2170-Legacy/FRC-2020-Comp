@@ -10,6 +10,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/button/JoystickButton.h>
 #include <frc2/command/RamseteCommand.h>
+#include <frc/smartdashboard/SendableChooser.h>
 
 #include "Subsystems/Climber.h"
 #include "Subsystems/DriveTrain.h"
@@ -66,6 +67,9 @@ class RobotContainer {
   Shooter m_shooter;
   Feeder m_feeder;
   Loader m_loader;
+
+  frc::SendableChooser<frc2::Command*> m_chooser;
+  frc2::Command* GenerateRamseteCommand();
 
   AutonomousCommand m_autonomousCommand;
 

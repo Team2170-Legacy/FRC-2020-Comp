@@ -12,6 +12,7 @@
 
 #include "frc/trajectory/Trajectory.h"
 #include "frc/trajectory/TrajectoryGenerator.h"
+#include "Commands/AutonomousCommandGroup.h"
 
 RobotContainer::RobotContainer() {
   m_driveTrain.SetDefaultCommand(TeleopDrive(&m_driveTrain));
@@ -20,6 +21,10 @@ RobotContainer::RobotContainer() {
 
   // Configure the button bindings
   ConfigureButtonBindings();
+
+  // Chooser Setup
+  m_chooser.SetDefaultOption("RamSete Command", GenerateRamseteCommand());
+  m_chooser.AddOption("Matlab Auto Test", new AutonomousCommandGroup(&m_driveTrain));
 }
 
 void RobotContainer::ConfigureButtonBindings() {
@@ -44,7 +49,7 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_driver, 3).WhileHeld(new VisionDrive(&m_vision, &m_driveTrain)); // X
 }
 
-frc2::Command* RobotContainer::GetAutonomousCommand() {
+frc2::Command* RobotContainer::GenerateRamseteCommand() {
 
   // Set up config for trajectory
   frc::TrajectoryConfig config(AutoConstants::kMaxSpeed,
@@ -76,6 +81,10 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   return new frc2::SequentialCommandGroup(
     std::move(ramseteCommand),
     frc2::InstantCommand([this]{m_driveTrain.SetWheelVelocity(0.0, 0.0);}, {}));
+}
+
+frc2::Command* RobotContainer::GetAutonomousCommand() {
+  return m_chooser.GetSelected();
 }
 
 void RobotContainer::StartDataLogging() {
