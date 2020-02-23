@@ -11,8 +11,7 @@
 #include "frc2/command/SequentialCommandGroup.h"
 #include "frc/smartdashboard/SmartDashboard.h"
 
-#include "frc/trajectory/Trajectory.h"
-#include "frc/trajectory/TrajectoryGenerator.h"
+
 #include "Commands/AutonomousCommandGroup.h"
 
 RobotContainer::RobotContainer() {
@@ -63,13 +62,15 @@ frc2::Command* RobotContainer::GenerateRamseteCommand() {
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at the origin facing the +X direction
       frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
-      // Pass through these two interior waypoints, making an 's' curve path
-     {frc::Translation2d(1_m, 1_m), frc::Translation2d(2_m, -1_m)},
-      //{},
+     
+     {frc::Translation2d(1_m, 0_m)},
       // End 3 meters straight ahead of where we started, facing forward
       frc::Pose2d(3_m, 0_m, frc::Rotation2d(0_deg)),
       // Pass the config
       config);
+
+     frc::SmartDashboard::PutNumber("Trajectory Time", units::unit_cast<double>(exampleTrajectory.TotalTime()));
+     t_states = exampleTrajectory.States();
 
   frc2::RamseteCommand ramseteCommand(
     exampleTrajectory, 
