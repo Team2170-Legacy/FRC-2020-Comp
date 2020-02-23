@@ -7,7 +7,9 @@
 
 #include "Commands/AutonomousMotionProfile.h"
 
-AutonomousMotionProfile::AutonomousMotionProfile(DriveTrain* subsystem, const ProfileData* leftProfile, const ProfileData* rightProfile) : m_driveTrain{subsystem} {
+AutonomousMotionProfile::AutonomousMotionProfile(DriveTrain *subsystem, const ProfileData *leftProfile, 
+        const ProfileData *rightProfile) : m_driveTrain{subsystem}
+{
   // Use addRequirements() here to declare subsystem dependencies.
   LeftProfile = leftProfile;
   RightProfile = rightProfile;
@@ -15,20 +17,33 @@ AutonomousMotionProfile::AutonomousMotionProfile(DriveTrain* subsystem, const Pr
 }
 
 // Called when the command is initially scheduled.
-void AutonomousMotionProfile::Initialize() {
-  rowIndex = 0;
+void AutonomousMotionProfile::Initialize()
+{
+  itLeft = LeftProfile->begin();
+  itRight = RightProfile->begin();
 }
 
 // Called repeatedly when this Command is scheduled to run
-void AutonomousMotionProfile::Execute() {
-  double leftVelocity = LeftProfile->at(rowIndex).at(1);
-  double rightVelocity = RightProfile->at(rowIndex).at(1);
+void AutonomousMotionProfile::Execute()
+{
+  double leftVelocity = itLeft->at(1);
+  double rightVelocity = itRight->at(1);
   m_driveTrain->SetWheelVelocity(leftVelocity, rightVelocity);
-  rowIndex++;
+  itLeft++;
+  itRight++;
 }
 
 // Called once the command ends or is interrupted.
 void AutonomousMotionProfile::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool AutonomousMotionProfile::IsFinished() { return false; }
+bool AutonomousMotionProfile::IsFinished() {
+  bool retVal = false;
+
+  if (itLeft == LeftProfile->end())
+  {
+    retVal = true;
+  }
+  
+  return retVal; 
+}

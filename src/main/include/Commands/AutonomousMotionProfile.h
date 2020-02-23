@@ -36,5 +36,6 @@ class AutonomousMotionProfile
   DriveTrain* m_driveTrain;
   const ProfileData* LeftProfile;
   const ProfileData* RightProfile;
-  int rowIndex = 0;
+  ProfileData::const_iterator itLeft;
+  ProfileData::const_iterator itRight;
 };

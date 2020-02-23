@@ -4,8 +4,9 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
-
+#include "Commands/AutonomousCommandGroup.h"
+#include "Commands/AutonomousMotionProfile.h"
+#include "Automoves/To_PwrPort.h"
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.
 // For more information, see:
@@ -13,5 +14,5 @@
 AutonomousCommandGroup::AutonomousCommandGroup(DriveTrain* m_driveTrain) {
   // Add your commands here, e.g.
   // AddCommands(FooCommand(), BarCommand());
-  AddCommands(AutonomousMotionProfile(m_driveTrain))
+  AddCommands(AutonomousMotionProfile(m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R));
 }
