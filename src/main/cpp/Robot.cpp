@@ -28,7 +28,6 @@ void Robot::RobotInit() {
 	dataOutPin1.reset(new frc::DigitalOutput(1));
 	dataOutPin2.reset(new frc::DigitalOutput(2));
 	dataOutPin3.reset(new frc::DigitalOutput(3));
-	frc::SmartDashboard::PutData("Auto Modes", &chooser);
 	frc::SmartDashboard::PutNumber("LED Code",0);
 }
 

@@ -28,7 +28,7 @@ void AutonomousMotionProfile::Execute()
 {
   double leftVelocity = itLeft->at(1);
   double rightVelocity = itRight->at(1);
-  m_driveTrain->SetWheelVelocity(leftVelocity, rightVelocity);
+  m_driveTrain->SetWheelVelocity(leftVelocity, -rightVelocity);
   itLeft++;
   itRight++;
 }

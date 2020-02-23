@@ -9,6 +9,7 @@
 #include "frc2/command/button/JoystickButton.h"
 #include "frc2/command/InstantCommand.h"
 #include "frc2/command/SequentialCommandGroup.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 
 #include "frc/trajectory/Trajectory.h"
 #include "frc/trajectory/TrajectoryGenerator.h"
@@ -25,6 +26,7 @@ RobotContainer::RobotContainer() {
   // Chooser Setup
   m_chooser.SetDefaultOption("RamSete Command", GenerateRamseteCommand());
   m_chooser.AddOption("Matlab Auto Test", new AutonomousCommandGroup(&m_driveTrain));
+  frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 }
 
 void RobotContainer::ConfigureButtonBindings() {
