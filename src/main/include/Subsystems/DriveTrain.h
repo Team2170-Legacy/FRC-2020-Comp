@@ -58,8 +58,7 @@ std::shared_ptr<frc::PowerDistributionPanel> powerDistributionPanel;
 	rev::CANPIDController m_pidControllerR{m_rightLead.GetPIDController()};
 
 	const double kGearRatio = 5.95;
-	double kWheelDiameter;
-	//const double ft = 0.305;
+	const double kWheelDiameter;
 	const double d = (25.75/12); 
 
 	// PID Gains for closed-loop velocity control

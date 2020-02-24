@@ -20,7 +20,7 @@ public:
 	void DriveTrainLogger(std::string name);
 	void WriteDriveTrainData(double leftVelocityCommand, double rightVelocityCommand, double leftActualVelocity, double rightActualVelocity, double leftLeadAppliedOutput, double leftFollowAppliedOutput, double rightLeadAppliedOutput, double rightFollowAppliedOutput, double leftLeadVoltage, double leftFollowVoltage, double rightLeadVoltage, double rightFollowVoltage, double leftLeadCurrent, double leftFollowCurrent, double rightLeadCurrent, double rightFollowCurrent);
 	void ShooterLogger(std::string name);
-	void WriteShooterData(double leadRPM, double followRPM, double leadAppliedOutput, double followAppliedOutput, double leadBusVoltage, double followBusVoltage, double leadCurrent, double followCurrent);
+	void WriteShooterData(double leadRPM, double leadAppliedOutput,  double leadBusVoltage, double leadCurrent);
 	virtual ~DataLogger();
 private:
 	std::ofstream tLog;
