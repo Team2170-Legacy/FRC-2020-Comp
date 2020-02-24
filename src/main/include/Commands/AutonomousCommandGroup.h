@@ -19,7 +19,7 @@ class AutonomousCommandGroup
     : public frc2::CommandHelper<frc2::SequentialCommandGroup,
                                  AutonomousCommandGroup> {
  public:
-  AutonomousCommandGroup(DriveTrain* m_driveTrain);
+  AutonomousCommandGroup(double delay, DriveTrain* m_driveTrain);
 
  private:
   DriveTrain* m_driveTrain;

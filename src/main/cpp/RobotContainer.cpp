@@ -25,7 +25,7 @@ RobotContainer::RobotContainer() {
 
   // Chooser Setup
   m_chooser.SetDefaultOption("RamSete Command", GenerateRamseteCommand());
-  m_chooser.AddOption("Matlab Auto Test", new AutonomousCommandGroup(&m_driveTrain));
+  m_chooser.AddOption("Matlab Auto Test", new AutonomousCommandGroup(0, &m_driveTrain));
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 }
 
