@@ -24,9 +24,27 @@ RobotContainer::RobotContainer() {
   ConfigureButtonBindings();
 
   // Chooser Setup
-  m_chooser.SetDefaultOption("RamSete Command", GenerateRamseteCommand());
-  m_chooser.AddOption("Matlab Auto Test", new AutonomousCommandGroup(0, &m_driveTrain));
-  frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+  //  m_chooser.SetDefaultOption("RamSete Command", GenerateRamseteCommand());
+  // m_chooser.AddOption("Matlab Auto Test", new AutonomousCommandGroup(0, &m_driveTrain));
+  // frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+
+  m_trajectoryChooser.SetDefaultOption("No Trajectory", NoTrajectory);
+  m_trajectoryChooser.AddObject("To Powerport", ToPwrPort);
+  frc::SmartDashboard::PutData("Auto Trajectories", &m_trajectoryChooser);
+
+  // set-up delay chooser
+  m_delayChooser.SetDefaultOption("No Delay", 0);
+  m_delayChooser.AddObject("1 Second", 1);
+  m_delayChooser.AddObject("2 Seconds", 2);
+  m_delayChooser.AddObject("3 Seconds", 3);
+  m_delayChooser.AddObject("4 Seconds", 4);
+  m_delayChooser.AddObject("5 Seconds", 5);
+  m_delayChooser.AddObject("6 Seconds", 6);
+  m_delayChooser.AddObject("7 Seconds", 7);
+  m_delayChooser.AddObject("8 Seconds", 8);
+  m_delayChooser.AddObject("9 Seconds", 9);
+  m_delayChooser.AddObject("10 Seconds", 10);
+  frc::SmartDashboard::PutData("Auto Start Delay", &m_delayChooser);
 }
 
 void RobotContainer::ConfigureButtonBindings() {
@@ -74,7 +92,7 @@ frc2::Command* RobotContainer::GenerateRamseteCommand() {
       config);
 
      frc::SmartDashboard::PutNumber("Trajectory Time", units::unit_cast<double>(exampleTrajectory.TotalTime()));
-     t_states = exampleTrajectory.States();
+     std::vector<frc::Trajectory::State> t_states = exampleTrajectory.States();
 
   frc2::RamseteCommand ramseteCommand(
     exampleTrajectory, 
@@ -91,7 +109,16 @@ frc2::Command* RobotContainer::GenerateRamseteCommand() {
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
-  return m_chooser.GetSelected();
+  // return m_chooser.GetSelected();
+  double delay = m_delayChooser.GetSelected();
+  switch(m_trajectoryChooser.GetSelected()) {
+    case NoTrajectory:
+      return nullptr;
+    case ToPwrPort:
+      return new AutonomousCommandGroup(delay, &m_driveTrain, &AutoMove_To_PwrPort_L,  &AutoMove_To_PwrPort_R);
+  }
+
+  return nullptr;
 }
 
 void RobotContainer::StartDataLogging() {

@@ -7,13 +7,13 @@
 #include "Commands/AutonomousCommandGroup.h"
 #include "Commands/AutonomousMotionProfile.h"
 #include "Commands/WaitCommand.h"
-#include "Automoves/To_PwrPort.h"
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.
 // For more information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-AutonomousCommandGroup::AutonomousCommandGroup(double delay, DriveTrain* m_driveTrain) {
+AutonomousCommandGroup::AutonomousCommandGroup(double delay, DriveTrain* m_driveTrain, const ProfileData *leftProfile, 
+        const ProfileData *rightProfile) {
   // Add your commands here, e.g.
   // AddCommands(FooCommand(), BarCommand());
-  AddCommands(WaitCommand(delay), AutonomousMotionProfile(m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R));
+  AddCommands(WaitCommand(delay), AutonomousMotionProfile(m_driveTrain, leftProfile, rightProfile));
 }
