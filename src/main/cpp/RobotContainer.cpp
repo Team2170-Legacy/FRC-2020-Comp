@@ -9,9 +9,10 @@
 #include "frc2/command/button/JoystickButton.h"
 #include "frc2/command/InstantCommand.h"
 #include "frc2/command/SequentialCommandGroup.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 
-#include "frc/trajectory/Trajectory.h"
-#include "frc/trajectory/TrajectoryGenerator.h"
+
+#include "Commands/AutonomousCommandGroup.h"
 
 RobotContainer::RobotContainer() {
   m_driveTrain.SetDefaultCommand(TeleopDrive(&m_driveTrain));
@@ -21,6 +22,11 @@ RobotContainer::RobotContainer() {
 
   // Configure the button bindings
   ConfigureButtonBindings();
+
+  // Chooser Setup
+  m_chooser.SetDefaultOption("RamSete Command", GenerateRamseteCommand());
+  m_chooser.AddOption("Matlab Auto Test", new AutonomousCommandGroup(&m_driveTrain));
+  frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 }
 
 void RobotContainer::ConfigureButtonBindings() {
@@ -48,7 +54,7 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_driver, 1).WhileHeld(new VisionDrive(&m_vision, &m_driveTrain));
 }
 
-frc2::Command* RobotContainer::GetAutonomousCommand() {
+frc2::Command* RobotContainer::GenerateRamseteCommand() {
 
   // Set up config for trajectory
   frc::TrajectoryConfig config(AutoConstants::kMaxSpeed,
@@ -60,13 +66,15 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at the origin facing the +X direction
       frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
-      // Pass through these two interior waypoints, making an 's' curve path
-//      {frc::Translation2d(1_m, 1_m), frc::Translation2d(2_m, -1_m)},
-      {},
+     
+     {frc::Translation2d(1_m, 0_m)},
       // End 3 meters straight ahead of where we started, facing forward
       frc::Pose2d(3_m, 0_m, frc::Rotation2d(0_deg)),
       // Pass the config
       config);
+
+     frc::SmartDashboard::PutNumber("Trajectory Time", units::unit_cast<double>(exampleTrajectory.TotalTime()));
+     t_states = exampleTrajectory.States();
 
   frc2::RamseteCommand ramseteCommand(
     exampleTrajectory, 
@@ -74,7 +82,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
     frc::RamseteController(AutoConstants::kRamseteB, AutoConstants::kRamseteZeta),
     DriveConstants::kDriveKinematics,
     [this](auto left, auto right){m_driveTrain.SetWheelVelocity(left, right);},
-    &m_driveTrain);
+    {&m_driveTrain});
 
   // An example command will be run in autonomous
   return new frc2::SequentialCommandGroup(
@@ -82,12 +90,18 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
     frc2::InstantCommand([this]{m_driveTrain.SetWheelVelocity(0.0, 0.0);}, {}));
 }
 
+frc2::Command* RobotContainer::GetAutonomousCommand() {
+  return m_chooser.GetSelected();
+}
+
 void RobotContainer::StartDataLogging() {
   m_vision.EnableLogging();
   m_driveTrain.EnableLogging();
+  m_shooter.EnableLogging();
 }
 
 void RobotContainer::EndDataLogging() {
   m_vision.DisableLogging();
   m_driveTrain.DisableLogging();
+  m_shooter.DisableLogging();
 }

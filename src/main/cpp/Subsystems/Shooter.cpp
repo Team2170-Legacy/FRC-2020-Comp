@@ -32,6 +32,8 @@ Shooter::Shooter() :
     // Set kFF and kP ( after tuning, since gains have been already been determined )
     m_pidShooterMotorLead.SetP(kP);
     m_pidShooterMotorLead.SetFF(kFF);
+   // Set up data logging file
+   shooterLogger.ShooterLogger("/home/lvuser/ShooterLogs/ShooterLog_" + DataLogger::GetTimestamp() + ".csv");
 }
 
 void Shooter::Periodic() {
@@ -42,6 +44,18 @@ void Shooter::Periodic() {
     else {
         m_pidShooterMotorLead.SetReference(0.0, rev::ControlType::kSmartVelocity);
     }
+
+    // Get and write subsystem data to datalog file
+    double leadRPM = m_shooterEncoderLead.GetVelocity(); 
+    double followRPM = m_shooterEncoderFollow.GetVelocity(); 
+    double leadAppliedOutput = m_shooterLead.GetAppliedOutput();
+    double followAppliedOutput = m_shooterFollow.GetAppliedOutput();
+    double leadVoltage = m_shooterLead.GetBusVoltage();
+    double followVoltage = m_shooterFollow.GetBusVoltage();
+    double leadCurrent = m_shooterLead.GetOutputCurrent();
+    double followCurrent = m_shooterFollow.GetOutputCurrent();
+    shooterLogger.WriteShooterData( leadRPM, followRPM, leadAppliedOutput, 
+                                    followAppliedOutput, leadVoltage, followVoltage, leadCurrent, followCurrent);
 }
 
 void Shooter::ShooterOff() {
@@ -80,6 +94,14 @@ bool Shooter::IsHoodLow() {
     }
 
     return retVal;
+}
+
+void Shooter::EnableLogging() {
+    shooterLogger.StartSession();
+}
+
+void Shooter::DisableLogging() {
+    shooterLogger.EndSession();
 }
 
  

@@ -9,7 +9,8 @@
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include "Subsystems/Intake.h"
+#include "Subsystems/DriveTrain.h"
+#include "ProfileData.h"
 
 /**
  * An example command.
@@ -18,10 +19,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class PullIntakeUp
-    : public frc2::CommandHelper<frc2::CommandBase, PullIntakeUp> {
+class AutonomousMotionProfile
+    : public frc2::CommandHelper<frc2::CommandBase, AutonomousMotionProfile> {
  public:
-  PullIntakeUp(Intake* subsystem);
+  AutonomousMotionProfile(DriveTrain* subsystem, const ProfileData* LeftProfile, const ProfileData* RightProfile);
 
   void Initialize() override;
 
@@ -31,6 +32,10 @@ class PullIntakeUp
 
   bool IsFinished() override;
 
-private:
-  Intake* m_intake;
+ private:
+  DriveTrain* m_driveTrain;
+  const ProfileData* LeftProfile;
+  const ProfileData* RightProfile;
+  ProfileData::const_iterator itLeft;
+  ProfileData::const_iterator itRight;
 };

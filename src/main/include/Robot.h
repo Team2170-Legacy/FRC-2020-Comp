@@ -36,7 +36,6 @@ public:
 	frc2::Command* autonomousCommand = nullptr;
 	static std::unique_ptr<OI> oi;
 	frc::LiveWindow *lw = frc::LiveWindow::GetInstance();
-	frc::SendableChooser<frc2::Command*> chooser;
 	void RobotInit() override;
 	void RobotPeriodic() override;
 	void DisabledInit() override;

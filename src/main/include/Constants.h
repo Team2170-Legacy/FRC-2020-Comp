@@ -12,7 +12,7 @@
 #include <units/units.h>
 
 namespace DriveConstants {
-  constexpr auto kTrackWidth = 0.7_m;
+  constexpr auto kTrackWidth = 0.6731_m;
 	extern const frc::DifferentialDriveKinematics kDriveKinematics;
 }
 

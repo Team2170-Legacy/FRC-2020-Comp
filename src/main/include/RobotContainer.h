@@ -10,6 +10,8 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/button/JoystickButton.h>
 #include <frc2/command/RamseteCommand.h>
+#include <frc/smartdashboard/SendableChooser.h>
+#include "frc/XboxController.h"
 
 #include "Subsystems/Climber.h"
 #include "Subsystems/DriveTrain.h"
@@ -39,14 +41,15 @@
 #include "Commands/ShooterOff.h"
 #include "Commands/TeleopIntake.h"
 
-
-#include "frc/XboxController.h"
 #include "Commands/ClimbGenUp.h"
 #include "Commands/ClimbGenDown.h"
 #include "Commands/ExtendWinch.h"
 #include "Commands/RetractWinch.h"
 #include "hwcfg.h"
 #include "Constants.h"
+
+#include "frc/trajectory/Trajectory.h"
+#include "frc/trajectory/TrajectoryGenerator.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -60,6 +63,7 @@ class RobotContainer {
   RobotContainer();
 
   frc2::Command* GetAutonomousCommand();
+  std::vector<frc::Trajectory::State> t_states;
 
   void StartDataLogging(void);
   void EndDataLogging(void);
@@ -73,6 +77,9 @@ class RobotContainer {
   Shooter m_shooter;
   Feeder m_feeder;
   Loader m_loader;
+
+  frc::SendableChooser<frc2::Command*> m_chooser;
+  frc2::Command* GenerateRamseteCommand();
 
   AutonomousCommand m_autonomousCommand;
 
