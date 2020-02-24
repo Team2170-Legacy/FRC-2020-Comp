@@ -90,6 +90,8 @@ void DriveTrain::Periodic() {
 
     frc::SmartDashboard::PutNumber("Gyro Position", m_gyro.GetAngle());
 
+    double leftEncoderPosition = m_leftEncoder.GetPosition();
+    double rightEncoderPosition = m_rightEncoder.GetPosition();
     double leftVelocity = m_leftEncoder.GetVelocity(); 
     double rightVelocity = m_rightEncoder.GetVelocity(); 
     double leftLeadAppliedOutput = m_leftLead.GetAppliedOutput();
@@ -105,7 +107,7 @@ void DriveTrain::Periodic() {
     double leftFollowCurrent = m_leftFollow.GetOutputCurrent();
     double rightLeadCurrent = m_rightLead.GetOutputCurrent();
     double rightFollowCurrent = m_rightFollow.GetOutputCurrent();
-    driveTrainLogger.WriteDriveTrainData(leftVelocityCommand, rightVelocityCommand, leftVelocity, rightVelocity, leftLeadAppliedOutput, leftFollowAppliedOutput, rightLeadAppliedOutput, rightFollowAppliedOutput, leftLeadVoltage, leftFollowVoltage, rightLeadVoltage, rightFollowVoltage, leftLeadCurrent, leftFollowCurrent, rightLeadCurrent, rightFollowCurrent);
+    driveTrainLogger.WriteDriveTrainData(leftEncoderPosition, rightEncoderPosition, leftVelocityCommand, rightVelocityCommand, leftVelocity, rightVelocity, leftLeadAppliedOutput, leftFollowAppliedOutput, rightLeadAppliedOutput, rightFollowAppliedOutput, leftLeadVoltage, leftFollowVoltage, rightLeadVoltage, rightFollowVoltage, leftLeadCurrent, leftFollowCurrent, rightLeadCurrent, rightFollowCurrent);
 
 }
 
