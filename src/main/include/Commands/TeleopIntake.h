@@ -18,10 +18,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class PullIntakeDown
-    : public frc2::CommandHelper<frc2::CommandBase, PullIntakeDown> {
+class TeleopIntake
+    : public frc2::CommandHelper<frc2::CommandBase, TeleopIntake> {
  public:
-  PullIntakeDown(Intake* subsystem);
+  TeleopIntake(Intake* subsystem);
 
   void Initialize() override;
 

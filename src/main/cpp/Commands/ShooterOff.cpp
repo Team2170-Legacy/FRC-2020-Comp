@@ -5,18 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/SetShooterSpeed.h"
+#include "Commands/ShooterOff.h"
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.
-// For more information, see:
-// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-SetShooterSpeed::SetShooterSpeed(Shooter* subsystem, double speed): m_shooter{subsystem} {
+ShooterOff::ShooterOff(Shooter* subsystem): m_shooter{subsystem} {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements({subsystem});
-  shooterSpeed = speed;
 }
 
 // Called when the command is initially scheduled.
-void SetShooterSpeed::Initialize() {
-  m_shooter->ShooterOn(shooterSpeed);
+void ShooterOff::Initialize() {}
+
+// Called repeatedly when this Command is scheduled to run
+void ShooterOff::Execute() {
+  m_shooter->ShooterOff();
 }
+
+// Called once the command ends or is interrupted.
+void ShooterOff::End(bool interrupted) {}
+
+// Returns true when the command should end.
+bool ShooterOff::IsFinished() { return false; }
