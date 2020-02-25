@@ -34,16 +34,16 @@ RobotContainer::RobotContainer() {
   frc::SmartDashboard::PutData("Auto Trajectories", &m_trajectoryChooser);
 
   // set-up delay chooser
-  m_delayChooser.SetDefaultOption("No Delay", 0);
-  m_delayChooser.AddObject("1 Second", 1);
-  m_delayChooser.AddObject("2 Seconds", 2);
-  m_delayChooser.AddObject("3 Seconds", 3);
-  m_delayChooser.AddObject("4 Seconds", 4);
-  m_delayChooser.AddObject("5 Seconds", 5);
-  m_delayChooser.AddObject("6 Seconds", 6);
-  m_delayChooser.AddObject("7 Seconds", 7);
-  m_delayChooser.AddObject("8 Seconds", 8);
-  m_delayChooser.AddObject("9 Seconds", 9);
+  m_delayChooser.SetDefaultOption("0/No Delay", 00);
+  m_delayChooser.AddObject("01 Second", 1);
+  m_delayChooser.AddObject("02 Seconds", 2);
+  m_delayChooser.AddObject("03 Seconds", 3);
+  m_delayChooser.AddObject("04 Seconds", 4);
+  m_delayChooser.AddObject("05 Seconds", 5);
+  m_delayChooser.AddObject("06 Seconds", 6);
+  m_delayChooser.AddObject("07 Seconds", 7);
+  m_delayChooser.AddObject("08 Seconds", 8);
+  m_delayChooser.AddObject("09 Seconds", 9);
   m_delayChooser.AddObject("10 Seconds", 10);
   frc::SmartDashboard::PutData("Auto Start Delay", &m_delayChooser);
 }
