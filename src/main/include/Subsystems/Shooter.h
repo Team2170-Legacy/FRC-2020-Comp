@@ -58,6 +58,10 @@ Shooter();
 	double GetShooterSpeed() {return CommandedVelocity;}
 	double GetMotorVelocity() {return m_shooterEncoderLead.GetVelocity();}
 
+	enum IdleMode {
+		kCoast = 0
+	};
+
 	void SetHoodHigh();
 	void SetHoodLow();
 
