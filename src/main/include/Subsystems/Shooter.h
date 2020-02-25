@@ -37,7 +37,7 @@ private:
 	rev::CANSparkMax m_shooterFollow{CANIDs::kShooterMotorID2, rev::CANSparkMax::MotorType::kBrushless};
 
 	// PID Gains for closed-loop velocity control
-	const double kP, kI = 0, kD = 0, kIz = 0, kFF, kMaxOutput = 1, kMinOutput = -1;	
+	const double kP, kI = 0, kD = 0, kIz = 0, kFF, kMaxOutput = 1, kMinOutput = 0;	
 
 	// Max RPM for motors
 	const double maxRPM;

@@ -30,10 +30,10 @@ Shooter::Shooter() :
 
 void Shooter::Periodic() {
     if (ShooterEnabled == true) {
-        m_pidShooterMotorLead.SetReference(CommandedVelocity, rev::ControlType::kSmartVelocity);
+        m_pidShooterMotorLead.SetReference(CommandedVelocity, rev::ControlType::kVelocity);
     }
     else {
-        m_pidShooterMotorLead.SetReference(0.0, rev::ControlType::kSmartVelocity);
+        m_pidShooterMotorLead.SetReference(0.0, rev::ControlType::kVelocity);
     }
 
     // Get and write subsystem data to datalog file

@@ -29,21 +29,21 @@ RobotContainer::RobotContainer() {
   // frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
   m_trajectoryChooser.SetDefaultOption("No Trajectory", NoTrajectory);
-  m_trajectoryChooser.AddObject("To Powerport", ToPwrPort);
+  m_trajectoryChooser.AddOption("To Powerport", ToPwrPort);
   frc::SmartDashboard::PutData("Auto Trajectories", &m_trajectoryChooser);
 
   // set-up delay chooser
   m_delayChooser.SetDefaultOption("0/No Delay", 00);
-  m_delayChooser.AddObject("01 Second", 1);
-  m_delayChooser.AddObject("02 Seconds", 2);
-  m_delayChooser.AddObject("03 Seconds", 3);
-  m_delayChooser.AddObject("04 Seconds", 4);
-  m_delayChooser.AddObject("05 Seconds", 5);
-  m_delayChooser.AddObject("06 Seconds", 6);
-  m_delayChooser.AddObject("07 Seconds", 7);
-  m_delayChooser.AddObject("08 Seconds", 8);
-  m_delayChooser.AddObject("09 Seconds", 9);
-  m_delayChooser.AddObject("10 Seconds", 10);
+  m_delayChooser.AddOption("01 Second", 1);
+  m_delayChooser.AddOption("02 Seconds", 2);
+  m_delayChooser.AddOption("03 Seconds", 3);
+  m_delayChooser.AddOption("04 Seconds", 4);
+  m_delayChooser.AddOption("05 Seconds", 5);
+  m_delayChooser.AddOption("06 Seconds", 6);
+  m_delayChooser.AddOption("07 Seconds", 7);
+  m_delayChooser.AddOption("08 Seconds", 8);
+  m_delayChooser.AddOption("09 Seconds", 9);
+  m_delayChooser.AddOption("10 Seconds", 10);
   frc::SmartDashboard::PutData("Auto Start Delay", &m_delayChooser);
 }
 
@@ -55,7 +55,7 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_operator,3).WhileHeld(new SpinStorage(&m_feeder)); // X
   frc2::JoystickButton(&m_operator,4).WhileHeld(new SpinStorageCCW(&m_feeder)); // Y
 
-  frc2::JoystickButton(&m_operator,5).WhileHeld(m_RetractWinch); // LB
+  frc2::JoystickButton(&m_operator,5).WhenPressed(m_RetractWinch).WhenReleased(m_StopWinch); // LB
   frc2::JoystickButton(&m_operator,6).WhileHeld(new ShooterOff(&m_shooter)); // RB
 
   frc2::JoystickButton(&m_operator, 7).WhileHeld(new PullIntakeUp(&m_intake)); // LA
@@ -69,7 +69,7 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_driver,3).WhileHeld(new LoaderUp(&m_loader)); // X
   frc2::JoystickButton(&m_driver,4).WhileHeld(new LoaderDown(&m_loader)); // Y
 
-  frc2::JoystickButton(&m_driver, 5).WhenPressed(m_ReleaseClimber);
+  frc2::JoystickButton(&m_driver, 5).WhenPressed(m_ReleaseClimber).WhenReleased(m_StopWinch);
   // LT and RT control intake on and reverse
 }
 
