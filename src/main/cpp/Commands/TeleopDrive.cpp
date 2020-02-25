@@ -8,6 +8,9 @@
 #include "Commands/TeleopDrive.h"
 #include "Robot.h"
 
+#define xAxis_Rate_Max  0.04
+#define turn_Rate_Max   0.05
+
 TeleopDrive::TeleopDrive(DriveTrain* subsystem) : m_driveTrain{subsystem} {
   // Use Requires() here to declare subsystem dependencies
   // eg. Requires(Robot::chassis.get());
@@ -18,7 +21,8 @@ TeleopDrive::TeleopDrive(DriveTrain* subsystem) : m_driveTrain{subsystem} {
 // Called just before this Command runs the first time
 void TeleopDrive::Initialize() 
 {
-	xAxis_prev 	= 0.0;
+	xAxis_prev 	    = 0.0;
+  turn_Rate_prev   = 0.0;
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -28,11 +32,11 @@ void TeleopDrive::Execute()
 
   double delta_xAxis = xAxis - xAxis_prev;
 
-  if ( delta_xAxis > 0.02 ) {
-	xAxis_prev 	= xAxis_prev +  0.02;
+  if ( delta_xAxis > xAxis_Rate_Max ) {
+	    xAxis_prev 	= xAxis_prev +  xAxis_Rate_Max;
   }
-  else if ( delta_xAxis < 0.02 ) {
- 	xAxis_prev 	= xAxis_prev - 0.02;
+  else if ( delta_xAxis < xAxis_Rate_Max ) {
+ 	    xAxis_prev 	= xAxis_prev - xAxis_Rate_Max;
   }
   else {
       xAxis_prev 	= xAxis;
@@ -43,20 +47,33 @@ void TeleopDrive::Execute()
   double speedPos = Robot::oi->getDriverJoystick()->GetRawAxis(3);
   double speedNeg = Robot::oi->getDriverJoystick()->GetRawAxis(2);
 
-  double speedVelocity = 0.0;
+  double turn_Rate = 0.0;
 
   if (speedNeg > 0.05) {
-    speedVelocity = -speedNeg;
+    turn_Rate = -speedNeg;
   }
   else if (speedPos > 0.05) {
-    speedVelocity = speedPos;
+    turn_Rate = speedPos;
   }
   else {
-    speedVelocity = 0.0;
+    turn_Rate = 0.0;
   }
 
-  m_driveTrain->VelocityArcadeDrive(-xAxis_prev, -speedVelocity, true);
- // Robot::driveTrian->VelocityArcadeDrive(speedVelocity, yAxis, true);
+  double delta_turn_Rate = turn_Rate - turn_Rate_prev;
+
+  if ( delta_turn_Rate > turn_Rate_Max ) {
+    turn_Rate_prev = turn_Rate_prev + turn_Rate_Max;
+  }
+  else if ( delta_turn_Rate < turn_Rate_Max ) {
+    turn_Rate_prev = turn_Rate_prev - turn_Rate_Max;
+  }   
+  else {
+    turn_Rate_prev = turn_Rate;
+  };
+
+
+  m_driveTrain->VelocityArcadeDrive(-xAxis_prev, -turn_Rate, true);
+ // Robot::driveTrian->VelocityArcadeDrive(turnRate, yAxis, true);
 }
 
 // Make this return true when this Command no longer needs to run execute()
@@ -67,5 +84,6 @@ bool TeleopDrive::IsFinished() {
 // Called once after isFinished returns true
 void TeleopDrive::End(bool interrupted) 
  {
-      xAxis_prev = 0.0;
+      xAxis_prev      = 0.0;
+      turn_Rate_prev  = 0.0;
  }

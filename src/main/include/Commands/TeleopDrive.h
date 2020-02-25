@@ -22,4 +22,5 @@ class TeleopDrive :  public frc2::CommandHelper<frc2::CommandBase, TeleopDrive> 
 private:
   DriveTrain* m_driveTrain;
   double xAxis_prev;
+  double turn_Rate_prev;
 };
