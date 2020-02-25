@@ -11,7 +11,8 @@
 #include "frc2/command/SequentialCommandGroup.h"
 #include "frc/smartdashboard/SmartDashboard.h"
 
-#include "Commands/AutonomousCommandGroup.h"
+#include "Commands/WaitCommand.h"
+#include "Commands/AutonomousMotionProfile.h"
 
 RobotContainer::RobotContainer() {
   m_driveTrain.SetDefaultCommand(TeleopDrive(&m_driveTrain));
@@ -23,9 +24,27 @@ RobotContainer::RobotContainer() {
   ConfigureButtonBindings();
 
   // Chooser Setup
-  m_chooser.SetDefaultOption("RamSete Command", GenerateRamseteCommand());
-  m_chooser.AddOption("Matlab Auto Test", new AutonomousCommandGroup(&m_driveTrain));
-  frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+  //  m_chooser.SetDefaultOption("RamSete Command", GenerateRamseteCommand());
+  // m_chooser.AddOption("Matlab Auto Test", new AutonomousCommandGroup(0, &m_driveTrain));
+  // frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+
+  m_trajectoryChooser.SetDefaultOption("No Trajectory", NoTrajectory);
+  m_trajectoryChooser.AddObject("To Powerport", ToPwrPort);
+  frc::SmartDashboard::PutData("Auto Trajectories", &m_trajectoryChooser);
+
+  // set-up delay chooser
+  m_delayChooser.SetDefaultOption("0/No Delay", 00);
+  m_delayChooser.AddObject("01 Second", 1);
+  m_delayChooser.AddObject("02 Seconds", 2);
+  m_delayChooser.AddObject("03 Seconds", 3);
+  m_delayChooser.AddObject("04 Seconds", 4);
+  m_delayChooser.AddObject("05 Seconds", 5);
+  m_delayChooser.AddObject("06 Seconds", 6);
+  m_delayChooser.AddObject("07 Seconds", 7);
+  m_delayChooser.AddObject("08 Seconds", 8);
+  m_delayChooser.AddObject("09 Seconds", 9);
+  m_delayChooser.AddObject("10 Seconds", 10);
+  frc::SmartDashboard::PutData("Auto Start Delay", &m_delayChooser);
 }
 
 void RobotContainer::ConfigureButtonBindings() {
@@ -74,7 +93,7 @@ frc2::Command* RobotContainer::GenerateRamseteCommand() {
       config);
 
      frc::SmartDashboard::PutNumber("Trajectory Time", units::unit_cast<double>(exampleTrajectory.TotalTime()));
-     t_states = exampleTrajectory.States();
+     std::vector<frc::Trajectory::State> t_states = exampleTrajectory.States();
 
   frc2::RamseteCommand ramseteCommand(
     exampleTrajectory, 
@@ -91,7 +110,19 @@ frc2::Command* RobotContainer::GenerateRamseteCommand() {
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
-  return m_chooser.GetSelected();
+  // return m_chooser.GetSelected();
+  double delay = m_delayChooser.GetSelected();
+  switch(m_trajectoryChooser.GetSelected()) {
+    case NoTrajectory:
+      return nullptr;
+    case ToPwrPort:
+      return new frc2::SequentialCommandGroup {
+      WaitCommand(delay), 
+      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R)
+      };
+  }
+
+  return nullptr;
 }
 
 void RobotContainer::StartDataLogging() {

@@ -7,21 +7,30 @@
 
 #pragma once
 
+#include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc2/command/SequentialCommandGroup.h>
-#include "ProfileData.h"
-#include "Commands/AutonomousMotionProfile.h"
-#include "frc/Preferences.h"
-#include "Subsystems/DriveTrain.h"
 
-
-class AutonomousCommandGroup
-    : public frc2::CommandHelper<frc2::SequentialCommandGroup,
-                                 AutonomousCommandGroup> {
+/**
+ * An example command.
+ *
+ * <p>Note that this extends CommandHelper, rather extending CommandBase
+ * directly; this is crucially important, or else the decorator functions in
+ * Command will *not* work!
+ */
+class WaitCommand
+    : public frc2::CommandHelper<frc2::CommandBase, WaitCommand> {
  public:
-  AutonomousCommandGroup(DriveTrain* m_driveTrain);
+  WaitCommand(double delay);
+
+  void Initialize() override;
+
+  void Execute() override;
+
+  void End(bool interrupted) override;
+
+  bool IsFinished() override;
 
  private:
-  DriveTrain* m_driveTrain;
-  double delay;
+  double timeRemaining;
+  double deltaTime = 0.02;
 };
