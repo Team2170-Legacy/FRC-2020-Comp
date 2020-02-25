@@ -11,6 +11,8 @@
 #include "Subsystems/Vision.h"
 
 Vision::Vision() {
+
+    // get all limelight network table entries
     auto table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
     tx = table->GetEntry("tx");
 	ty = table->GetEntry("ty");
@@ -21,11 +23,12 @@ Vision::Vision() {
 	camMode = table->GetEntry("camMode");
 	setPipe = table->GetEntry("pipeline");
 	snapshot = table->GetEntry("snapshot");
+  
+    // add our own network table entries
     nt_distance = table->GetEntry("distance");
     nt_distance.SetDouble(0);
     nt_visionDrive = table->GetEntry("Vision Drive");
     nt_visionDrive.SetBoolean(false);
-
     nt_kP_Omega = table->GetEntry("Vision kP Omega");
     nt_kI_Omega = table->GetEntry("Vision kI Omega");
     nt_kP_Distance = table->GetEntry("Vision kP Distance");
@@ -35,16 +38,29 @@ Vision::Vision() {
     nt_kP_Distance.SetDouble(kP_Distance);
     nt_angle_DB.SetDouble(angleErrorDeadband);
 
+    // open a datalogging file
     visionLogger.VisionLogger("/home/lvuser/VisionLogs/VisionLog_" + DataLogger::GetTimestamp() + ".csv");
 
+   
+    if (disableLEDWhenVisionDriveInactive) {
+     // LEDs should start off by default
     SetCamMode(false);
     SetLEDMode(forceOff);
+    }
 }
 
 void Vision::Periodic() {
     bool targetLocked = TargetIsLocked();
     if (visionDriveActive) {
+        
+        if (takePeriodicSnapshots) {
+            loopsSinceLastImage++;
+            if (loopsSinceLastImage >= loopsBetweenImages) {
+                loopsSinceLastImage = 0;
+                TakeSnapshot();
+            }
 
+        }
     }
     else if (targetLocked) {
         frc::SmartDashboard::PutNumber("LED Code",LEDCodes::VLock);
@@ -116,7 +132,6 @@ double Vision::GetLatency() {
  * @brief Sets the LED Mode of the camera
  * 
  * @param ledModeToSet LEDMode enum value
- *
  */
 void Vision::SetLEDMode(LEDMode ledModeToSet) {
     int ledModeValue = ledModeToSet;
@@ -176,6 +191,7 @@ void Vision::SetPipeline(Pipeline pipeline) {
 void Vision::VisionSteerInit() {
     SetCamMode(true);
     SetLEDMode(currentPipelineMode);
+    loopsSinceLastImage = loopsBetweenImages;
     visionDriveActive = true;
     nt_visionDrive.SetBoolean(true);
     omegaIntegrator = 0.0;
@@ -281,8 +297,10 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
  * @brief ends the vision steer
  */
 void Vision::VisionSteerEnd() {
+    if (disableLEDWhenVisionDriveInactive) {
     SetCamMode(false);
     SetLEDMode(forceOff);
+    }
     visionDriveActive = false;
     nt_visionDrive.SetBoolean(false);
 }

@@ -62,7 +62,7 @@ private:
 	const double powerportVisionTargetHeight = (6 + 9.25 * inches) + (1 + 5.0 * inches)/2; // height of the center of the vision target (ft)
 	const double cameraHeight = 21.0 * inches; // height that the camera is mounted at (ft)
 	const double cameraAngle = 35; // angle camera is mounted at from horizontal (degrees)
-	const double cameraDistanceFromFrontBumper = 15.0 * inches; // ft
+	const double cameraDistanceFromFrontBumper = 15.0 * inches; // (ft)
 	double optimalShootingDistance = 10; // optimal distance from powerport to shoot from (ft)
 
 	// For VisionDrive PID controller
@@ -86,6 +86,15 @@ private:
 	double angleError_DB = 0;
 	double speed = 0;
 	double omega = 0;
+
+	// for taking snapshots during visiondrives
+	bool takePeriodicSnapshots = false;
+	int loopsBetweenImages = 5;
+	int loopsSinceLastImage = 0;
+
+	// makes sure the LED is on only when vision drive is being used
+	// should be set to true during competitions
+	bool disableLEDWhenVisionDriveInactive = true;
 
 public:
   Vision();
