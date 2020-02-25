@@ -14,12 +14,18 @@
 
 DriveTrain::DriveTrain() : 
 
-    kWheelDiameter(frc::Preferences::GetInstance()->GetDouble("Wheel Diameter", 5.0)),
-    kP(frc::Preferences::GetInstance()->GetDouble("Drive kP", 0.1)),
-    kFF(frc::Preferences::GetInstance()->GetDouble("Drive kFF", 0.05)),
-    kI(frc::Preferences::GetInstance()->GetDouble("Drive kI", 0.0)),
-    maxFeetPerSec(frc::Preferences::GetInstance()->GetDouble("Drive FPS", 18.0)),
-    maxAccelPerSec(frc::Preferences::GetInstance()->GetDouble("Drive Accel FPS^2", 10.0)) {
+    kWheelDiameter{frc::Preferences::GetInstance()->GetDouble("Wheel Diameter", 5.0)},
+    kP{frc::Preferences::GetInstance()->GetDouble("Drive kP", 0.1)},
+    kI{frc::Preferences::GetInstance()->GetDouble("Drive kI", 0.00)},
+    kFF{frc::Preferences::GetInstance()->GetDouble("Drive kFF", 0.05)},
+    kPvel{frc::Preferences::GetInstance()->GetDouble("Vel kP", 0.1)},
+    kIvel{frc::Preferences::GetInstance()->GetDouble("Vel kI", 0.00)},
+    kFFvel{frc::Preferences::GetInstance()->GetDouble("Vel kFF", 0.05)},
+    kPpos{frc::Preferences::GetInstance()->GetDouble("Pos kP", 0.1)},
+    kIpos{frc::Preferences::GetInstance()->GetDouble("Pos kI", 0.00)},
+    kFFpos{frc::Preferences::GetInstance()->GetDouble("Pos kFF", 0.05)},
+    maxFeetPerSec{frc::Preferences::GetInstance()->GetDouble("Drive FPS", 18.0)},
+    maxAccelPerSec{frc::Preferences::GetInstance()->GetDouble("Drive Accel FPS^2", 10.0)} {
     
     compressor.reset(new frc::Compressor(0));
     powerDistributionPanel.reset(new frc::PowerDistributionPanel(0));
@@ -44,17 +50,37 @@ DriveTrain::DriveTrain() :
     m_pidControllerR.SetSmartMotionMaxAccel(maxAccelPerSec);
     
     // Set kFF and kP ( after tuning, since gains have been already been determined )
-    m_pidControllerL.SetP(kP);
-    m_pidControllerR.SetP(kP);
 
-    m_pidControllerL.SetFF(kFF);
-    m_pidControllerR.SetFF(kFF);    
+    // Tuned for driver velocity mode
+    m_pidControllerL.SetP(kP, GainSelect::kDriverVelocity);
+    m_pidControllerR.SetP(kP, GainSelect::kDriverVelocity);
+    m_pidControllerL.SetP(kD, GainSelect::kDriverVelocity);
+    m_pidControllerR.SetP(kD, GainSelect::kDriverVelocity);
+    m_pidControllerL.SetFF(kFF, GainSelect::kDriverVelocity);
+    m_pidControllerR.SetFF(kFF, GainSelect::kDriverVelocity);  
+    m_pidControllerL.SetI(kI, GainSelect::kDriverVelocity);
+    m_pidControllerR.SetI(kI, GainSelect::kDriverVelocity);  
 
-    m_leftLead.SetClosedLoopRampRate(100);
-    m_rightLead.SetClosedLoopRampRate(100);
-    m_leftFollow.SetClosedLoopRampRate(100);
-    m_rightFollow.SetClosedLoopRampRate(100);
-    
+    // Tuned for autonomous velocity mode
+    m_pidControllerL.SetP(kPvel, GainSelect::kAutoVelocity);
+    m_pidControllerR.SetP(kPvel, GainSelect::kAutoVelocity);
+    m_pidControllerL.SetP(kDvel, GainSelect::kAutoVelocity);
+    m_pidControllerR.SetP(kDvel, GainSelect::kAutoVelocity);
+    m_pidControllerL.SetFF(kFFvel, GainSelect::kAutoVelocity);
+    m_pidControllerR.SetFF(kFFvel, GainSelect::kAutoVelocity);  
+    m_pidControllerL.SetI(kIvel, GainSelect::kAutoVelocity);
+    m_pidControllerR.SetI(kIvel, GainSelect::kAutoVelocity);  
+
+    // Tuned for autonomous position mode
+    m_pidControllerL.SetP(kPpos, GainSelect::kAutoPosition);
+    m_pidControllerR.SetP(kPpos, GainSelect::kAutoPosition);
+    m_pidControllerL.SetP(kDpos, GainSelect::kAutoPosition);
+    m_pidControllerR.SetP(kDpos, GainSelect::kAutoPosition);
+    m_pidControllerL.SetFF(kFFpos, GainSelect::kAutoPosition);
+    m_pidControllerR.SetFF(kFFpos, GainSelect::kAutoPosition);  
+    m_pidControllerL.SetI(kIpos, GainSelect::kAutoPosition);
+    m_pidControllerR.SetI(kIpos, GainSelect::kAutoPosition);  
+
     m_leftEncoder.SetPosition(0.0);
     m_rightEncoder.SetPosition(0.0);
 
@@ -199,8 +225,8 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
     rightVelocityCommand = rightMotorSpeed;
 
     // Send setpoints to pid controllers
-    m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kSmartVelocity);
-    m_pidControllerR.SetReference(rightMotorSpeed, rev::ControlType::kSmartVelocity);
+    m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kSmartVelocity, GainSelect::kDriverVelocity);
+    m_pidControllerR.SetReference(rightMotorSpeed, rev::ControlType::kSmartVelocity, GainSelect::kDriverVelocity);
     m_Drive.FeedWatchdog();
 
 }
@@ -260,9 +286,9 @@ double DriveTrain::GetAverageEncoderDistance( ) {
  * @param left wheel velocity in feet per second
  * @param right wheel velocity in feet per second
  */
-void DriveTrain::SetWheelVelocity(double left, double right) {
-    m_pidControllerL.SetReference(left, rev::ControlType::kVelocity);
-    m_pidControllerR.SetReference(right, rev::ControlType::kVelocity);
+void DriveTrain::SetWheelVelocity(double left, double right, int pidSlot) {
+    m_pidControllerL.SetReference(left, rev::ControlType::kVelocity, pidSlot);
+    m_pidControllerR.SetReference(right, rev::ControlType::kVelocity, pidSlot);
     leftVelocityCommand = left;
     rightVelocityCommand = right;
     m_Drive.FeedWatchdog();
@@ -274,10 +300,10 @@ void DriveTrain::SetWheelVelocity(double left, double right) {
  * @param left wheel velocity in feet per second
  * @param right wheel velocity in feet per second
  */
-void DriveTrain::SetWheelVelocity(units::meters_per_second_t left, units::meters_per_second_t right) {
+void DriveTrain::SetWheelVelocity(units::meters_per_second_t left, units::meters_per_second_t right, int pidSlot) {
     units::feet_per_second_t leftFPS = left;
     units::feet_per_second_t rightFPS = right;
-    SetWheelVelocity(units::unit_cast<double>(leftFPS), units::unit_cast<double>(rightFPS));
+    SetWheelVelocity(units::unit_cast<double>(leftFPS), units::unit_cast<double>(rightFPS), pidSlot);
 }
 
 /**
@@ -285,21 +311,21 @@ void DriveTrain::SetWheelVelocity(units::meters_per_second_t left, units::meters
  * 
  * @param velocity left and right velocity in feet per second
  */
-void DriveTrain::SetWheelVelocity(double velocity) {
-    SetWheelVelocity(velocity, velocity);
+void DriveTrain::SetWheelVelocity(double velocity, int pidSlot) {
+    SetWheelVelocity(velocity, velocity, pidSlot);
     m_Drive.FeedWatchdog();
 }
 
-void DriveTrain::SetWheelPosition(double leftInches, double rightInches) {
-    m_pidControllerL.SetReference(leftInches, rev::ControlType::kPosition);
-    m_pidControllerR.SetReference(rightInches, rev::ControlType::kPosition);
+void DriveTrain::SetWheelPosition(double leftInches, double rightInches, int pidSlot) {
+    m_pidControllerL.SetReference(leftInches, rev::ControlType::kPosition, pidSlot);
+    m_pidControllerR.SetReference(rightInches, rev::ControlType::kPosition, pidSlot);
     m_Drive.FeedWatchdog();
 }
 
-void DriveTrain::SetWheelPosition(units::meter_t left, units::meter_t right) {
+void DriveTrain::SetWheelPosition(units::meter_t left, units::meter_t right, int pidSlot) {
     units::foot_t leftFt = left;
     units::foot_t rightFt = right;
-    SetWheelPosition(units::unit_cast<double>(leftFt), units::unit_cast<double>(rightFt));
+    SetWheelPosition(units::unit_cast<double>(leftFt), units::unit_cast<double>(rightFt), pidSlot);
 }
 
 /**
@@ -315,22 +341,3 @@ void DriveTrain::EnableLogging() {
 void DriveTrain::DisableLogging() {
     driveTrainLogger.EndSession();
 }
-
-/**
- * @brief Send correct LED code to Arduino
- */
-// void DriveTrain::sendProperLEDCode(double leftSpeed, double rightSpeed, double rotateValue) {
-//     bool turning = rotateValue != 0.0;
-//     auto table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-//     bool visionDriveActive = table->GetEntry("Vision Drive").GetBoolean(false);
-//     bool targetLocked = table->GetEntry("tv").GetDouble(0) == 1;
-
-//     if (!turning && !visionDriveActive && !targetLocked && leftSpeed > 0.0 && -rightSpeed > 0.0) {
-//         // Driving Forward
-//         frc::SmartDashboard::PutNumber("LED Code", LEDCodes::Fwd);
-//     }
-//     if (!turning && !visionDriveActive && !targetLocked && leftSpeed < 0.0 && -rightSpeed < 0.0) {
-//         // Driving Backward
-//         frc::SmartDashboard::PutNumber("LED Code", LEDCodes::Bwd);
-//     }
-// }

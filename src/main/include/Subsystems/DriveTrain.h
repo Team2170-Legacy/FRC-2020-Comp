@@ -62,7 +62,9 @@ std::shared_ptr<frc::PowerDistributionPanel> powerDistributionPanel;
 	const double d = (25.75/12); 
 
 	// PID Gains for closed-loop velocity control
-	const double kP, kI, kD = 0, kIz = 0, kFF, kMaxOutput = 1, kMinOutput = -1;	
+	const double kP, kI, kD = 0, kIz = 0, kFF, kMaxOutput = 1, kMinOutput = -1;
+	const double kPvel, kIvel, kDvel = 0.0, kFFvel;	
+	const double kPpos, kIpos, kDpos = 0.0, kFFpos;	
 
 	// Max RPM for motors
 	const double maxRPM = 5600;
@@ -93,11 +95,11 @@ DriveTrain();
 	void VelocityArcadeDrive(double xSpeed, double zRotation, bool squaredInputs = true);
 	void SetWheelVolts(double left, double right);
 	void SetWheelVolts(double voltage);
-	void SetWheelVelocity(double left, double right);
-	void SetWheelVelocity(double velocity);
-	void SetWheelVelocity(units::meters_per_second_t left, units::meters_per_second_t right);
-	void SetWheelPosition(double left, double right);
-	void SetWheelPosition(units::meter_t left, units::meter_t right);
+	void SetWheelVelocity(double left, double right, int pidSlot = 0);
+	void SetWheelVelocity(double velocity, int pidSlot = 0);
+	void SetWheelVelocity(units::meters_per_second_t left, units::meters_per_second_t right, int pidSlot=0);
+	void SetWheelPosition(double left, double right, int pidSlot = 0);
+	void SetWheelPosition(units::meter_t left, units::meter_t right, int pidSlot = 0);
 
 	// odometry/kinematics
 	void ResetEncoders();
@@ -111,6 +113,12 @@ DriveTrain();
 	void ResetOdometry(frc::Pose2d pose);
 	void EnableLogging();
 	void DisableLogging();
+
+	enum GainSelect {
+		kDriverVelocity = 0, 
+		kAutoVelocity = 1, 
+		kAutoPosition = 2
+	};
 
 	void sendProperLEDCode(double leftSpeed, double rightSpeed, double rotateValue);
 

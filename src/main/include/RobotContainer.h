@@ -10,9 +10,13 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/button/JoystickButton.h>
 #include <frc2/command/RamseteCommand.h>
+#include <frc2/command/StartEndCommand.h>
+#include <frc2/command/FunctionalCommand.h>
+#include <frc2/command/ParallelRaceGroup.h>
+#include <frc2/command/WaitCommand.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include "frc/XboxController.h"
-
+#include "units/units.h"
 #include "Subsystems/Climber.h"
 #include "Subsystems/DriveTrain.h"
 #include "Subsystems/Feeder.h"
@@ -41,8 +45,6 @@
 #include "Commands/ShooterOff.h"
 #include "Commands/TeleopIntake.h"
 
-#include "Commands/ClimbGenUp.h"
-#include "Commands/ClimbGenDown.h"
 #include "Commands/ExtendWinch.h"
 #include "Commands/RetractWinch.h"
 #include "hwcfg.h"
@@ -85,6 +87,11 @@ class RobotContainer {
 
   frc::XboxController m_driver{HIDIDs::kDriver};
   frc::XboxController m_operator{HIDIDs::kOperator};
+
+  // Climber related commands
+  frc2::InstantCommand m_RetractWinch{[this] {m_climber.WinchRetract();}, {&m_climber}};
+  frc2::StartEndCommand m_ReleaseClimber{[this] {m_climber.WinchRetract();}, 
+                                         [this] {m_climber.WinchStop();}, {&m_climber}};
 
   void ConfigureButtonBindings();
 };
