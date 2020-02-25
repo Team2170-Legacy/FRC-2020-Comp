@@ -15,7 +15,7 @@
 #include "frc/DoubleSolenoid.h"
 #include "ctre/Phoenix.h"
 
-#define DEFAULT_INTAKE_VOLTS 0.5
+#define DEFAULT_INTAKE_VOLTS 1.0
 
 /**
  *

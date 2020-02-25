@@ -18,6 +18,8 @@ Shooter::Shooter() :
     m_pidShooterMotorLead.SetOutputRange(kMinOutput, kMaxOutput);
     m_pidShooterMotorLead.SetSmartMotionMaxVelocity(maxRPM);
     m_pidShooterMotorLead.SetSmartMotionMaxAccel(maxAccel);
+    m_shooterLead.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    m_shooterFollow.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     
     // Set kFF and kP ( after tuning, since gains have been already been determined )
     m_pidShooterMotorLead.SetP(kP);
