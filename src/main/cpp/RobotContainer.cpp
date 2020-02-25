@@ -31,27 +31,27 @@ RobotContainer::RobotContainer() {
 
 void RobotContainer::ConfigureButtonBindings() {
   // Configure your button bindings here6
-  frc2::JoystickButton(&m_operator,1).WhileHeld(new JostleStorage(&m_feeder));
-  frc2::JoystickButton(&m_operator,2).WhileHeld(new FeederOff(&m_feeder));
+  frc2::JoystickButton(&m_operator,1).WhileHeld(new JostleStorage(&m_feeder)); // A
+  frc2::JoystickButton(&m_operator,2).WhileHeld(new FeederOff(&m_feeder)); // B
 
-  frc2::JoystickButton(&m_operator,3).WhileHeld(new SpinStorage(&m_feeder));
-  frc2::JoystickButton(&m_operator,4).WhileHeld(new SpinStorageCCW(&m_feeder));
+  frc2::JoystickButton(&m_operator,3).WhileHeld(new SpinStorage(&m_feeder)); // X
+  frc2::JoystickButton(&m_operator,4).WhileHeld(new SpinStorageCCW(&m_feeder)); // Y
 
-  frc2::JoystickButton(&m_operator,5).WhileHeld(new ClimbGenDown(&m_climber));
-  frc2::JoystickButton(&m_operator,6).WhileHeld(new ShooterOff(&m_shooter));
+  frc2::JoystickButton(&m_operator,5).WhileHeld(new ClimbGenDown(&m_climber)); // LB
+  frc2::JoystickButton(&m_operator,6).WhileHeld(new ShooterOff(&m_shooter)); // RB
 
-  frc2::JoystickButton(&m_operator, 7).WhileHeld(new PullIntakeUp(&m_intake));
-  frc2::JoystickButton(&m_operator, 8).WhileHeld(new PullIntakeUp(&m_intake));
+  frc2::JoystickButton(&m_operator, 7).WhileHeld(new PullIntakeUp(&m_intake)); // LA
+  frc2::JoystickButton(&m_operator, 8).WhileHeld(new PullIntakeDown(&m_intake)); // RA
 
-  frc2::JoystickButton(&m_operator,9).WhileHeld(new ConfigShooterHigh(&m_shooter, &m_feeder));
-  frc2::JoystickButton(&m_operator,10).WhileHeld(new ConfigShooterLow(&m_shooter, &m_feeder));
+  frc2::JoystickButton(&m_operator,9).WhileHeld(new ConfigShooterHigh(&m_shooter, &m_feeder)); // LJ
+  frc2::JoystickButton(&m_operator,10).WhileHeld(new ConfigShooterLow(&m_shooter, &m_feeder)); // RJ
 
-  frc2::JoystickButton(&m_driver,2).WhileHeld(new LoaderOff(&m_loader));
-  frc2::JoystickButton(&m_driver,3).WhileHeld(new LoaderUp(&m_loader));
-  frc2::JoystickButton(&m_driver,4).WhileHeld(new LoaderDown(&m_loader));
+  frc2::JoystickButton(&m_driver, 1).WhileHeld(new VisionDrive(&m_vision, &m_driveTrain)); // A
+  frc2::JoystickButton(&m_driver,2).WhileHeld(new LoaderOff(&m_loader)); // B
+  frc2::JoystickButton(&m_driver,3).WhileHeld(new LoaderUp(&m_loader)); // X
+  frc2::JoystickButton(&m_driver,4).WhileHeld(new LoaderDown(&m_loader)); // Y
 
-
-  frc2::JoystickButton(&m_driver, 1).WhileHeld(new VisionDrive(&m_vision, &m_driveTrain));
+  // LT and RT control intake on and reverse
 }
 
 frc2::Command* RobotContainer::GenerateRamseteCommand() {
