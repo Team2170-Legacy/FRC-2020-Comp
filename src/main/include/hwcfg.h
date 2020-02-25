@@ -40,7 +40,7 @@ enum LEDCodes
 	Off = 0,
 	Shooter_SpoolUp = 1,
 	Shooter_AtSpeed = 2,
-	Shoooter_Shooting = 3,
+	Shooter_Shooting = 3,
 	VLock = 4,
 	VDrive = 5,
 	IntakeBalls = 6

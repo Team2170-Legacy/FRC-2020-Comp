@@ -11,9 +11,6 @@
 #include "frc2/command/SequentialCommandGroup.h"
 #include "frc/smartdashboard/SmartDashboard.h"
 
-#include "Commands/WaitCommand.h"
-#include "Commands/AutonomousMotionProfile.h"
-
 RobotContainer::RobotContainer() {
   m_driveTrain.SetDefaultCommand(TeleopDrive(&m_driveTrain));
   m_intake.SetDefaultCommand(TeleopIntake(&m_intake));
@@ -120,7 +117,51 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       WaitCommand(delay), 
       AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R)
       };
-    // Create auto strategies here
+    case ShootFromLine_L:
+      return new frc2::SequentialCommandGroup {
+      VisionDrive(&m_vision, &m_driveTrain),
+      WaitCommand(delay),
+      ConfigShooterLow(&m_shooter, &m_feeder),
+      WaitCommand(delay),
+      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L_L, &AutoMove_To_PwrPort_L_R)   
+      };
+    case ShootFromLine_R:
+      return new frc2::SequentialCommandGroup {
+      VisionDrive(&m_vision, &m_driveTrain),
+      WaitCommand(delay),
+      ConfigShooterLow(&m_shooter, &m_feeder),
+      WaitCommand(delay),
+      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_R_L, &AutoMove_To_PwrPort_R_R)   
+      };
+
+    case ShootFromLine_C:
+      return new frc2::SequentialCommandGroup {
+      VisionDrive(&m_vision, &m_driveTrain),
+      WaitCommand(delay),
+      ConfigShooterLow(&m_shooter, &m_feeder),
+      WaitCommand(delay),
+      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R)  
+      };
+    case ShootFromPwrPrt_L:
+      return new frc2::SequentialCommandGroup {
+        WaitCommand(delay),
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R),  // then drive to trench: FIX THIS!
+        WaitCommand(delay),
+      };
+    case ShootFromPwrPrt_R:
+      return new frc2::SequentialCommandGroup {
+        WaitCommand(delay),
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R),    // then drive to trench: FIX THIS!
+        WaitCommand(delay),
+      };
+    case ShootFromPwrPrt_C:
+      return new frc2::SequentialCommandGroup {
+        WaitCommand(delay),
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_L, &AutoMove_To_Trench_R),    
+        WaitCommand(delay),
+      };
+    
+
   }
 
   return nullptr;

@@ -44,6 +44,11 @@
 #include "Commands/PullIntakeUp.h"
 #include "Commands/ShooterOff.h"
 #include "Commands/TeleopIntake.h"
+#include "Commands/WaitCommand.h"
+#include "Commands/AutonomousMotionProfile.h"
+#include "Commands/VisionDrive.h"
+#include "Commands/ConfigShooterHigh.h"
+#include "Commands/ConfigShooterLow.h"
 
 #include "Commands/ExtendWinch.h"
 #include "Commands/RetractWinch.h"
@@ -54,6 +59,9 @@
 #include "frc/trajectory/TrajectoryGenerator.h"
 
 #include "Automoves/To_PwrPort.h"
+#include "Automoves/To_PwrPort_L.h"
+#include "Automoves/To_PwrPort_R.h"
+#include "Automoves/To_Trench.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -68,7 +76,17 @@ class RobotContainer {
 
   frc2::Command* GetAutonomousCommand();
 
-  enum Profile {NoTrajectory = 0, ToPwrPort = 1};
+  enum Profile 
+  { NoTrajectory = 0, 
+    ToPwrPort = 1, 
+    ShootFromLine_L = 2,
+    ShootFromLine_R = 3, 
+    ShootFromLine_C = 4,  
+    ShootFromPwrPrt_L = 5,
+    ShootFromPwrPrt_R = 6,
+    ShootFromPwrPrt_C = 7,
+    GatherMoreBalls = 8
+  };
   
   void StartDataLogging(void);
   void EndDataLogging(void);
