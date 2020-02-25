@@ -25,8 +25,3 @@ void Climber::Periodic() {
     // Put code here to be run every loop
 
 }
-
-void Climber::ClimberDown() {
-
-}
-

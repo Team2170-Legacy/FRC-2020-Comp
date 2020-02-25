@@ -11,7 +11,6 @@
 #include "frc2/command/SequentialCommandGroup.h"
 #include "frc/smartdashboard/SmartDashboard.h"
 
-
 #include "Commands/AutonomousCommandGroup.h"
 
 RobotContainer::RobotContainer() {
@@ -37,7 +36,7 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_operator,3).WhileHeld(new SpinStorage(&m_feeder));
   frc2::JoystickButton(&m_operator,4).WhileHeld(new SpinStorageCCW(&m_feeder));
 
-  frc2::JoystickButton(&m_operator,5).WhileHeld(new ClimbGenDown(&m_climber));
+  frc2::JoystickButton(&m_operator,5).WhileHeld(m_RetractWinch);
   frc2::JoystickButton(&m_operator,6).WhileHeld(new ShooterOff(&m_shooter));
 
   frc2::JoystickButton(&m_operator, 7).WhileHeld(new PullIntakeUp(&m_intake));
@@ -49,6 +48,8 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_driver,2).WhileHeld(new LoaderOff(&m_loader));
   frc2::JoystickButton(&m_driver,3).WhileHeld(new LoaderUp(&m_loader));
   frc2::JoystickButton(&m_driver,4).WhileHeld(new LoaderDown(&m_loader));
+
+  frc2::JoystickButton(&m_driver, 5).WhenPressed(m_ReleaseClimber);
 
 
   frc2::JoystickButton(&m_driver, 1).WhileHeld(new VisionDrive(&m_vision, &m_driveTrain));
