@@ -12,7 +12,8 @@
 #include "frc/smartdashboard/SmartDashboard.h"
 
 
-#include "Commands/AutonomousCommandGroup.h"
+#include "Commands/WaitCommand.h"
+#include "Commands/AutonomousMotionProfile.h"
 
 RobotContainer::RobotContainer() {
   m_driveTrain.SetDefaultCommand(TeleopDrive(&m_driveTrain));
@@ -115,7 +116,10 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
     case NoTrajectory:
       return nullptr;
     case ToPwrPort:
-      return new AutonomousCommandGroup(delay, &m_driveTrain, &AutoMove_To_PwrPort_L,  &AutoMove_To_PwrPort_R);
+      return new frc2::SequentialCommandGroup {
+      WaitCommand(delay), 
+      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R)
+      };
   }
 
   return nullptr;
