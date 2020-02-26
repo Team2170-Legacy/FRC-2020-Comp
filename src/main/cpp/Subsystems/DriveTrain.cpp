@@ -227,7 +227,7 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
 
     // Send setpoints to pid controllers
     if (kVoltageDrive) {
-        m_Drive.ArcadeDrive(xSpeed, zRotation);
+        m_Drive.ArcadeDrive(zRotation, xSpeed);
     }
     else {
         m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kSmartVelocity, GainSelect::kDriverVelocity);
