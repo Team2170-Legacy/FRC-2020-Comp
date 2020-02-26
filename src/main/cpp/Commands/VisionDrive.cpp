@@ -22,7 +22,6 @@ m_drive{drive} {
  * @brief Called just before this Command runs the first time
  */
 void VisionDrive::Initialize() {
-    //m_vision->visionDrive.SetBoolean(false);
     m_vision->VisionSteerInit();
 }
 

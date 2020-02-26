@@ -115,6 +115,9 @@ frc2::Command* RobotContainer::GenerateRamseteCommand() {
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   // return m_chooser.GetSelected();
+
+  double visionDriveAcceptableError = 0.8; // VisionDrives during auto will terminate once they reach this error or less
+  double maxVisionDriveTime = 3; // VisionDrives during auto will terminate if they take longer than this time
   double delay = m_delayChooser.GetSelected();
   switch(m_trajectoryChooser.GetSelected()) {
     case NoTrajectory:
@@ -126,7 +129,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       };
     case ShootFromLine_L:
       return new frc2::SequentialCommandGroup {
-      VisionDrive(&m_vision, &m_driveTrain),
+      VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
       WaitCommand(delay),
       ConfigShooterLow(&m_shooter, &m_feeder),
       WaitCommand(delay),
@@ -134,7 +137,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       };
     case ShootFromLine_R:
       return new frc2::SequentialCommandGroup {
-      VisionDrive(&m_vision, &m_driveTrain),
+      VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
       WaitCommand(delay),
       ConfigShooterLow(&m_shooter, &m_feeder),
       WaitCommand(delay),
@@ -143,7 +146,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
 
     case ShootFromLine_C:
       return new frc2::SequentialCommandGroup {
-      VisionDrive(&m_vision, &m_driveTrain),
+      VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
       WaitCommand(delay),
       ConfigShooterLow(&m_shooter, &m_feeder),
       WaitCommand(delay),

@@ -31,7 +31,6 @@
 #include "Commands/IntakeReverse.h"
 #include "Commands/SpinStorage.h"
 #include "Commands/SpinStorageCCW.h"
-#include "Commands/VisionDrive.h"
 #include "Commands/ConfigShooterHigh.h"
 #include "Commands/ConfigShooterLow.h"
 #include "Commands/SetShooterSpeed.h"
@@ -47,8 +46,8 @@
 #include "Commands/WaitCommand.h"
 #include "Commands/AutonomousMotionProfile.h"
 #include "Commands/VisionDrive.h"
-#include "Commands/ConfigShooterHigh.h"
-#include "Commands/ConfigShooterLow.h"
+#include "Commands/VisionDriveAuto.h"
+
 
 #include "Commands/ExtendWinch.h"
 #include "Commands/RetractWinch.h"
