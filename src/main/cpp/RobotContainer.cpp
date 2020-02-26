@@ -11,9 +11,6 @@
 #include "frc2/command/SequentialCommandGroup.h"
 #include "frc/smartdashboard/SmartDashboard.h"
 
-#include "Commands/WaitCommand.h"
-#include "Commands/AutonomousMotionProfile.h"
-
 RobotContainer::RobotContainer() {
   m_driveTrain.SetDefaultCommand(TeleopDrive(&m_driveTrain));
   m_intake.SetDefaultCommand(TeleopIntake(&m_intake));
@@ -28,8 +25,15 @@ RobotContainer::RobotContainer() {
   // m_chooser.AddOption("Matlab Auto Test", new AutonomousCommandGroup(0, &m_driveTrain));
   // frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
-  m_trajectoryChooser.SetDefaultOption("No Trajectory", NoTrajectory);
-  m_trajectoryChooser.AddOption("To Powerport", ToPwrPort);
+  m_trajectoryChooser.SetDefaultOption("A. No Trajectory", NoTrajectory);
+  m_trajectoryChooser.AddOption("B. To PowerPort from Center", ToPwrPort);
+  m_trajectoryChooser.AddOption("C. Shoot from Line: Start Left", ShootFromLine_L);
+  m_trajectoryChooser.AddOption("D. Shoot from Line: Start Right", ShootFromLine_R);
+  m_trajectoryChooser.AddOption("E. Shoot from Line: Start Center", ShootFromLine_C);
+  m_trajectoryChooser.AddOption("F. Shoot from PowerPort: Start Left", ShootFromPwrPrt_L);
+  m_trajectoryChooser.AddOption("G. Shoot from PowerPort: Start Right", ShootFromPwrPrt_R);
+  m_trajectoryChooser.AddOption("H. Shoot from PowerPort: Start Center", ShootFromPwrPrt_C);
+  //m_trajectoryChooser.AddOption("I. Gather more balls", ToPwrPort);
   frc::SmartDashboard::PutData("Auto Trajectories", &m_trajectoryChooser);
 
   // set-up delay chooser
@@ -120,6 +124,51 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       WaitCommand(delay), 
       AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R)
       };
+    case ShootFromLine_L:
+      return new frc2::SequentialCommandGroup {
+      VisionDrive(&m_vision, &m_driveTrain),
+      WaitCommand(delay),
+      ConfigShooterLow(&m_shooter, &m_feeder),
+      WaitCommand(delay),
+      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L_L, &AutoMove_To_PwrPort_L_R)   
+      };
+    case ShootFromLine_R:
+      return new frc2::SequentialCommandGroup {
+      VisionDrive(&m_vision, &m_driveTrain),
+      WaitCommand(delay),
+      ConfigShooterLow(&m_shooter, &m_feeder),
+      WaitCommand(delay),
+      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_R_L, &AutoMove_To_PwrPort_R_R)   
+      };
+
+    case ShootFromLine_C:
+      return new frc2::SequentialCommandGroup {
+      VisionDrive(&m_vision, &m_driveTrain),
+      WaitCommand(delay),
+      ConfigShooterLow(&m_shooter, &m_feeder),
+      WaitCommand(delay),
+      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R)  
+      };
+    case ShootFromPwrPrt_L:
+      return new frc2::SequentialCommandGroup {
+        WaitCommand(delay),
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R),  // then drive to trench: FIX THIS!
+        WaitCommand(delay),
+      };
+    case ShootFromPwrPrt_R:
+      return new frc2::SequentialCommandGroup {
+        WaitCommand(delay),
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R),    // then drive to trench: FIX THIS!
+        WaitCommand(delay),
+      };
+    case ShootFromPwrPrt_C:
+      return new frc2::SequentialCommandGroup {
+        WaitCommand(delay),
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_L, &AutoMove_To_Trench_R),    
+        WaitCommand(delay),
+      };
+    
+
   }
 
   return nullptr;
