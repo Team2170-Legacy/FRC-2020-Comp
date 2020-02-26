@@ -60,9 +60,9 @@ private:
 	
 	// for distance calculation
 	const double powerportVisionTargetHeight = (6 + 9.25 * inches) + (1 + 5.0 * inches)/2; // height of the center of the vision target (ft)
-	const double cameraHeight = 21.0 * inches; // height that the camera is mounted at (ft)
+	const double cameraHeight = 44.0 * inches; // height that the camera is mounted at (ft)
 	const double cameraAngle = 35; // angle camera is mounted at from horizontal (degrees)
-	const double cameraDistanceFromFrontBumper = 15.0 * inches; // (ft)
+	const double cameraDistanceFromFrontBumper = 30.0 * inches; // (ft)
 	double optimalShootingDistance = 10; // optimal distance from powerport to shoot from (ft)
 
 	// For VisionDrive PID controller
