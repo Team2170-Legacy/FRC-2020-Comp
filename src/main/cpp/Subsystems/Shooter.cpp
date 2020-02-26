@@ -44,6 +44,7 @@ void Shooter::Periodic() {
     shooterLogger.WriteShooterData(leadRPM, leadAppliedOutput, leadVoltage, leadCurrent);
     frc::SmartDashboard::PutNumber("Shooter RPM", GetMotorVelocity());
     frc::SmartDashboard::PutNumber("Shooter Error", GetMotorVelocity() - CommandedVelocity);
+    frc::SmartDashboard::PutBoolean("Shooter at speed", ShooterAtSpeed());
 }
 
 void Shooter::ShooterOff() {
@@ -89,4 +90,20 @@ void Shooter::EnableLogging() {
 
 void Shooter::DisableLogging() {
     shooterLogger.EndSession();
+}
+
+bool Shooter::ShooterAtSpeed()
+{
+    bool atSpeed = false;
+
+    if (CommandedVelocity != 0)
+    {
+        double error = fabs((CommandedVelocity - GetMotorVelocity()));
+
+        if ((error / CommandedVelocity) < 0.05)
+        {
+            atSpeed = true;
+        }
+    }
+    return atSpeed;
 }

@@ -57,6 +57,7 @@ Shooter();
 	bool IsShooterOn() {return ShooterEnabled;}
 	double GetShooterSpeed() {return CommandedVelocity;}
 	double GetMotorVelocity() {return m_shooterEncoderLead.GetVelocity();}
+	bool ShooterAtSpeed();
 
 	enum IdleMode {
 		kCoast = 0
