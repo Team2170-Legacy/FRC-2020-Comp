@@ -66,9 +66,9 @@ private:
 	double optimalShootingDistance = 10; // optimal distance from powerport to shoot from (ft)
 
 	// For VisionDrive PID controller
-	double angleErrorDeadband = 0.5; // 0;	// degrees
+	double angleErrorDeadband = 0.5; // degrees
 	double kP_Omega = -0.12; 
-	double kI_Omega = -0.3; // -0;
+	double kI_Omega = -0.3; 
 	double kP_Distance = -0;
 	double distanceErrorDeadband = 0; // feet 
 	double omegaLimiter = 0.46;
