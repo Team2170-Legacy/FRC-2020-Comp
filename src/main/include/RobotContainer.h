@@ -114,8 +114,10 @@ class RobotContainer {
   // Climber related commands
   frc2::InstantCommand m_RetractWinch{[this] {m_climber.WinchRetract();}, {&m_climber}};
   frc2::InstantCommand m_StopWinch{[this] {m_climber.WinchStop();}, {&m_climber}};
-  frc2::StartEndCommand m_ReleaseClimber{[this] {m_climber.WinchRetract();}, 
-                                         [this] {m_climber.WinchStop();}, {&m_climber}};
+  frc2::ParallelRaceGroup m_ReleaseClimber = 
+    frc2::StartEndCommand(
+      [this] {m_climber.WinchRetract();}, 
+      [this] {m_climber.WinchStop();}, {&m_climber}).WithTimeout(1.0_s);
 
   void ConfigureButtonBindings();
 };

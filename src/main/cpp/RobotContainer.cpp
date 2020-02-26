@@ -73,7 +73,7 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_driver,3).WhileHeld(new LoaderUp(&m_loader)); // X
   frc2::JoystickButton(&m_driver,4).WhileHeld(new LoaderDown(&m_loader)); // Y
 
-  frc2::JoystickButton(&m_driver, 5).WhenPressed(m_ReleaseClimber).WhenReleased(m_StopWinch);
+  frc2::JoystickButton(&m_driver, 5).WhenPressed(m_ReleaseClimber);
   // LT and RT control intake on and reverse
 }
 
