@@ -60,6 +60,7 @@ std::shared_ptr<frc::PowerDistributionPanel> powerDistributionPanel;
 	const double kGearRatio = 5.95;
 	const double kWheelDiameter;
 	const double d = (25.75/12); 
+	const bool kVoltageDrive;
 
 	// PID Gains for closed-loop velocity control
 	const double kP, kI, kD = 0, kIz = 0, kFF, kMaxOutput = 1, kMinOutput = -1;

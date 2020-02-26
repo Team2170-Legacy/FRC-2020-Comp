@@ -15,6 +15,7 @@
 DriveTrain::DriveTrain() : 
 
     kWheelDiameter{frc::Preferences::GetInstance()->GetDouble("Wheel Diameter", 5.0)},
+    kVoltageDrive{frc::Preferences::GetInstance()->GetBoolean("Voltage Driving", false)},
     kP{frc::Preferences::GetInstance()->GetDouble("Drive kP", 0.1)},
     kI{frc::Preferences::GetInstance()->GetDouble("Drive kI", 0.00)},
     kFF{frc::Preferences::GetInstance()->GetDouble("Drive kFF", 0.05)},
@@ -225,8 +226,13 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
     rightVelocityCommand = rightMotorSpeed;
 
     // Send setpoints to pid controllers
-    m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kSmartVelocity, GainSelect::kDriverVelocity);
-    m_pidControllerR.SetReference(rightMotorSpeed, rev::ControlType::kSmartVelocity, GainSelect::kDriverVelocity);
+    if (kVoltageDrive) {
+        m_Drive.ArcadeDrive(xSpeed, zRotation);
+    }
+    else {
+        m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kSmartVelocity, GainSelect::kDriverVelocity);
+        m_pidControllerR.SetReference(rightMotorSpeed, rev::ControlType::kSmartVelocity, GainSelect::kDriverVelocity);
+    }
     m_Drive.FeedWatchdog();
 
 }
