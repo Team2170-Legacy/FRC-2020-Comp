@@ -54,8 +54,8 @@ DriveTrain::DriveTrain() :
     // Tuned for driver velocity mode
     m_pidControllerL.SetP(kP, GainSelect::kDriverVelocity);
     m_pidControllerR.SetP(kP, GainSelect::kDriverVelocity);
-    m_pidControllerL.SetP(kD, GainSelect::kDriverVelocity);
-    m_pidControllerR.SetP(kD, GainSelect::kDriverVelocity);
+    m_pidControllerL.SetD(kD, GainSelect::kDriverVelocity);
+    m_pidControllerR.SetD(kD, GainSelect::kDriverVelocity);
     m_pidControllerL.SetFF(kFF, GainSelect::kDriverVelocity);
     m_pidControllerR.SetFF(kFF, GainSelect::kDriverVelocity);  
     m_pidControllerL.SetI(kI, GainSelect::kDriverVelocity);
@@ -64,8 +64,8 @@ DriveTrain::DriveTrain() :
     // Tuned for autonomous velocity mode
     m_pidControllerL.SetP(kPvel, GainSelect::kAutoVelocity);
     m_pidControllerR.SetP(kPvel, GainSelect::kAutoVelocity);
-    m_pidControllerL.SetP(kDvel, GainSelect::kAutoVelocity);
-    m_pidControllerR.SetP(kDvel, GainSelect::kAutoVelocity);
+    m_pidControllerL.SetD(kDvel, GainSelect::kAutoVelocity);
+    m_pidControllerR.SetD(kDvel, GainSelect::kAutoVelocity);
     m_pidControllerL.SetFF(kFFvel, GainSelect::kAutoVelocity);
     m_pidControllerR.SetFF(kFFvel, GainSelect::kAutoVelocity);  
     m_pidControllerL.SetI(kIvel, GainSelect::kAutoVelocity);
@@ -74,8 +74,8 @@ DriveTrain::DriveTrain() :
     // Tuned for autonomous position mode
     m_pidControllerL.SetP(kPpos, GainSelect::kAutoPosition);
     m_pidControllerR.SetP(kPpos, GainSelect::kAutoPosition);
-    m_pidControllerL.SetP(kDpos, GainSelect::kAutoPosition);
-    m_pidControllerR.SetP(kDpos, GainSelect::kAutoPosition);
+    m_pidControllerL.SetD(kDpos, GainSelect::kAutoPosition);
+    m_pidControllerR.SetD(kDpos, GainSelect::kAutoPosition);
     m_pidControllerL.SetFF(kFFpos, GainSelect::kAutoPosition);
     m_pidControllerR.SetFF(kFFpos, GainSelect::kAutoPosition);  
     m_pidControllerL.SetI(kIpos, GainSelect::kAutoPosition);

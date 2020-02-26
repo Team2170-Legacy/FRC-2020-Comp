@@ -8,8 +8,8 @@
 #include "Commands/TeleopDrive.h"
 #include "Robot.h"
 
-#define xAxis_Rate_Max  0.04
-#define turn_Rate_Max   0.05
+#define xAxis_Rate_Max  0.2
+#define turn_Rate_Max   0.25
 
 TeleopDrive::TeleopDrive(DriveTrain* subsystem) : m_driveTrain{subsystem} {
   // Use Requires() here to declare subsystem dependencies
@@ -30,20 +30,6 @@ void TeleopDrive::Execute()
 {
   double xAxis = Robot::oi->getDriverJoystick()->GetRawAxis(1);
 
-  double delta_xAxis = xAxis - xAxis_prev;
-
-  if ( delta_xAxis > xAxis_Rate_Max ) {
-	    xAxis_prev 	= xAxis_prev +  xAxis_Rate_Max;
-  }
-  else if ( delta_xAxis < xAxis_Rate_Max ) {
- 	    xAxis_prev 	= xAxis_prev - xAxis_Rate_Max;
-  }
-  else {
-      xAxis_prev 	= xAxis;
-  };
-
-  //double yAxis = Robot::oi->getDriverJoystick()->GetRawAxis(4);
-
   double speedPos = Robot::oi->getDriverJoystick()->GetRawAxis(3);
   double speedNeg = Robot::oi->getDriverJoystick()->GetRawAxis(2);
 
@@ -59,6 +45,21 @@ void TeleopDrive::Execute()
     turn_Rate = 0.0;
   }
 
+  double delta_xAxis = xAxis - xAxis_prev;
+
+  if ( delta_xAxis > xAxis_Rate_Max ) {
+	    xAxis_prev 	= xAxis_prev +  xAxis_Rate_Max;
+  }
+  else if ( delta_xAxis < xAxis_Rate_Max ) {
+ 	    xAxis_prev 	= xAxis_prev - xAxis_Rate_Max;
+  }
+  else {
+      xAxis_prev 	= xAxis;
+  };
+
+  //double yAxis = Robot::oi->getDriverJoystick()->GetRawAxis(4);
+
+
   double delta_turn_Rate = turn_Rate - turn_Rate_prev;
 
   if ( delta_turn_Rate > turn_Rate_Max ) {
@@ -71,9 +72,8 @@ void TeleopDrive::Execute()
     turn_Rate_prev = turn_Rate;
   };
 
-
-  m_driveTrain->VelocityArcadeDrive(-xAxis_prev, -turn_Rate, true);
- // Robot::driveTrian->VelocityArcadeDrive(turnRate, yAxis, true);
+//  m_driveTrain->VelocityArcadeDrive(-xAxis_prev, -turn_Rate, true);
+ m_driveTrain->VelocityArcadeDrive(-xAxis, -turn_Rate, true);
 }
 
 // Make this return true when this Command no longer needs to run execute()
