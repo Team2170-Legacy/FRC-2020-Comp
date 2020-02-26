@@ -129,28 +129,28 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       };
     case ShootFromLine_L:
       return new frc2::SequentialCommandGroup {
+      ConfigShooterHigh(&m_shooter, &m_feeder),
       VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
+      LoaderUp(&m_loader),
       WaitCommand(delay),
-      ConfigShooterLow(&m_shooter, &m_feeder),
-      WaitCommand(delay),
-      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L_L, &AutoMove_To_PwrPort_L_R)   
+      //AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R)     
       };
     case ShootFromLine_R:
       return new frc2::SequentialCommandGroup {
+      ConfigShooterHigh(&m_shooter, &m_feeder),
       VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
+      LoaderUp(&m_loader),
       WaitCommand(delay),
-      ConfigShooterLow(&m_shooter, &m_feeder),
-      WaitCommand(delay),
-      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_R_L, &AutoMove_To_PwrPort_R_R)   
+      //AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R)  
       };
 
     case ShootFromLine_C:
       return new frc2::SequentialCommandGroup {
+      ConfigShooterHigh(&m_shooter, &m_feeder),
       VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
+      LoaderUp(&m_loader),
       WaitCommand(delay),
-      ConfigShooterLow(&m_shooter, &m_feeder),
-      WaitCommand(delay),
-      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R)  
+      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_L, &AutoMove_To_Trench_R)  
       };
     case ShootFromPwrPrt_L:
       return new frc2::SequentialCommandGroup {
