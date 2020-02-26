@@ -25,8 +25,15 @@ RobotContainer::RobotContainer() {
   // m_chooser.AddOption("Matlab Auto Test", new AutonomousCommandGroup(0, &m_driveTrain));
   // frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
-  m_trajectoryChooser.SetDefaultOption("No Trajectory", NoTrajectory);
-  m_trajectoryChooser.AddOption("To Powerport", ToPwrPort);
+  m_trajectoryChooser.SetDefaultOption("A. No Trajectory", NoTrajectory);
+  m_trajectoryChooser.AddOption("B. To PowerPort from Center", ToPwrPort);
+  m_trajectoryChooser.AddOption("C. Shoot from Line: Start Left", ShootFromLine_L);
+  m_trajectoryChooser.AddOption("D. Shoot from Line: Start Right", ShootFromLine_R);
+  m_trajectoryChooser.AddOption("E. Shoot from Line: Start Center", ShootFromLine_C);
+  m_trajectoryChooser.AddOption("F. Shoot from PowerPort: Start Left", ShootFromPwrPrt_L);
+  m_trajectoryChooser.AddOption("G. Shoot from PowerPort: Start Right", ShootFromPwrPrt_R);
+  m_trajectoryChooser.AddOption("H. Shoot from PowerPort: Start Center", ShootFromPwrPrt_C);
+  //m_trajectoryChooser.AddOption("I. Gather more balls", ToPwrPort);
   frc::SmartDashboard::PutData("Auto Trajectories", &m_trajectoryChooser);
 
   // set-up delay chooser
