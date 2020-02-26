@@ -161,7 +161,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
     case ShootFromPwrPrt_R:
       return new frc2::SequentialCommandGroup {
         WaitCommand(delay),
-        AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_R_L, &AutoMove_To_PwrPort_R),    // then drive to trench: FIX THIS!
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_R_L, &AutoMove_To_PwrPort_R_R),    // then drive to trench: FIX THIS!
         //WaitCommand(delay),
       };
     case ShootFromPwrPrt_C:
