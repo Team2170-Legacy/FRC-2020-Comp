@@ -150,7 +150,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
       LoaderUp(&m_loader),
       WaitCommand(delay),
-      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_L, &AutoMove_To_Trench_R)  
+      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R)  
       };
     case ShootFromPwrPrt_L:
       return new frc2::SequentialCommandGroup {
@@ -168,6 +168,10 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       return new frc2::SequentialCommandGroup {
         WaitCommand(delay),
         AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_L, &AutoMove_To_Trench_R),    
+        WaitCommand(delay),
+      };
+    case GatherMoreBalls:
+      return new frc2::SequentialCommandGroup {
         WaitCommand(delay),
       };
     
