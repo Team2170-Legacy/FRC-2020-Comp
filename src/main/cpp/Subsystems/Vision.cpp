@@ -59,7 +59,6 @@ void Vision::Periodic() {
                 loopsSinceLastImage = 0;
                 TakeSnapshot();
             }
-
         }
     }
     else if (targetLocked) {
@@ -82,6 +81,10 @@ void Vision::Periodic() {
         angleError_DB = 0;
         speed = 0;
         omega = 0;        
+    }
+    if (disableLEDWhenVisionDriveInactive && !visionDriveActive) {
+        SetCamMode(false);
+        SetLEDMode(forceOff);
     }
     visionLogger.WriteVisionData(targetLocked, visionDriveActive, distance,
                                  distanceError, distanceError_DB, angleError, angleError_DB, speed, omega);
