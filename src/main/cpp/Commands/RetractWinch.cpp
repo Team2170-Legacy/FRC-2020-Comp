@@ -22,7 +22,9 @@ void RetractWinch::Execute() {
 }
 
 // Called once the command ends or is interrupted.
-void RetractWinch::End(bool interrupted) {}
+void RetractWinch::End(bool interrupted) {
+  m_climber->WinchStop();
+}
 
 // Returns true when the command should end.
 bool RetractWinch::IsFinished() { return false; }

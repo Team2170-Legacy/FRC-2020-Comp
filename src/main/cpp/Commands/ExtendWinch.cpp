@@ -22,7 +22,9 @@ void ExtendWinch::Execute() {
 }
 
 // Called once the command ends or is interrupted.
-void ExtendWinch::End(bool interrupted) {}
+void ExtendWinch::End(bool interrupted) {
+  m_climber->WinchStop();
+}
 
 // Returns true when the command should end.
 bool ExtendWinch::IsFinished() { return false; }

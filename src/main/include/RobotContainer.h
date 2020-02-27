@@ -119,5 +119,9 @@ class RobotContainer {
       [this] {m_climber.WinchRetract();}, 
       [this] {m_climber.WinchStop();}, {&m_climber}).WithTimeout(1.0_s);
 
+  // Shooter related commands
+  frc2::ParallelRaceGroup m_WaitShooterSpeed = 
+    WaitCommand(3.0).WithInterrupt([this] {return m_shooter.ShooterAtSpeed();});
+
   void ConfigureButtonBindings();
 };
