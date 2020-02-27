@@ -61,6 +61,8 @@
 #include "Automoves/To_PwrPort_L.h"
 #include "Automoves/To_PwrPort_R.h"
 #include "Automoves/To_Trench.h"
+#include "Automoves/To_Trench_L.h"
+#include "Automoves/To_Trench_R.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
