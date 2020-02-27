@@ -60,7 +60,7 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_operator,4).WhileHeld(new SpinStorageCCW(&m_feeder)); // Y
 
   frc2::JoystickButton(&m_operator,5).WhileHeld(new RetractWinch(&m_climber)); // LB
-  frc2::JoystickButton(&m_operator,6).WhileHeld(new ShooterOff(&m_shooter)); // RB
+  frc2::JoystickButton(&m_operator,6).WhileHeld(new ShooterOff(&m_shooter)).WhileHeld(&m_ReleaseInterlock); // RB
 
   frc2::JoystickButton(&m_operator, 7).WhileHeld(new PullIntakeUp(&m_intake)); // LA
   frc2::JoystickButton(&m_operator, 8).WhileHeld(new PullIntakeDown(&m_intake)); // RA
