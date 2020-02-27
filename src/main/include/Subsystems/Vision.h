@@ -88,13 +88,15 @@ private:
 	double omega = 0;
 
 	// for taking snapshots during visiondrives
-	bool takePeriodicSnapshots = false;
-	int loopsBetweenImages = 5;
+	bool takePeriodicSnapshots = true;
+	nt::NetworkTableEntry nt_takePeriodicSnapshots;
+	int loopsBetweenImages = 10;
 	int loopsSinceLastImage = 0;
 
-	// makes sure the LED is on only when vision drive is being used
-	// should be set to true during competitions
-	bool disableLEDWhenVisionDriveInactive = true;
+	// makes sure the LED and vision processing is on only when vision drive is being used
+	// should be set to true during competitions, false when calibrating
+	bool competitionMode = true;
+	nt::NetworkTableEntry nt_competitionMode;
 
 public:
   Vision();
