@@ -8,7 +8,7 @@
 #include "Commands/TeleopDrive.h"
 #include "Robot.h"
 
-#define xAxis_Rate_Max  0.2
+#define xAxis_Rate_Max  0.1
 #define turn_Rate_Max   0.25
 
 TeleopDrive::TeleopDrive(DriveTrain* subsystem) : m_driveTrain{subsystem} {
