@@ -8,7 +8,7 @@ blue_balance:1975
 calibration_type:0
 contour_grouping:0
 contour_sort_final:0
-convexity_max:60
+convexity_max:40
 convexity_min:0
 corner_approx:2
 cross_a_a:1
