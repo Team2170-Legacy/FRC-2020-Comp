@@ -79,14 +79,13 @@ class RobotContainer {
 
   enum Profile 
   { NoTrajectory = 0, 
-    ToPwrPort = 1, 
-    ShootFromLine_L = 2,
-    ShootFromLine_R = 3, 
-    ShootFromLine_C = 4,  
-    ShootFromPwrPrt_L = 5,
-    ShootFromPwrPrt_R = 6,
-    ShootFromPwrPrt_C = 7,
-    GatherMoreBalls = 8
+    ShootFromLine_L = 1,
+    ShootFromLine_R = 2, 
+    ShootFromLine_C = 3,  
+    ShootFromPwrPrt_L = 4,
+    ShootFromPwrPrt_R = 5,
+    ShootFromPwrPrt_C = 6,
+    GatherMoreBalls = 7
   };
   
   void StartDataLogging(void);
