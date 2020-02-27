@@ -37,7 +37,7 @@ void Shooter::Periodic() {
     }
 
     // Get and write subsystem data to datalog file
-    double leadRPM = m_shooterEncoderLead.GetVelocity(); 
+    double leadRPM = GetMotorVelocity();
     double leadAppliedOutput = m_shooterLead.GetAppliedOutput();
     double leadVoltage = m_shooterLead.GetBusVoltage();
     double leadCurrent = m_shooterLead.GetOutputCurrent();
