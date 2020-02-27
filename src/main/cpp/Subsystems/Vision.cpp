@@ -37,12 +37,16 @@ Vision::Vision() {
     nt_kI_Omega.SetDouble(kI_Omega);
     nt_kP_Distance.SetDouble(kP_Distance);
     nt_angle_DB.SetDouble(angleErrorDeadband);
+    nt_takePeriodicSnapshots = table->GetEntry("Take Periodic Snapshots");
+    nt_takePeriodicSnapshots.SetBoolean(takePeriodicSnapshots);
+    nt_competitionMode = table->GetEntry("Competition Mode Vision");
+    nt_competitionMode.SetBoolean(competitionMode);
 
     // open a datalogging file
     visionLogger.VisionLogger("/home/lvuser/VisionLogs/VisionLog_" + DataLogger::GetTimestamp() + ".csv");
 
    
-    if (disableLEDWhenVisionDriveInactive) {
+    if (competitionMode) {
      // LEDs should start off by default
     SetCamMode(false);
     SetLEDMode(forceOff);
@@ -50,16 +54,16 @@ Vision::Vision() {
 }
 
 void Vision::Periodic() {
+    takePeriodicSnapshots = nt_takePeriodicSnapshots.GetBoolean(takePeriodicSnapshots);
+    competitionMode = nt_competitionMode.GetBoolean(competitionMode);
     bool targetLocked = TargetIsLocked();
-    if (visionDriveActive) {
-        
+    if (visionDriveActive) {  
         if (takePeriodicSnapshots) {
             loopsSinceLastImage++;
             if (loopsSinceLastImage >= loopsBetweenImages) {
                 loopsSinceLastImage = 0;
                 TakeSnapshot();
             }
-
         }
     }
     else if (targetLocked) {
@@ -82,6 +86,14 @@ void Vision::Periodic() {
         angleError_DB = 0;
         speed = 0;
         omega = 0;        
+    }
+    if (competitionMode && !visionDriveActive) {
+        SetCamMode(false);
+        SetLEDMode(forceOff);
+    }
+    else if (!competitionMode) {
+        SetCamMode(true);
+        SetLEDMode(currentPipelineMode);
     }
     visionLogger.WriteVisionData(targetLocked, visionDriveActive, distance,
                                  distanceError, distanceError_DB, angleError, angleError_DB, speed, omega);
@@ -297,7 +309,7 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
  * @brief ends the vision steer
  */
 void Vision::VisionSteerEnd() {
-    if (disableLEDWhenVisionDriveInactive) {
+    if (competitionMode) {
     SetCamMode(false);
     SetLEDMode(forceOff);
     }

@@ -60,15 +60,15 @@ private:
 	
 	// for distance calculation
 	const double powerportVisionTargetHeight = (6 + 9.25 * inches) + (1 + 5.0 * inches)/2; // height of the center of the vision target (ft)
-	const double cameraHeight = 21.0 * inches; // height that the camera is mounted at (ft)
+	const double cameraHeight = 44.0 * inches; // height that the camera is mounted at (ft)
 	const double cameraAngle = 35; // angle camera is mounted at from horizontal (degrees)
-	const double cameraDistanceFromFrontBumper = 15.0 * inches; // (ft)
+	const double cameraDistanceFromFrontBumper = 30.0 * inches; // (ft)
 	double optimalShootingDistance = 10; // optimal distance from powerport to shoot from (ft)
 
 	// For VisionDrive PID controller
-	double angleErrorDeadband = 0.5; // 0;	// degrees
+	double angleErrorDeadband = 0.5; // degrees
 	double kP_Omega = -0.12; 
-	double kI_Omega = -0.3; // -0;
+	double kI_Omega = -0.3; 
 	double kP_Distance = -0;
 	double distanceErrorDeadband = 0; // feet 
 	double omegaLimiter = 0.46;
@@ -88,13 +88,15 @@ private:
 	double omega = 0;
 
 	// for taking snapshots during visiondrives
-	bool takePeriodicSnapshots = false;
-	int loopsBetweenImages = 5;
+	bool takePeriodicSnapshots = true;
+	nt::NetworkTableEntry nt_takePeriodicSnapshots;
+	int loopsBetweenImages = 10;
 	int loopsSinceLastImage = 0;
 
-	// makes sure the LED is on only when vision drive is being used
-	// should be set to true during competitions
-	bool disableLEDWhenVisionDriveInactive = true;
+	// makes sure the LED and vision processing is on only when vision drive is being used
+	// should be set to true during competitions, false when calibrating
+	bool competitionMode = true;
+	nt::NetworkTableEntry nt_competitionMode;
 
 public:
   Vision();

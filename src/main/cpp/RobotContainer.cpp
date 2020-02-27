@@ -59,8 +59,8 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_operator,3).WhileHeld(new SpinStorage(&m_feeder)); // X
   frc2::JoystickButton(&m_operator,4).WhileHeld(new SpinStorageCCW(&m_feeder)); // Y
 
-  frc2::JoystickButton(&m_operator,5).WhenPressed(m_RetractWinch).WhenReleased(m_StopWinch); // LB
-  frc2::JoystickButton(&m_operator,6).WhileHeld(new ShooterOff(&m_shooter)); // RB
+  frc2::JoystickButton(&m_operator,5).WhileHeld(new RetractWinch(&m_climber)); // LB
+  frc2::JoystickButton(&m_operator,6).WhileHeld(new ShooterOff(&m_shooter)).WhileHeld(&m_ReleaseInterlock); // RB
 
   frc2::JoystickButton(&m_operator, 7).WhileHeld(new PullIntakeUp(&m_intake)); // LA
   frc2::JoystickButton(&m_operator, 8).WhileHeld(new PullIntakeDown(&m_intake)); // RA
@@ -73,7 +73,6 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_driver,3).WhileHeld(new LoaderUp(&m_loader)); // X
   frc2::JoystickButton(&m_driver,4).WhileHeld(new LoaderDown(&m_loader)); // Y
 
-  frc2::JoystickButton(&m_driver, 5).WhenPressed(m_ReleaseClimber).WhenReleased(m_StopWinch);
   // LT and RT control intake on and reverse
 }
 

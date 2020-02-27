@@ -16,6 +16,7 @@ DriveTrain::DriveTrain() :
 
     kWheelDiameter{frc::Preferences::GetInstance()->GetDouble("Wheel Diameter", 5.0)},
     kVoltageDrive{frc::Preferences::GetInstance()->GetBoolean("Voltage Driving", false)},
+    kRampRate{frc::Preferences::GetInstance()->GetDouble("Voltage Ramp Time", 0.0)},
     kP{frc::Preferences::GetInstance()->GetDouble("Drive kP", 0.1)},
     kI{frc::Preferences::GetInstance()->GetDouble("Drive kI", 0.00)},
     kFF{frc::Preferences::GetInstance()->GetDouble("Drive kFF", 0.05)},
@@ -35,6 +36,14 @@ DriveTrain::DriveTrain() :
     m_leftFollow.Follow(m_leftLead);
     m_rightFollow.Follow(m_rightLead);
     m_rightLead.SetInverted(true);
+
+    m_leftLead.SetOpenLoopRampRate(kRampRate);
+    m_rightLead.SetOpenLoopRampRate(kRampRate);
+
+    m_leftLead.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    m_leftFollow.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    m_rightLead.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    m_rightFollow.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
 
     // Set encoder converting factors Inches/Sec, Inches
     m_leftEncoder.SetVelocityConversionFactor((M_PI * kWheelDiameter / (kGearRatio * 60.0 * 12.0)));
@@ -227,7 +236,7 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
 
     // Send setpoints to pid controllers
     if (kVoltageDrive) {
-        m_Drive.ArcadeDrive(xSpeed, zRotation);
+        m_Drive.ArcadeDrive(zRotation, xSpeed);
     }
     else {
         m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kSmartVelocity, GainSelect::kDriverVelocity);
