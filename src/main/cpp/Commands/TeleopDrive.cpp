@@ -8,8 +8,8 @@
 #include "Commands/TeleopDrive.h"
 #include "Robot.h"
 
-#define xAxis_Rate_Max  0.08
-#define turn_Rate_Max   0.15
+#define xAxis_Rate_Max  0.10
+#define turn_Rate_Max   0.10
 
 TeleopDrive::TeleopDrive(DriveTrain* subsystem) : m_driveTrain{subsystem},
     kVoltageDrive{frc::Preferences::GetInstance()->GetBoolean("Voltage Driving", false)}

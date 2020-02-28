@@ -32,7 +32,6 @@ void VisionDrive::Initialize() {
 void VisionDrive::Execute() {
         std::pair<double, double> result = m_vision->SteerToLockedTarget();
         m_drive->AutoVelocityArcadeDrive(result.first, result.second);
- 
 }
 
 /**
