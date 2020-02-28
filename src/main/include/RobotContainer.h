@@ -12,11 +12,18 @@
 #include <frc2/command/RamseteCommand.h>
 #include <frc2/command/StartEndCommand.h>
 #include <frc2/command/FunctionalCommand.h>
+#include <frc2/command/InstantCommand.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/WaitCommand.h>
+#include "frc2/command/SequentialCommandGroup.h"
+
+#include "frc/trajectory/Trajectory.h"
+#include "frc/trajectory/TrajectoryGenerator.h"
+
 #include <frc/smartdashboard/SendableChooser.h>
-#include "frc/XboxController.h"
+#include <frc/XboxController.h>
 #include "units/units.h"
+
 #include "Subsystems/Climber.h"
 #include "Subsystems/DriveTrain.h"
 #include "Subsystems/Feeder.h"
@@ -43,19 +50,15 @@
 #include "Commands/PullIntakeUp.h"
 #include "Commands/ShooterOff.h"
 #include "Commands/TeleopIntake.h"
-#include "Commands/WaitCommand.h"
+#include "Commands/WaitForShooterSpeed.h"
 #include "Commands/AutonomousMotionProfile.h"
 #include "Commands/VisionDrive.h"
 #include "Commands/VisionDriveAuto.h"
-
-
 #include "Commands/ExtendWinch.h"
 #include "Commands/RetractWinch.h"
+
 #include "hwcfg.h"
 #include "Constants.h"
-
-#include "frc/trajectory/Trajectory.h"
-#include "frc/trajectory/TrajectoryGenerator.h"
 
 #include "Automoves/To_PwrPort_C.h"
 #include "Automoves/To_PwrPort_L.h"
@@ -108,6 +111,7 @@ class RobotContainer {
   frc::SendableChooser<double> m_delayChooser;
 
   frc2::Command* GenerateRamseteCommand();
+  void ConfigureButtonBindings();
 
   AutonomousCommand m_autonomousCommand;
 
@@ -126,11 +130,11 @@ class RobotContainer {
                     {[this] {m_climber.SetInterlock();}}, {&m_climber}};
 
   // Shooter related commands
-  // frc2::ParallelRaceGroup m_WaitShooterSpeed = 
-  //   WaitCommand(3.0).WithInterrupt([this] {return m_shooter.ShooterAtSpeed();});
+   frc2::ParallelRaceGroup m_WaitShooterSpeed = 
+     frc2::WaitCommand(3.0_s).WithInterrupt([this] {return m_shooter.ShooterAtSpeed();});
 
+  frc2::SequentialCommandGroup m_TestGroup{frc2::WaitCommand(3.0_s), frc2::WaitCommand(38.0_s)};
   frc2::InstantCommand m_InstantSpinStorageCCW{[this] {m_feeder.RotateCCW(); }, {&m_feeder}};
   frc2::InstantCommand m_StopSpinStorageCCW{[this] {m_feeder.FeedStop(); }, {&m_feeder}};
 
-  void ConfigureButtonBindings();
 };

@@ -7,8 +7,6 @@
 
 #include "RobotContainer.h"
 #include "frc2/command/button/JoystickButton.h"
-#include "frc2/command/InstantCommand.h"
-#include "frc2/command/SequentialCommandGroup.h"
 #include "frc/smartdashboard/SmartDashboard.h"
 
 RobotContainer::RobotContainer() {
@@ -126,12 +124,12 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       return nullptr;
     case ShootFromLine_L:
       return new frc2::SequentialCommandGroup {
-        WaitCommand(delay),
+        frc2::WaitCommand((units::second_t)delay),
         SetHoodHigh(&m_shooter),
         SetShooterSpeed(&m_shooter, highShooterSpeed),
         m_InstantSpinStorageCCW,
         VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
-        //m_WaitShooterSpeed,
+        SetShooterSpeed(&m_shooter, highShooterSpeed),
         LoaderUp(&m_loader),
         m_StopSpinStorageCCW,
         // Call Backwards_Short trajectory
@@ -139,12 +137,12 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       };
     case ShootFromLine_R:
       return new frc2::SequentialCommandGroup {
-        WaitCommand(delay),
+        frc2::WaitCommand((units::second_t)delay),
         SetHoodHigh(&m_shooter),
         SetShooterSpeed(&m_shooter, highShooterSpeed),
         m_InstantSpinStorageCCW,
         VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
-        //m_WaitShooterSpeed,
+        SetShooterSpeed(&m_shooter, highShooterSpeed),
         LoaderUp(&m_loader),
         m_StopSpinStorageCCW
         // Call Backwards_Short trajectory
@@ -153,12 +151,12 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
 
     case ShootFromLine_C:
       return new frc2::SequentialCommandGroup {
-        WaitCommand(delay),
+        frc2::WaitCommand((units::second_t)delay),
         SetHoodHigh(&m_shooter),
         SetShooterSpeed(&m_shooter, highShooterSpeed),
         m_InstantSpinStorageCCW,
         VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
-        //m_WaitShooterSpeed,
+        WaitForShooterSpeed(&m_shooter).WithTimeout(3.0_s),
         LoaderUp(&m_loader),
         m_StopSpinStorageCCW
         // Call Backwards_Short trajectory
@@ -166,7 +164,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       };
     case ShootFromPwrPrt_L:
       return new frc2::SequentialCommandGroup {
-        WaitCommand(delay),
+        frc2::WaitCommand((units::second_t)delay),
         SetHoodLow(&m_shooter),
         SetShooterSpeed(&m_shooter, lowShooterSpeed),
         m_InstantSpinStorageCCW,
@@ -177,7 +175,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       };
     case ShootFromPwrPrt_R:
       return new frc2::SequentialCommandGroup {
-        WaitCommand(delay),
+        frc2::WaitCommand((units::second_t)delay),
         SetHoodLow(&m_shooter),
         SetShooterSpeed(&m_shooter, lowShooterSpeed),
         m_InstantSpinStorageCCW,
@@ -187,7 +185,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       };
     case ShootFromPwrPrt_C:
       return new frc2::SequentialCommandGroup {
-        WaitCommand(delay),
+        frc2::WaitCommand((units::second_t)delay),
         SetHoodLow(&m_shooter),
         SetShooterSpeed(&m_shooter, lowShooterSpeed),
         m_InstantSpinStorageCCW,
@@ -197,7 +195,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       };
     case GatherMoreBalls:
       return new frc2::SequentialCommandGroup {
-        WaitCommand(delay),
+        frc2::WaitCommand((units::second_t)delay),
         // Trajectory not yet complete
       };
   }
