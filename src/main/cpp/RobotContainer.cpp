@@ -7,8 +7,6 @@
 
 #include "RobotContainer.h"
 #include "frc2/command/button/JoystickButton.h"
-#include "frc2/command/InstantCommand.h"
-#include "frc2/command/SequentialCommandGroup.h"
 #include "frc/smartdashboard/SmartDashboard.h"
 
 RobotContainer::RobotContainer() {
@@ -26,13 +24,12 @@ RobotContainer::RobotContainer() {
   // frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
   m_trajectoryChooser.SetDefaultOption("A. No Trajectory", NoTrajectory);
-  m_trajectoryChooser.AddOption("B. To PowerPort from Center", ToPwrPort);
-  m_trajectoryChooser.AddOption("C. Shoot from Line: Start Left", ShootFromLine_L);
-  m_trajectoryChooser.AddOption("D. Shoot from Line: Start Right", ShootFromLine_R);
-  m_trajectoryChooser.AddOption("E. Shoot from Line: Start Center", ShootFromLine_C);
-  m_trajectoryChooser.AddOption("F. Shoot from PowerPort: Start Left", ShootFromPwrPrt_L);
-  m_trajectoryChooser.AddOption("G. Shoot from PowerPort: Start Right", ShootFromPwrPrt_R);
-  m_trajectoryChooser.AddOption("H. Shoot from PowerPort: Start Center", ShootFromPwrPrt_C);
+  m_trajectoryChooser.AddOption("B. Shoot from Line: Start Left", ShootFromLine_L);
+  m_trajectoryChooser.AddOption("C. Shoot from Line: Start Right", ShootFromLine_R);
+  m_trajectoryChooser.AddOption("D. Shoot from Line: Start Center", ShootFromLine_C);
+  m_trajectoryChooser.AddOption("E. Shoot from PowerPort: Start Left", ShootFromPwrPrt_L);
+  m_trajectoryChooser.AddOption("F. Shoot from PowerPort: Start Right", ShootFromPwrPrt_R);
+  m_trajectoryChooser.AddOption("G. Shoot from PowerPort: Start Center", ShootFromPwrPrt_C);
   //m_trajectoryChooser.AddOption("I. Gather more balls", ToPwrPort);
   frc::SmartDashboard::PutData("Auto Trajectories", &m_trajectoryChooser);
 
@@ -120,63 +117,89 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   double visionDriveAcceptableError = 0.8; // VisionDrives during auto will terminate once they reach this error or less
   double maxVisionDriveTime = 3; // VisionDrives during auto will terminate if they take longer than this time
   double delay = m_delayChooser.GetSelected();
+
+  double highShooterSpeed = frc::Preferences::GetInstance()->GetDouble("High Shooter Speed", 20.0);
+  double lowShooterSpeed = frc::Preferences::GetInstance()->GetDouble("Low Shooter Speed", 20.0);
+
   switch(m_trajectoryChooser.GetSelected()) {
     case NoTrajectory:
       return nullptr;
-    case ToPwrPort:
-      return new frc2::SequentialCommandGroup {
-      WaitCommand(delay), 
-      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R)
-      };
     case ShootFromLine_L:
       return new frc2::SequentialCommandGroup {
-      ConfigShooterHigh(&m_shooter, &m_feeder),
-      VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
-      LoaderUp(&m_loader),
-      WaitCommand(delay),
-      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_L_L, &AutoMove_To_Trench_L_R)   
+        frc2::WaitCommand((units::second_t)delay),
+        SetHoodHigh(&m_shooter),
+        SetShooterSpeed(&m_shooter, highShooterSpeed),
+        m_InstantSpinStorageCCW,
+        VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
+        SetShooterSpeed(&m_shooter, highShooterSpeed),
+        LoaderUp(&m_loader),
+        m_StopSpinStorageCCW,
+        // Call Backwards_Short trajectory
+        //AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_L_L, &AutoMove_To_Trench_L_R)   
       };
     case ShootFromLine_R:
       return new frc2::SequentialCommandGroup {
-      ConfigShooterHigh(&m_shooter, &m_feeder),
-      VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
-      LoaderUp(&m_loader),
-      WaitCommand(delay),
-      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_R_L, &AutoMove_To_Trench_R_R)  
+        frc2::WaitCommand((units::second_t)delay),
+        SetHoodHigh(&m_shooter),
+        SetShooterSpeed(&m_shooter, highShooterSpeed),
+        m_InstantSpinStorageCCW,
+        VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
+        SetShooterSpeed(&m_shooter, highShooterSpeed),
+        LoaderUp(&m_loader),
+        m_StopSpinStorageCCW
+        // Call Backwards_Short trajectory
+        //AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_R_L, &AutoMove_To_Trench_R_R)  
       };
 
     case ShootFromLine_C:
       return new frc2::SequentialCommandGroup {
-      ConfigShooterHigh(&m_shooter, &m_feeder),
-      VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
-      LoaderUp(&m_loader),
-      WaitCommand(delay),
-      AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_L, &AutoMove_To_Trench_R)   
+        frc2::WaitCommand((units::second_t)delay),
+        SetHoodHigh(&m_shooter),
+        SetShooterSpeed(&m_shooter, highShooterSpeed),
+        m_InstantSpinStorageCCW,
+        VisionDriveAuto(&m_vision, &m_driveTrain, visionDriveAcceptableError, maxVisionDriveTime),
+        WaitForShooterSpeed(&m_shooter).WithTimeout(3.0_s),
+        LoaderUp(&m_loader),
+        m_StopSpinStorageCCW
+        // Call Backwards_Short trajectory
+        //AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_L, &AutoMove_To_Trench_R)   
       };
     case ShootFromPwrPrt_L:
       return new frc2::SequentialCommandGroup {
-        WaitCommand(delay),
+        frc2::WaitCommand((units::second_t)delay),
+        SetHoodLow(&m_shooter),
+        SetShooterSpeed(&m_shooter, lowShooterSpeed),
+        m_InstantSpinStorageCCW,
         AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L_L, &AutoMove_To_PwrPort_L_R),  // then drive to trench: FIX THIS!
-        //WaitCommand(delay),
+        LoaderUp(&m_loader),
+        m_StopSpinStorageCCW
+        //AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_L, &AutoMove_To_Trench_R) 
       };
     case ShootFromPwrPrt_R:
       return new frc2::SequentialCommandGroup {
-        WaitCommand(delay),
-        AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_R_L, &AutoMove_To_PwrPort_R_R),    // then drive to trench: FIX THIS!
-        //WaitCommand(delay),
+        frc2::WaitCommand((units::second_t)delay),
+        SetHoodLow(&m_shooter),
+        SetShooterSpeed(&m_shooter, lowShooterSpeed),
+        m_InstantSpinStorageCCW,
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_R_L, &AutoMove_To_PwrPort_R_R),  // then drive to trench: FIX THIS!
+        LoaderUp(&m_loader),
+        m_StopSpinStorageCCW       
       };
     case ShootFromPwrPrt_C:
       return new frc2::SequentialCommandGroup {
-        WaitCommand(delay),
-        AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L, &AutoMove_To_PwrPort_R),    
-        //WaitCommand(delay),
+        frc2::WaitCommand((units::second_t)delay),
+        SetHoodLow(&m_shooter),
+        SetShooterSpeed(&m_shooter, lowShooterSpeed),
+        m_InstantSpinStorageCCW,
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_C_L, &AutoMove_To_PwrPort_C_R),  // then drive to trench: FIX THIS!
+        LoaderUp(&m_loader),
+        m_StopSpinStorageCCW
       };
     case GatherMoreBalls:
       return new frc2::SequentialCommandGroup {
-        WaitCommand(delay),
+        frc2::WaitCommand((units::second_t)delay),
+        // Trajectory not yet complete
       };
-    
-
   }
 
   return nullptr;

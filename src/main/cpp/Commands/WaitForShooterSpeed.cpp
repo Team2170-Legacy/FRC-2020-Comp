@@ -5,25 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/WaitCommand.h"
+#include "Commands/WaitForShooterSpeed.h"
 
-WaitCommand::WaitCommand(double delay) {
+WaitForShooterSpeed::WaitForShooterSpeed(Shooter* subsystem) : m_shooter{subsystem} {
   // Use addRequirements() here to declare subsystem dependencies.
-  timeRemaining = delay;
+  AddRequirements(subsystem);
 }
 
 // Called when the command is initially scheduled.
-void WaitCommand::Initialize() {}
+void WaitForShooterSpeed::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void WaitCommand::Execute() {
-  timeRemaining -= deltaTime;
-}
+void WaitForShooterSpeed::Execute() {}
 
 // Called once the command ends or is interrupted.
-void WaitCommand::End(bool interrupted) {}
+void WaitForShooterSpeed::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool WaitCommand::IsFinished() { 
-    return (timeRemaining <= 0);
-  }
+bool WaitForShooterSpeed::IsFinished() { return m_shooter->ShooterAtSpeed(); }

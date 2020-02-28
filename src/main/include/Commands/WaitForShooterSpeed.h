@@ -10,6 +10,8 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 
+#include "Subsystems/Shooter.h"
+
 /**
  * An example command.
  *
@@ -17,10 +19,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class WaitCommand
-    : public frc2::CommandHelper<frc2::CommandBase, WaitCommand> {
+class WaitForShooterSpeed
+    : public frc2::CommandHelper<frc2::CommandBase, WaitForShooterSpeed> {
  public:
-  WaitCommand(double delay);
+  WaitForShooterSpeed(Shooter* subsystem);
 
   void Initialize() override;
 
@@ -30,7 +32,6 @@ class WaitCommand
 
   bool IsFinished() override;
 
- private:
-  double timeRemaining;
-  double deltaTime = 0.02;
+private:
+  Shooter* m_shooter;
 };
