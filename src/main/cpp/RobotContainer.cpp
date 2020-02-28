@@ -120,9 +120,6 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
 
   double highShooterSpeed = frc::Preferences::GetInstance()->GetDouble("High Shooter Speed", 20.0);
   double lowShooterSpeed = frc::Preferences::GetInstance()->GetDouble("Low Shooter Speed", 20.0);
-  //auto m_InstantSpinStorageCCW = frc2::InstantCommand([this] {m_feeder.RotateCCW(); }, {&m_feeder});
-  //auto m_StopSpinStorageCCW = frc2::InstantCommand([this] {m_feeder.FeedStop(); }, {&m_feeder});
-  //auto m_WaitShooterSpeed = WaitCommand(3.0).WithInterrupt([this] {return m_shooter.ShooterAtSpeed();});
 
   switch(m_trajectoryChooser.GetSelected()) {
     case NoTrajectory:
