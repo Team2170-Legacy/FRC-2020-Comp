@@ -127,5 +127,8 @@ class RobotContainer {
   frc2::ParallelRaceGroup m_WaitShooterSpeed = 
     WaitCommand(3.0).WithInterrupt([this] {return m_shooter.ShooterAtSpeed();});
 
+  frc2::InstantCommand InstantSpinStorageCCW{[this] {m_feeder.RotateCCW(); }, {&m_feeder}};
+  frc2::InstantCommand StopSpinStorageCCW{[this] {m_feeder.FeedStop(); }, {&m_feeder}};
+
   void ConfigureButtonBindings();
 };
