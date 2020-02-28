@@ -22,7 +22,7 @@ void VisionDriveAuto::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void VisionDriveAuto::Execute() {
     std::pair<double, double> result = m_vision->SteerToLockedTarget();
-    m_drive->VelocityArcadeDrive(result.first, result.second);
+    m_drive->AutoVelocityArcadeDrive(result.first, result.second);
     timeRemaining -= deltaTime;
 }
 
