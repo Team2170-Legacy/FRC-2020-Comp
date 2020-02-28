@@ -148,20 +148,29 @@ void DriveTrain::Periodic() {
 
 }
 
+void DriveTrain::ArcadeDrive(double xSpeed, double zRotation, bool squaredInputs)
+{
+    if (fabs(xSpeed) < 0.05) {
+        xSpeed = 0.0;
+    }
+    if (fabs(zRotation) < 0.05) {
+        zRotation = 0.0;
+    }
+
+    m_Drive.ArcadeDrive(zRotation, xSpeed, squaredInputs);
+}
 void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squaredInputs)
 {
+    if (fabs(xSpeed) < 0.05) {
+        xSpeed = 0.0;
+    }
+
+    if (fabs(zRotation) < 0.05) {
+        zRotation = 0.0;
+    }
+
     double moveValue = xSpeed;
     double rotateValue = zRotation;
-
-    if(moveValue > 0.0 && moveValue < 0.05){
-        moveValue = 0.0;
-    } else if(moveValue < 0.0 && moveValue > -0.05){
-        moveValue = 0.0;
-    } 
-
-    if (fabs(rotateValue) < 0.01) {
-        rotateValue = 0.0;
-    }
 
     static bool reported = false;
     if (!reported)
@@ -235,15 +244,83 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
     rightVelocityCommand = rightMotorSpeed;
 
     // Send setpoints to pid controllers
-    if (kVoltageDrive) {
-        m_Drive.ArcadeDrive(zRotation, xSpeed);
-    }
-    else {
-        m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kSmartVelocity, GainSelect::kDriverVelocity);
-        m_pidControllerR.SetReference(rightMotorSpeed, rev::ControlType::kSmartVelocity, GainSelect::kDriverVelocity);
-    }
+    m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kVelocity, GainSelect::kDriverVelocity);
+    m_pidControllerR.SetReference(rightMotorSpeed, rev::ControlType::kVelocity, GainSelect::kDriverVelocity);
     m_Drive.FeedWatchdog();
+}
 
+void DriveTrain::AutoVelocityArcadeDrive(double xSpeed, double zRotation)
+{
+    double moveValue = xSpeed;
+    double rotateValue = zRotation;
+
+    static bool reported = false;
+    if (!reported)
+    {
+        HAL_Report(HALUsageReporting::kResourceType_RobotDrive, 4,
+                   HALUsageReporting::kRobotDrive_ArcadeStandard);
+        reported = true;
+    }
+
+    // local variables to hold the computed PWM values for the motors
+    double leftMotorOutput;
+    double rightMotorOutput;
+
+    // LeftMove and leftRotate limits to +-1.0
+    if (moveValue > 1.0)
+    {
+        moveValue = 1.0;
+    }
+    if (moveValue < -1.0)
+    {
+        moveValue = -1.0;
+    }
+    if (rotateValue > 1.0)
+    {
+        rotateValue = 1.0;
+    }
+    if (rotateValue < -1.0)
+    {
+        rotateValue = -1.0;
+    }
+
+    if (moveValue > 0.0)
+    {
+        if (rotateValue > 0.0)
+        {
+            leftMotorOutput = moveValue - rotateValue;
+            rightMotorOutput = std::max(moveValue, rotateValue);
+        }
+        else
+        {
+            leftMotorOutput = std::max(moveValue, -rotateValue);
+            rightMotorOutput = moveValue + rotateValue;
+        }
+    }
+    else
+    {
+        if (rotateValue > 0.0)
+        {
+            leftMotorOutput = -std::max(-moveValue, rotateValue);
+            rightMotorOutput = moveValue + rotateValue;
+        }
+        else
+        {
+            leftMotorOutput = moveValue - rotateValue;
+            rightMotorOutput = -std::max(-moveValue, -rotateValue);
+        }
+    }
+
+    double leftMotorSpeed = leftMotorOutput * maxFeetPerSec;
+    double rightMotorSpeed = rightMotorOutput * maxFeetPerSec;
+
+    leftVelocityCommand = leftMotorSpeed;
+    rightVelocityCommand = rightMotorSpeed;
+
+    // Send setpoints to pid controllers
+    m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kVelocity, GainSelect::kDriverVelocity);
+    m_pidControllerR.SetReference(rightMotorSpeed, rev::ControlType::kVelocity, GainSelect::kDriverVelocity);
+    m_Drive.FeedWatchdog();
 }
 
 /**

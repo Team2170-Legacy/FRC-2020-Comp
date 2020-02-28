@@ -23,4 +23,5 @@ private:
   DriveTrain* m_driveTrain;
   double xAxis_prev;
   double turn_Rate_prev;
+  bool kVoltageDrive;
 };

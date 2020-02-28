@@ -10,13 +10,14 @@
 
 
 #include "Subsystems/Climber.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
 Climber::Climber() {
 }
 
 void Climber::Periodic() {
     // Put code here to be run every loop
-
+    frc::SmartDashboard::PutBoolean("Climber Released", IsInterlockReleased());
 }
 
 void Climber::WinchExtend(double speed) {

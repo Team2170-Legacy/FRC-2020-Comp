@@ -121,8 +121,7 @@ class RobotContainer {
       [this] {m_climber.WinchRetract();}, 
       [this] {m_climber.WinchStop();}, {&m_climber}).WithTimeout(1.0_s);
 
-  frc2::StartEndCommand m_ReleaseInterlock {[this] {m_climber.ReleaseInterlock();},
-                    {[this] {m_climber.SetInterlock();}}, {&m_climber}};
+  frc2::InstantCommand m_ReleaseInterlock {[this] {m_climber.ReleaseInterlock();}, {&m_climber}};
 
   // Shooter related commands
   frc2::ParallelRaceGroup m_WaitShooterSpeed = 

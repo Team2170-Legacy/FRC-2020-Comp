@@ -8,10 +8,12 @@
 #include "Commands/TeleopDrive.h"
 #include "Robot.h"
 
-#define xAxis_Rate_Max  0.1
-#define turn_Rate_Max   0.25
+#define xAxis_Rate_Max  0.08
+#define turn_Rate_Max   0.15
 
-TeleopDrive::TeleopDrive(DriveTrain* subsystem) : m_driveTrain{subsystem} {
+TeleopDrive::TeleopDrive(DriveTrain* subsystem) : m_driveTrain{subsystem},
+    kVoltageDrive{frc::Preferences::GetInstance()->GetBoolean("Voltage Driving", false)}
+{
   // Use Requires() here to declare subsystem dependencies
   // eg. Requires(Robot::chassis.get());
  // Requires(Robot::driveTrain.get());
@@ -33,24 +35,14 @@ void TeleopDrive::Execute()
   double speedPos = Robot::oi->getDriverJoystick()->GetRawAxis(3);
   double speedNeg = Robot::oi->getDriverJoystick()->GetRawAxis(2);
 
-  double turn_Rate = 0.0;
-
-  if (speedNeg > 0.05) {
-    turn_Rate = -speedNeg;
-  }
-  else if (speedPos > 0.05) {
-    turn_Rate = speedPos;
-  }
-  else {
-    turn_Rate = 0.0;
-  }
+  double turn_Rate = speedPos - speedNeg;
 
   double delta_xAxis = xAxis - xAxis_prev;
 
   if ( delta_xAxis > xAxis_Rate_Max ) {
 	    xAxis_prev 	= xAxis_prev +  xAxis_Rate_Max;
   }
-  else if ( delta_xAxis < xAxis_Rate_Max ) {
+  else if ( delta_xAxis < -xAxis_Rate_Max ) {
  	    xAxis_prev 	= xAxis_prev - xAxis_Rate_Max;
   }
   else {
@@ -73,7 +65,12 @@ void TeleopDrive::Execute()
   };
 
 //  m_driveTrain->VelocityArcadeDrive(-xAxis_prev, -turn_Rate, true);
- m_driveTrain->VelocityArcadeDrive(-xAxis, -turn_Rate, true);
+  if (kVoltageDrive) {
+    m_driveTrain->ArcadeDrive(-xAxis_prev, turn_Rate, true);
+  }
+  else {
+    m_driveTrain->VelocityArcadeDrive(-xAxis_prev, turn_Rate, true);
+  }
 }
 
 // Make this return true when this Command no longer needs to run execute()
