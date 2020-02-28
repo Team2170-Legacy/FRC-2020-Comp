@@ -8,16 +8,17 @@
 #pragma once
 
 #include <frc2/command/CommandHelper.h>
-#include <frc2/command/InstantCommand.h>
-#include "Subsystems/Loader.h"
+#include <frc2/command/SequentialCommandGroup.h>
 
-class LoaderOff
-    : public frc2::CommandHelper<frc2::InstantCommand, LoaderOff> {
+#include "Subsystems/Shooter.h"
+#include "Subsystems/Feeder.h"
+
+class AutoSetShootLow
+    : public frc2::CommandHelper<frc2::SequentialCommandGroup,
+                                 AutoSetShootLow> {
  public:
-  LoaderOff(Loader* subsystem);
+  AutoSetShootLow(Shooter* shooter, Feeder* feeder);
 
-  void Initialize() override;
-
-private: 
-  Loader* m_loader;
+private:
+  const double kLowShooterSpeed;
 };

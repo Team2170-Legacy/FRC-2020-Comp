@@ -118,22 +118,19 @@ class RobotContainer {
   frc::XboxController m_driver{HIDIDs::kDriver};
   frc::XboxController m_operator{HIDIDs::kOperator};
 
+  //Vision config parameters
+  const double kVisionDriveAcceptableError = 0.8; // VisionDrives during auto will terminate once they reach this error or less
+  const double kMaxVisionDriveTime = 3.0; // VisionDrives during auto will terminate if they take longer than this time
+
+  // Shooter control parameters
+  const double kHighShooterSpeed;
+  const double kLowShooterSpeed;
+  const units::second_t kAutoShootTime;        // time to wait for balls to launch during an auto shoot sequence
+
   // Climber related commands
   frc2::InstantCommand m_RetractWinch{[this] {m_climber.WinchRetract();}, {&m_climber}};
   frc2::InstantCommand m_StopWinch{[this] {m_climber.WinchStop();}, {&m_climber}};
-  frc2::ParallelRaceGroup m_ReleaseClimber = 
-    frc2::StartEndCommand(
-      [this] {m_climber.WinchRetract();}, 
-      [this] {m_climber.WinchStop();}, {&m_climber}).WithTimeout(1.0_s);
-
   frc2::InstantCommand m_ReleaseInterlock {[this] {m_climber.ReleaseInterlock();}, {&m_climber}};
 
-  // Shooter related commands
-   frc2::ParallelRaceGroup m_WaitShooterSpeed = 
-     frc2::WaitCommand(3.0_s).WithInterrupt([this] {return m_shooter.ShooterAtSpeed();});
-
-  frc2::SequentialCommandGroup m_TestGroup{frc2::WaitCommand(3.0_s), frc2::WaitCommand(38.0_s)};
-  frc2::InstantCommand m_InstantSpinStorageCCW{[this] {m_feeder.RotateCCW(); }, {&m_feeder}};
-  frc2::InstantCommand m_StopSpinStorageCCW{[this] {m_feeder.FeedStop(); }, {&m_feeder}};
 
 };
