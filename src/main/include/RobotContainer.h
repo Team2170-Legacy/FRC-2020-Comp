@@ -57,12 +57,14 @@
 #include "frc/trajectory/Trajectory.h"
 #include "frc/trajectory/TrajectoryGenerator.h"
 
-#include "Automoves/To_PwrPort.h"
+#include "Automoves/To_PwrPort_C.h"
 #include "Automoves/To_PwrPort_L.h"
 #include "Automoves/To_PwrPort_R.h"
-#include "Automoves/To_Trench.h"
+#include "Automoves/To_Trench_C.h"
 #include "Automoves/To_Trench_L.h"
 #include "Automoves/To_Trench_R.h"
+#include "Automoves/Backwards_Long.h"
+#include "Automoves/Backwards_Short.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -124,11 +126,11 @@ class RobotContainer {
                     {[this] {m_climber.SetInterlock();}}, {&m_climber}};
 
   // Shooter related commands
-  frc2::ParallelRaceGroup m_WaitShooterSpeed = 
-    WaitCommand(3.0).WithInterrupt([this] {return m_shooter.ShooterAtSpeed();});
+  // frc2::ParallelRaceGroup m_WaitShooterSpeed = 
+  //   WaitCommand(3.0).WithInterrupt([this] {return m_shooter.ShooterAtSpeed();});
 
-  frc2::InstantCommand InstantSpinStorageCCW{[this] {m_feeder.RotateCCW(); }, {&m_feeder}};
-  frc2::InstantCommand StopSpinStorageCCW{[this] {m_feeder.FeedStop(); }, {&m_feeder}};
+  frc2::InstantCommand m_InstantSpinStorageCCW{[this] {m_feeder.RotateCCW(); }, {&m_feeder}};
+  frc2::InstantCommand m_StopSpinStorageCCW{[this] {m_feeder.FeedStop(); }, {&m_feeder}};
 
   void ConfigureButtonBindings();
 };
