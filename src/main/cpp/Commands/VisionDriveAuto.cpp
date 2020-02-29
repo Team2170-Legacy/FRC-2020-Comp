@@ -7,11 +7,10 @@
 
 #include "Commands/VisionDriveAuto.h"
 
-VisionDriveAuto::VisionDriveAuto(Vision* vision, DriveTrain* drive, double acceptableError, double maxTime) : m_vision{vision}, m_drive{drive} {
+VisionDriveAuto::VisionDriveAuto(Vision* vision, DriveTrain* drive, double acceptableError) : m_vision{vision}, m_drive{drive} {
   	AddRequirements(vision);
    AddRequirements(drive);
    acceptableDegreeError = acceptableError;
-   timeRemaining = maxTime;
 }
 
 // Called when the command is initially scheduled.
@@ -23,7 +22,6 @@ void VisionDriveAuto::Initialize() {
 void VisionDriveAuto::Execute() {
     std::pair<double, double> result = m_vision->SteerToLockedTarget();
     m_drive->AutoVelocityArcadeDrive(result.first, result.second);
-    timeRemaining -= deltaTime;
 }
 
 // Called once the command ends or is interrupted.
@@ -33,5 +31,6 @@ void VisionDriveAuto::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool VisionDriveAuto::IsFinished() { 
-  return (timeRemaining <= 0 || abs(m_vision->GetXAngleToTarget()) <= acceptableDegreeError);
+  return ((abs(m_vision->GetXAngleToTarget()) <= acceptableDegreeError) &&
+               m_vision->TargetIsLocked());
  }

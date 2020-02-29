@@ -24,7 +24,7 @@
 class VisionDriveAuto
     : public frc2::CommandHelper<frc2::CommandBase, VisionDriveAuto> {
  public:
-  VisionDriveAuto(Vision* vision, DriveTrain* drive, double acceptableError, double maxTime);
+  VisionDriveAuto(Vision* vision, DriveTrain* drive, double acceptableError);
 
   void Initialize() override;
 
@@ -38,6 +38,4 @@ class VisionDriveAuto
 	Vision* m_vision;
 	DriveTrain* m_drive;
     double acceptableDegreeError;
-    double timeRemaining;
-    const double deltaTime = 0.02;
 };

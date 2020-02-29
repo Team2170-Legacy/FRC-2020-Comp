@@ -16,6 +16,7 @@
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/WaitCommand.h>
 #include "frc2/command/SequentialCommandGroup.h"
+#include <frc2/command/PrintCommand.h>
 
 #include "frc/trajectory/Trajectory.h"
 #include "frc/trajectory/TrajectoryGenerator.h"
@@ -136,8 +137,8 @@ class RobotContainer {
 
   // Feeder commands
   frc2::SequentialCommandGroup m_Agitate = frc2::SequentialCommandGroup(
-    SpinStorage(&m_feeder).WithTimeout(0.3_s),
-    SpinStorageCCW(&m_feeder).WithTimeout(0.3_s),
+    SpinStorage(&m_feeder).WithTimeout(0.2_s),
+    SpinStorageCCW(&m_feeder).WithTimeout(0.2_s),
     FeederOff(&m_feeder)
   );
 

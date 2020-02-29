@@ -26,6 +26,7 @@ void AutonomousMotionProfile::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void AutonomousMotionProfile::Execute()
 {
+  printf("AutoMotion\n");
   double leftVelocity = itLeft->at(1);
   double rightVelocity = itRight->at(1);
   m_driveTrain->SetWheelVelocity(leftVelocity, rightVelocity);

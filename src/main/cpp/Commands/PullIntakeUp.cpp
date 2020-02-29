@@ -24,4 +24,4 @@ void PullIntakeUp::Execute() {
 void PullIntakeUp::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool PullIntakeUp::IsFinished() { return false; }
+bool PullIntakeUp::IsFinished() { return true; }

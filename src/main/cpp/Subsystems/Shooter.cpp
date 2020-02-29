@@ -98,9 +98,9 @@ bool Shooter::ShooterAtSpeed()
 
     if (CommandedVelocity != 0)
     {
-        double error = fabs((CommandedVelocity - GetMotorVelocity()));
+        double threshold = CommandedVelocity * 0.9;
 
-        if ((error / CommandedVelocity) < 0.05)
+        if (GetMotorVelocity() >= threshold)
         {
             atSpeed = true;
         }

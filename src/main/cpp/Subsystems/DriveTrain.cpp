@@ -94,9 +94,8 @@ DriveTrain::DriveTrain() :
     m_leftEncoder.SetPosition(0.0);
     m_rightEncoder.SetPosition(0.0);
 
-    
-
-    
+    m_Drive.SetExpiration(1.0);
+        
     driveTrainLogger.DriveTrainLogger("/home/lvuser/DriveTrainLogs/DriveTrainLog_" + DataLogger::GetTimestamp() + ".csv");
 }
 
@@ -127,6 +126,7 @@ void DriveTrain::Periodic() {
 
     frc::SmartDashboard::PutNumber("Gyro Position", m_gyro.GetAngle());
 
+    if (m_LoggingEnabled) {
     double leftEncoderPosition = m_leftEncoder.GetPosition();
     double rightEncoderPosition = m_rightEncoder.GetPosition();
     double leftVelocity = m_leftEncoder.GetVelocity(); 
@@ -145,7 +145,7 @@ void DriveTrain::Periodic() {
     double rightLeadCurrent = m_rightLead.GetOutputCurrent();
     double rightFollowCurrent = m_rightFollow.GetOutputCurrent();
     driveTrainLogger.WriteDriveTrainData(leftEncoderPosition, rightEncoderPosition, leftVelocityCommand, rightVelocityCommand, leftVelocity, rightVelocity, leftLeadAppliedOutput, leftFollowAppliedOutput, rightLeadAppliedOutput, rightFollowAppliedOutput, leftLeadVoltage, leftFollowVoltage, rightLeadVoltage, rightFollowVoltage, leftLeadCurrent, leftFollowCurrent, rightLeadCurrent, rightFollowCurrent);
-
+    }
 }
 
 void DriveTrain::ArcadeDrive(double xSpeed, double zRotation, bool squaredInputs)

@@ -29,8 +29,8 @@ private:
 public:
 Intake();
 	void Periodic() override;
-	void IntakeUp(){m_intakeSol.Set(frc::DoubleSolenoid::kReverse);}
-	void IntakeDown(){m_intakeSol.Set(frc::DoubleSolenoid::kForward);}
+	void IntakeUp(){m_intakeSol.Set(frc::DoubleSolenoid::kForward);}
+	void IntakeDown(){m_intakeSol.Set(frc::DoubleSolenoid::kReverse);}
 	void IntakeOn(double speed = DEFAULT_INTAKE_VOLTS){m_intakeMotor.Set(speed);}
 	void IntakeOff(void){m_intakeMotor.Set(0.0);}
 	void IntakeReverse(double speed = DEFAULT_INTAKE_VOLTS) {m_intakeMotor.Set(-speed);}

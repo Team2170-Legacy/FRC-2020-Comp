@@ -24,4 +24,4 @@ void ShooterOff::Execute() {
 void ShooterOff::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool ShooterOff::IsFinished() { return false; }
+bool ShooterOff::IsFinished() { return true; }

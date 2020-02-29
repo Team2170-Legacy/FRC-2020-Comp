@@ -77,6 +77,7 @@ private:
 
 	// for data logging
 	DataLogger driveTrainLogger;
+	bool m_LoggingEnabled = false;
 	double leftVelocityCommand = 0;
 	double rightVelocityCommand = 0;
 

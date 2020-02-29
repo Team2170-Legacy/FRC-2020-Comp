@@ -24,4 +24,4 @@ void FeederOff::Execute() {
 void FeederOff::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool FeederOff::IsFinished() { return false; }
+bool FeederOff::IsFinished() { return true; }

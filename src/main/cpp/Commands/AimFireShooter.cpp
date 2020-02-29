@@ -16,11 +16,11 @@
 #include "Commands/ShooterOff.h"
 
 AimFireShooter::AimFireShooter(Shooter* shooter, Vision* vision, Loader* loader, DriveTrain* drivetrain, Feeder* feeder) :
-  kVisionDriveAcceptableError {frc::Preferences::GetInstance()->GetDouble("High Shooter Speed", 20.0)},
+  kVisionDriveAcceptableError {frc::Preferences::GetInstance()->GetDouble("Vision Acceptable Error", 0.8)},
   kAutoShootTime {(units::second_t)frc::Preferences::GetInstance()->GetDouble("Auto Shoot Time", 2.0)}
 {
   AddCommands(
-    VisionDriveAuto(vision, drivetrain, kVisionDriveAcceptableError, kMaxVisionDriveTime),
+    VisionDriveAuto(vision, drivetrain, kVisionDriveAcceptableError).WithTimeout(3.0_s),
     WaitForShooterSpeed(shooter).WithTimeout(kAutoShootTime),
     LoaderUp(loader),
     frc2::WaitCommand(kAutoShootTime),

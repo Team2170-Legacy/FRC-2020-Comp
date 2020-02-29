@@ -24,4 +24,4 @@ void PullIntakeDown::Execute() {
 void PullIntakeDown::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool PullIntakeDown::IsFinished() { return false; }
+bool PullIntakeDown::IsFinished() { return true; }

@@ -67,8 +67,8 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_operator,5).WhileHeld(new RetractWinch(&m_climber)); // LB
   frc2::JoystickButton(&m_operator,6).WhileHeld(new ShooterOff(&m_shooter)); // RB
 
-  frc2::JoystickButton(&m_operator, 7).WhileHeld(new PullIntakeUp(&m_intake)); // LA
-  frc2::JoystickButton(&m_operator, 8).WhileHeld(new PullIntakeDown(&m_intake)); // RA
+  frc2::JoystickButton(&m_operator, 7).WhileHeld(new PullIntakeDown(&m_intake)); // LA
+  frc2::JoystickButton(&m_operator, 8).WhileHeld(new PullIntakeUp(&m_intake)); // RA
 
   frc2::JoystickButton(&m_operator,9).WhileHeld(new ConfigShooterHigh(&m_shooter, &m_feeder)); // LJ
   frc2::JoystickButton(&m_operator,10).WhileHeld(new ConfigShooterLow(&m_shooter, &m_feeder)); // RJ
@@ -131,49 +131,59 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
     case ShootFromLine_L:
       return new frc2::SequentialCommandGroup {
         frc2::WaitCommand((units::second_t)delay),
+        PullIntakeDown(&m_intake),
         AutoSetShootHigh(&m_shooter, &m_feeder),
         AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder),
         // Call Backwards_Short trajectory
-        //AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_L_L, &AutoMove_To_Trench_L_R)   
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_Backwards_Short_L, &AutoMove_Backwards_Short_R)   
       };
     case ShootFromLine_R:
       return new frc2::SequentialCommandGroup {
         frc2::WaitCommand((units::second_t)delay),
+        PullIntakeDown(&m_intake),
         AutoSetShootHigh(&m_shooter, &m_feeder),
+        frc2::PrintCommand("Shooting Start"),
         AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder),
+        frc2::PrintCommand("Shooting Complete"),
         // Call Backwards_Short trajectory
-        //AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_R_L, &AutoMove_To_Trench_R_R)  
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_Backwards_Short_L, &AutoMove_Backwards_Short_R)   
       };
 
     case ShootFromLine_C:
       return new frc2::SequentialCommandGroup {
         frc2::WaitCommand((units::second_t)delay),
+        PullIntakeDown(&m_intake),
         AutoSetShootHigh(&m_shooter, &m_feeder),
         AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder),
         // Call Backwards_Short trajectory
-        //AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_L, &AutoMove_To_Trench_R)   
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_Backwards_Short_L, &AutoMove_Backwards_Short_R)   
       };
     case ShootFromPwrPrt_L:
       return new frc2::SequentialCommandGroup {
         frc2::WaitCommand((units::second_t)delay),
+        PullIntakeDown(&m_intake),
         AutoSetShootLow(&m_shooter, &m_feeder),
         AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L_L, &AutoMove_To_PwrPort_L_R),  // then drive to trench: FIX THIS!
         AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder),
-        //AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_L, &AutoMove_To_Trench_R) 
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_Backwards_Long_L, &AutoMove_Backwards_Long_R)   
       };
     case ShootFromPwrPrt_R:
       return new frc2::SequentialCommandGroup {
         frc2::WaitCommand((units::second_t)delay),
+        PullIntakeDown(&m_intake),
         AutoSetShootLow(&m_shooter, &m_feeder),
         AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_R_L, &AutoMove_To_PwrPort_R_R),  // then drive to trench: FIX THIS!
         AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder),
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_Backwards_Long_L, &AutoMove_Backwards_Long_R)   
       };
     case ShootFromPwrPrt_C:
       return new frc2::SequentialCommandGroup {
         frc2::WaitCommand((units::second_t)delay),
+        PullIntakeDown(&m_intake),
         AutoSetShootLow(&m_shooter, &m_feeder),
         AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_C_L, &AutoMove_To_PwrPort_C_R),  // then drive to trench: FIX THIS!
         AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder),
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_Backwards_Long_L, &AutoMove_Backwards_Long_R)   
       };
     case GatherMoreBalls:
       return new frc2::SequentialCommandGroup {
