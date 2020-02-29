@@ -56,6 +56,8 @@
 #include "Commands/VisionDriveAuto.h"
 #include "Commands/ExtendWinch.h"
 #include "Commands/RetractWinch.h"
+#include "Commands/SpinStorage.h"
+#include "Commands/SpinStorageCCW.h"
 
 #include "hwcfg.h"
 #include "Constants.h"
@@ -132,5 +134,11 @@ class RobotContainer {
   frc2::InstantCommand m_StopWinch{[this] {m_climber.WinchStop();}, {&m_climber}};
   frc2::InstantCommand m_ReleaseInterlock {[this] {m_climber.ReleaseInterlock();}, {&m_climber}};
 
+  // Feeder commands
+  frc2::SequentialCommandGroup m_Agitate = frc2::SequentialCommandGroup(
+    SpinStorage(&m_feeder).WithTimeout(0.3_s),
+    SpinStorageCCW(&m_feeder).WithTimeout(0.3_s),
+    FeederOff(&m_feeder)
+  );
 
 };

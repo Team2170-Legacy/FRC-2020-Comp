@@ -22,7 +22,10 @@ void SpinStorage::Execute() {
 }
 
 // Called once the command ends or is interrupted.
-void SpinStorage::End(bool interrupted) {}
+void SpinStorage::End(bool interrupted) 
+{
+  m_feeder->FeedStop();
+}
 
 // Returns true when the command should end.
 bool SpinStorage::IsFinished() { return false; }

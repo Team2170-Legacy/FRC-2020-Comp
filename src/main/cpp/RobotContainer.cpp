@@ -58,7 +58,7 @@ RobotContainer::RobotContainer() :
 
 void RobotContainer::ConfigureButtonBindings() {
   // Configure your button bindings here6
-  frc2::JoystickButton(&m_operator,1).WhileHeld(new JostleStorage(&m_feeder)); // A
+  frc2::JoystickButton(&m_operator,1).WhenPressed(&m_Agitate); // A
   frc2::JoystickButton(&m_operator,2).WhileHeld(new FeederOff(&m_feeder)); // B
 
   frc2::JoystickButton(&m_operator,3).WhileHeld(new SpinStorage(&m_feeder)); // X
