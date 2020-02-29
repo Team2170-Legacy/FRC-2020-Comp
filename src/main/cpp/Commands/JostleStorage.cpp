@@ -13,15 +13,31 @@ JostleStorage::JostleStorage(Feeder* subsystem): m_feeder{subsystem} {
 }
 
 // Called when the command is initially scheduled.
-void JostleStorage::Initialize() {}
+void JostleStorage::Initialize() {
+  m_ActivityCount = 0;
+  m_CCW = false;
+}
 
 // Called repeatedly when this Command is scheduled to run
 void JostleStorage::Execute() {
-  m_feeder->Agitate();
+  if ((m_ActivityCount % 4) == 0)
+  {
+    if (m_CCW) {
+      m_feeder->RotateCW();
+      m_CCW = false;
+    }
+    else {
+      m_feeder->RotateCCW();
+      m_CCW = true;
+    }
+  }
+  m_ActivityCount++;
 }
 
 // Called once the command ends or is interrupted.
-void JostleStorage::End(bool interrupted) {}
+void JostleStorage::End(bool interrupted) {
+  m_feeder->FeedStop();
+}
 
 // Returns true when the command should end.
 bool JostleStorage::IsFinished() { return false; }

@@ -32,4 +32,6 @@ class JostleStorage
   bool IsFinished() override;
 private:
   Feeder* m_feeder;
+  int m_ActivityCount = 0;
+  bool m_CCW = false;
 };
