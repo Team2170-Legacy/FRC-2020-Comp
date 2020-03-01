@@ -12,6 +12,7 @@
 #include "Commands/AimFireShooter.h"
 #include "Commands/AutoSetShootHigh.h"
 #include "Commands/AutoSetShootLow.h"
+#include "Commands/FireShooter.h"
 
 RobotContainer::RobotContainer() :
   kHighShooterSpeed {frc::Preferences::GetInstance()->GetDouble("High Shooter Speed", 20.0)},
@@ -64,7 +65,7 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_operator,3).WhileHeld(new SpinStorage(&m_feeder)); // X
   frc2::JoystickButton(&m_operator,4).WhileHeld(new SpinStorageCCW(&m_feeder)); // Y
 
-  frc2::JoystickButton(&m_operator,5).WhileHeld(new RetractWinch(&m_climber)); // LB
+  frc2::JoystickButton(&m_driver,5).WhileHeld(new RetractWinch(&m_climber)); // LB
   frc2::JoystickButton(&m_operator,6).WhileHeld(new ShooterOff(&m_shooter)); // RB
 
   frc2::JoystickButton(&m_operator, 7).WhileHeld(new PullIntakeDown(&m_intake)); // LA
@@ -78,7 +79,7 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_driver,3).WhileHeld(new LoaderUp(&m_loader)); // X
   frc2::JoystickButton(&m_driver,4).WhileHeld(new LoaderDown(&m_loader)); // Y
 
-  frc2::JoystickButton(&m_driver, 9).WhenPressed(&m_ReleaseInterlock);
+  frc2::JoystickButton(&m_operator, 5).WhenPressed(&m_ReleaseInterlock);
 
   // LT and RT control intake on and reverse
 }
@@ -164,7 +165,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
         PullIntakeDown(&m_intake),
         AutoSetShootLow(&m_shooter, &m_feeder),
         AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_L_L, &AutoMove_To_PwrPort_L_R),  // then drive to trench: FIX THIS!
-        AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder),
+        FireShooter(&m_shooter, &m_loader, &m_feeder),
         AutonomousMotionProfile(&m_driveTrain, &AutoMove_Backwards_Long_L, &AutoMove_Backwards_Long_R)   
       };
     case ShootFromPwrPrt_R:
@@ -173,7 +174,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
         PullIntakeDown(&m_intake),
         AutoSetShootLow(&m_shooter, &m_feeder),
         AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_R_L, &AutoMove_To_PwrPort_R_R),  // then drive to trench: FIX THIS!
-        AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder),
+        FireShooter(&m_shooter, &m_loader, &m_feeder),
         AutonomousMotionProfile(&m_driveTrain, &AutoMove_Backwards_Long_L, &AutoMove_Backwards_Long_R)   
       };
     case ShootFromPwrPrt_C:
@@ -182,7 +183,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
         PullIntakeDown(&m_intake),
         AutoSetShootLow(&m_shooter, &m_feeder),
         AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_C_L, &AutoMove_To_PwrPort_C_R),  // then drive to trench: FIX THIS!
-        AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder),
+        FireShooter(&m_shooter, &m_loader, &m_feeder),
         AutonomousMotionProfile(&m_driveTrain, &AutoMove_Backwards_Long_L, &AutoMove_Backwards_Long_R)   
       };
     case GatherMoreBalls:
