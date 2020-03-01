@@ -12,17 +12,29 @@ SpinStorageCCW::SpinStorageCCW(Feeder* subsystem): m_feeder{subsystem} {
   AddRequirements({subsystem});
 }
 
+SpinStorageCCW::SpinStorageCCW(Feeder* subsystem, double rpm) : m_feeder {subsystem}
+{
+  bExplicitRPM = true;
+  m_rpm = rpm;
+}
 // Called when the command is initially scheduled.
 void SpinStorageCCW::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void SpinStorageCCW::Execute() {
-  m_feeder->RotateCCW();
+  if (bExplicitRPM) {
+    m_feeder->RotateCCW(m_rpm);
+  }
+  else {
+    m_feeder->RotateCCW();
+  }
 }
 
 // Called once the command ends or is interrupted.
 void SpinStorageCCW::End(bool interrupted) {
-  m_feeder->FeedStop();
+  if (!bExplicitRPM) {
+      m_feeder->FeedStop();
+  }
 }
 
 // Returns true when the command should end.

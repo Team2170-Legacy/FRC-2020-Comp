@@ -22,6 +22,7 @@ class SpinStorageCCW
     : public frc2::CommandHelper<frc2::CommandBase, SpinStorageCCW> {
  public:
   SpinStorageCCW(Feeder* subsystem);
+  SpinStorageCCW(Feeder* sybsystem, double rpm);
 
   void Initialize() override;
 
@@ -33,4 +34,6 @@ class SpinStorageCCW
 
 private:
   Feeder* m_feeder;
+  double m_rpm;
+  bool bExplicitRPM = false;
 };

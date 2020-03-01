@@ -24,4 +24,5 @@ class AutoSetShootHigh
 
 private:
   const double kHighShooterSpeed;
+  const double kFeederSpeed;
 };
