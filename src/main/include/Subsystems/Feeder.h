@@ -36,7 +36,9 @@ public:
 	Feeder();
 	void Periodic() override;
 	void RotateCW(void);
+	void RotateCW(double rpm);
 	void RotateCCW(void);
+	void RotateCCW(double rpm);
 	void FeedStop(void);
 	void Agitate(void);
 

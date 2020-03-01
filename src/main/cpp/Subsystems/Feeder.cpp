@@ -36,8 +36,16 @@ void Feeder::RotateCW(){
     m_pidStorageController.SetReference(kRotateRPM, rev::ControlType::kSmartVelocity);
 }
 
+void Feeder::RotateCW(double rpm) {
+    m_pidStorageController.SetReference(rpm, rev::ControlType::kSmartVelocity);
+}
+
 void Feeder::RotateCCW(){
     m_pidStorageController.SetReference(-kRotateRPM, rev::ControlType::kSmartVelocity);
+}
+
+void Feeder::RotateCCW(double rpm) {
+    m_pidStorageController.SetReference(-rpm, rev::ControlType::kSmartVelocity);
 }
 
 void Feeder::FeedStop(){
