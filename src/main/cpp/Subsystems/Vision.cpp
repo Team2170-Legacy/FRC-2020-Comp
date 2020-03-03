@@ -37,15 +37,14 @@ Vision::Vision() {
     nt_kI_Omega.SetDouble(kI_Omega);
     nt_kP_Distance.SetDouble(kP_Distance);
     nt_angle_DB.SetDouble(angleErrorDeadband);
-    nt_takePeriodicSnapshots = table->GetEntry("Take Periodic Snapshots");
-    nt_takePeriodicSnapshots.SetBoolean(takePeriodicSnapshots);
     nt_competitionMode = table->GetEntry("Competition Mode Vision");
     nt_competitionMode.SetBoolean(competitionMode);
 
     // get driverstation preferences
     acceptableAlignmentError = frc::Preferences::GetInstance()->GetDouble(acceptableAlignmentErrorPrefName, acceptableAlignmentError);
     distanceSetpoint = frc::Preferences::GetInstance()->GetDouble(distanceSetpointPrefName, distanceSetpoint);
-
+    takePeriodicSnapshots = frc::Preferences::GetInstance()->GetBoolean(takePeriodicSnapshotsPrefName, takePeriodicSnapshots);
+    
     // open a datalogging file
     visionLogger.VisionLogger("/home/lvuser/VisionLogs/VisionLog_" + DataLogger::GetTimestamp() + ".csv");
 
@@ -57,7 +56,6 @@ Vision::Vision() {
 }
 
 void Vision::Periodic() {
-    takePeriodicSnapshots = nt_takePeriodicSnapshots.GetBoolean(takePeriodicSnapshots);
     competitionMode = nt_competitionMode.GetBoolean(competitionMode);
     bool targetLocked = TargetIsLocked();
     if (visionDriveActive) {  

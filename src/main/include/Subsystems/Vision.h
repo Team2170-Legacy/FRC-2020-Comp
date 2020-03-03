@@ -63,6 +63,12 @@ private:
 	std::string acceptableAlignmentErrorPrefName = "Vision Acceptable Align Error";
 	double distanceSetpoint = 10; // optimal distance from powerport to shoot from (ft)
 	std::string distanceSetpointPrefName = "Vision Distance Setpoint";
+	bool takePeriodicSnapshots = true;
+	std::string takePeriodicSnapshotsPrefName = "Save Snapshots During VisionDrives";
+
+	// for taking periodic snapshots
+	const int loopsBetweenImages = 10;
+	int loopsSinceLastImage = 0;
 
 	// for distance calculation
 	const double powerportVisionTargetHeight = (6 + 9.25 * inches) + (1 + 5.0 * inches)/2; // height of the center of the vision target (ft)
@@ -91,12 +97,6 @@ private:
 	double angleError_DB = 0;
 	double speed = 0;
 	double omega = 0;
-
-	// for taking snapshots during visiondrives
-	bool takePeriodicSnapshots = true;
-	nt::NetworkTableEntry nt_takePeriodicSnapshots;
-	int loopsBetweenImages = 10;
-	int loopsSinceLastImage = 0;
 
 	// makes sure the LED and vision processing is on only when vision drive is being used
 	// should be set to true during competitions, false when calibrating
