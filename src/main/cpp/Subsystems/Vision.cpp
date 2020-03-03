@@ -42,10 +42,13 @@ Vision::Vision() {
     nt_competitionMode = table->GetEntry("Competition Mode Vision");
     nt_competitionMode.SetBoolean(competitionMode);
 
+    // get driverstation preferences
+    acceptableAlignmentError = frc::Preferences::GetInstance()->GetDouble(acceptableAlignmentErrorPrefName, acceptableAlignmentError);
+    distanceSetpoint = frc::Preferences::GetInstance()->GetDouble(distanceSetpointPrefName, distanceSetpoint);
+
     // open a datalogging file
     visionLogger.VisionLogger("/home/lvuser/VisionLogs/VisionLog_" + DataLogger::GetTimestamp() + ".csv");
 
-   
     if (competitionMode) {
      // LEDs should start off by default
     SetCamMode(false);
@@ -70,8 +73,8 @@ void Vision::Periodic() {
         frc::SmartDashboard::PutNumber("LED Code",LEDCodes::VLock);
         distance = GetDistanceToPowerport();
         nt_distance.SetDouble(distance);
-        optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
-        distanceError =  optimalShootingDistance - distance;
+        distanceSetpoint = frc::Preferences::GetInstance()->GetDouble(distanceSetpointPrefName, distanceSetpoint);
+        distanceError =  distanceSetpoint - distance;
         distanceError_DB = distanceError;
         angleError = GetXAngleToTarget();
         angleError_DB = angleError;
@@ -107,6 +110,17 @@ void Vision::Periodic() {
  */
 bool Vision::TargetIsLocked() {
     return (tv.GetDouble(0) == 1);
+}
+
+/**
+ * @brief Checks if the error to the target is less than a certain alignment threshold
+ * 
+ * @return true when error is less than alignment threshold and target is locked
+ * @return false when error is greater than alignment threshold or target not locked
+ */
+bool Vision::IsAlignedWithTarget() {
+    acceptableAlignmentError = frc::Preferences::GetInstance()->GetDouble(acceptableAlignmentErrorPrefName, acceptableAlignmentError);
+    return abs(GetXAngleToTarget()) <= acceptableAlignmentError && TargetIsLocked();
 }
 
 /**
@@ -167,20 +181,6 @@ void Vision::SetCamMode(bool visionProcessingEnabled) {
 }
 
 /**
- * @brief Toggles between vision processing and drive mode
- */
-void Vision::ToggleCamMode() {
-    if (camMode.GetDouble(1))
-    {
-        camMode.SetDouble(0);
-    }
-    else
-    {
-        camMode.SetDouble(1);
-    }
-}
-
-/**
  * @brief Sets the current vision processing pipeline
  * 
  * @param pipeline the pipeline to use
@@ -198,9 +198,9 @@ void Vision::SetPipeline(Pipeline pipeline) {
  }
 
 /**
- * @brief prepares for vision steer
+ * @brief prepares for vision drive
  */
-void Vision::VisionSteerInit() {
+void Vision::VisionDriveInit() {
     SetCamMode(true);
     SetLEDMode(currentPipelineMode);
     loopsSinceLastImage = loopsBetweenImages;
@@ -210,19 +210,20 @@ void Vision::VisionSteerInit() {
 }
 
 /**
- * @brief calcuates speed and omega to steer to face the target and be the optimal distance away
+ * @brief calcuates pair of speed (always 0) and omega to align with the locked target
  * 
- * @returns a pair of speed and omega to be passed to VelocityArcadeDrive method in drivetrain
+ * @returns a pair of speed and omega to be passed to AutoVelocityArcadeDrive method in drivetrain
  */
-std::pair<double, double> Vision::SteerToLockedTarget() {
- 
-    frc::SmartDashboard::PutNumber("LED Code",LEDCodes::VDrive);
+std::pair<double, double> Vision::AlignWithLockedTarget() {   
     
-    // calulate distance error
-    optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
-    distance = GetDistanceToPowerport();
-    distanceError = optimalShootingDistance - distance;
-    nt_distance.SetDouble(distance);
+    // reset omega and speed
+    omega = 0.0;
+    speed = 0.0;
+
+    // fetch gains from network tables
+    kP_Omega = nt_kP_Omega.GetDouble(kP_Omega);
+    kI_Omega = nt_kI_Omega.GetDouble(kI_Omega);
+    angleErrorDeadband = nt_angle_DB.GetDouble(angleErrorDeadband);
 
     // get angle error
     angleError = GetXAngleToTarget();
@@ -242,14 +243,6 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
         angleError_DB = angleError + angleErrorDeadband;
     }
 
-    // fetch gains from network tables
-    kP_Omega = nt_kP_Omega.GetDouble(kP_Omega);
-    kI_Omega = nt_kI_Omega.GetDouble(kI_Omega);
-    angleErrorDeadband = nt_angle_DB.GetDouble(angleErrorDeadband);
-    kP_Distance = nt_kP_Distance.GetDouble(kP_Distance);
-    omega = 0.0;
-    speed = 0.0;
-
     // omega PID calculations
     omegaIntegrator += angleError_DB * deltaTime;
     double omegaP = kP_Omega * angleError_DB;
@@ -268,47 +261,79 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
         omegaIntegrator -= angleError_DB * deltaTime; // PI anti-windup
     }
 
-    if (angleError >  -5 && angleError < 5)
-    {
-
-        // deadband distance error
-        if (distanceError < distanceErrorDeadband && distanceError > -distanceErrorDeadband)
-        {
-            distanceError_DB = 0;
-        }
-        else if (angleError > angleErrorDeadband)
-        {
-            distanceError_DB = distanceError - distanceErrorDeadband;
-        }
-        else
-        {
-            distanceError_DB = distanceError + distanceErrorDeadband;
-        }
-
-
-        // speed PID calculations
-        speed = kP_Distance * distanceError_DB;
-
-        // limit speed
-        if (speed > speedLimiter)
-        {
-            speed = speedLimiter;
-        }
-        else if (speed < -speedLimiter)
-        {
-            speed = -speedLimiter;
-        }
-
-    }
-
- 
     return std::make_pair(speed, omega);
 }
 
 /**
- * @brief ends the vision steer
+ * @brief calcuates pair of speed and omega (always 0) to drive to the right distance from the powerport
+ * Assumes the robot is already aligned with the powerport.
+ * 
+ * @returns a pair of speed and omega to be passed to AutoVelocityArcadeDrive method in drivetrain
  */
-void Vision::VisionSteerEnd() {
+std::pair<double, double> Vision::DriveToDistanceSetpoint() {
+    
+    // reset speed and omega
+    speed = 0;
+    omega = 0;
+
+    // fetch gains and preferences
+    distanceSetpoint = frc::Preferences::GetInstance()->GetDouble(distanceSetpointPrefName, distanceSetpoint);
+    kP_Distance = nt_kP_Distance.GetDouble(kP_Distance);
+
+    // calculate distance error
+    distance = GetDistanceToPowerport();
+    distanceError = distanceSetpoint - distance;
+    nt_distance.SetDouble(distance);
+
+    // deadband distance error
+    if (distanceError < distanceErrorDeadband && distanceError > -distanceErrorDeadband)
+    {
+        distanceError_DB = 0;
+    }
+    else if (angleError > angleErrorDeadband)
+    {
+        distanceError_DB = distanceError - distanceErrorDeadband;
+    }
+    else
+    {
+        distanceError_DB = distanceError + distanceErrorDeadband;
+    }
+
+    // speed PID calculations
+    speed = kP_Distance * distanceError_DB;
+
+    // limit speed
+    if (speed > speedLimiter)
+    {
+        speed = speedLimiter;
+    }
+    else if (speed < -speedLimiter)
+    {
+        speed = -speedLimiter;
+    }
+
+    return std::make_pair(speed, omega);   
+}
+
+/**
+ * @brief calcuates speed and omega to steer to face the target and be the correct distance away
+ * 
+ * @returns a pair of speed and omega to be passed to AutoVelocityArcadeDrive method in drivetrain
+ */
+std::pair<double, double> Vision::DriveToLockedTarget() {
+    if (!IsAlignedWithTarget()) {
+        return AlignWithLockedTarget();
+    }
+    else {
+        return DriveToDistanceSetpoint();
+    }
+    return std::make_pair(0, 0);     
+}
+
+/**
+ * @brief ends the vision drive
+ */
+void Vision::VisionDriveEnd() {
     if (competitionMode) {
     SetCamMode(false);
     SetLEDMode(forceOff);

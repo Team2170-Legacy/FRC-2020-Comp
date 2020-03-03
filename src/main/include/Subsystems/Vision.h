@@ -57,13 +57,18 @@ private:
 	nt::NetworkTableEntry nt_kI_Omega;
 	nt::NetworkTableEntry nt_angle_DB;
 	nt::NetworkTableEntry nt_kP_Distance;
-	
+
+	// driverstation preferences
+	double acceptableAlignmentError = 0.8; // degrees
+	std::string acceptableAlignmentErrorPrefName = "Vision Acceptable Align Error";
+	double distanceSetpoint = 10; // optimal distance from powerport to shoot from (ft)
+	std::string distanceSetpointPrefName = "Vision Distance Setpoint";
+
 	// for distance calculation
 	const double powerportVisionTargetHeight = (6 + 9.25 * inches) + (1 + 5.0 * inches)/2; // height of the center of the vision target (ft)
 	const double cameraHeight = 44.0 * inches; // height that the camera is mounted at (ft)
 	const double cameraAngle = 35; // angle camera is mounted at from horizontal (degrees)
 	const double cameraDistanceFromFrontBumper = 30.0 * inches; // (ft)
-	double optimalShootingDistance = 10; // optimal distance from powerport to shoot from (ft)
 
 	// For VisionDrive PID controller
 	double angleErrorDeadband = 0.5; // degrees
@@ -71,9 +76,9 @@ private:
 	double kI_Omega = -0.001; 
 	double kP_Distance = -0;
 	double distanceErrorDeadband = 0; // feet 
-	double omegaLimiter = 0.46;
+	double omegaLimiter = 0.5;
 	double omegaIntegrator = 0;
-	double speedLimiter = 0.7;
+	double speedLimiter = 0.5;
 	const double deltaTime = 0.02;
 
 	// for data logging
@@ -106,17 +111,19 @@ public:
 	void Periodic() override;
 
 	bool TargetIsLocked();
+	bool IsAlignedWithTarget();
 	double GetXAngleToTarget();
 	double GetDistanceToPowerport();
 	double GetLatency();
 	void SetLEDMode(LEDMode ledModeToSet);
 	void SetCamMode(bool visionProcessingEnabled);
-	void ToggleCamMode();
 	void SetPipeline(Pipeline pipeline);
 	void TakeSnapshot();
-	void VisionSteerInit();
-	std::pair<double, double> SteerToLockedTarget(void);
-	void VisionSteerEnd();
+	void VisionDriveInit();
+	std::pair<double, double> AlignWithLockedTarget();
+	std::pair<double, double> DriveToDistanceSetpoint();
+	std::pair<double, double> DriveToLockedTarget();
+	void VisionDriveEnd();
 	void EnableLogging();
 	void DisableLogging();
 };

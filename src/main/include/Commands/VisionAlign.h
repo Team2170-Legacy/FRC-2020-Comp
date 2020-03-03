@@ -12,19 +12,14 @@
 
 #include "Subsystems/Vision.h"
 #include "Subsystems/DriveTrain.h"
+
 /**
- * The same thing as VisionDrive, but to be used in autonomous.
- *
- * <p> This command differs from VisionDrive in that it terminates automatically, either
- * after a certain period of time or after the robot has reached an acceptable alignment error.
- * The other VisionDrive never finishes, will only terminate if interrupted, and should only be
- * used in Teleop. This is the command that should be used in the autonomous phase. 
- * 
+ * Aligns the robot, if autonomousPhase is true it ends automatically once an acceptable error is achieved
  */
-class VisionDriveAuto
-    : public frc2::CommandHelper<frc2::CommandBase, VisionDriveAuto> {
+class VisionAlign
+    : public frc2::CommandHelper<frc2::CommandBase, VisionAlign> {
  public:
-  VisionDriveAuto(Vision* vision, DriveTrain* drive, double acceptableError);
+  VisionAlign(Vision* vision, DriveTrain* drive, bool inAutonomousPhase = false);
 
   void Initialize() override;
 
@@ -37,5 +32,5 @@ class VisionDriveAuto
   private:
 	Vision* m_vision;
 	DriveTrain* m_drive;
-    double acceptableDegreeError;
+  bool inAutonomous;
 };
