@@ -5,10 +5,6 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#pragma once
-#include "DriveControllers/DriveController.h"
+#include "JoystickAdapters/Exponential.h"
 
-class ExponentialDrive : public DriveController {
- public:
-  ExponentialDrive();
-};
+Exponential::Exponential() {}

@@ -5,10 +5,6 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#pragma once
+#include "JoystickAdapters/LowGear.h"
 
-class DriveController {
- public:
-  DriveController();
-  std::pair<double, double> 
-};
+LowGear::LowGear() {}

@@ -5,6 +5,10 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "DriveControllers/JoystickAdapter.h"
+#pragma once
+#include "JoystickAdapters/JoystickAdapter.h"
 
-JoystickAdapter::JoystickAdapter() {}
+class Exponential : public JoystickAdapter {
+ public:
+  Exponential();
+};

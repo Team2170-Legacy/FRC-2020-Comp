@@ -6,9 +6,9 @@
 /*----------------------------------------------------------------------------*/
 
 #pragma once
+#include "JoystickAdapters/JoystickAdapter.h"
 
-class DriveController {
+class LowGear : public JoystickAdapter {
  public:
-  DriveController();
-  std::pair<double, double> 
+  LowGear();
 };

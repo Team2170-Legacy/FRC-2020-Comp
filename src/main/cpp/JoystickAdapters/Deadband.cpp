@@ -5,6 +5,6 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "DriveControllers/ExponentialDrive.h"
+#include "JoystickAdapters/Deadband.h"
 
-ExponentialDrive::ExponentialDrive() {}
+Deadband::Deadband() {}

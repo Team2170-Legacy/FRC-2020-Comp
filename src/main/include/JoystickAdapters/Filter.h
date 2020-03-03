@@ -6,9 +6,9 @@
 /*----------------------------------------------------------------------------*/
 
 #pragma once
+#include "JoystickAdapters/JoystickAdapter.h"
 
-class DriveController {
+class Filter : public JoystickAdapter {
  public:
-  DriveController();
-  std::pair<double, double> 
+  Filter();
 };

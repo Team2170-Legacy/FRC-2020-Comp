@@ -5,10 +5,6 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#pragma once
+#include "JoystickAdapters/Filter.h"
 
-class DriveController {
- public:
-  DriveController();
-  std::pair<double, double> 
-};
+Filter::Filter() {}
