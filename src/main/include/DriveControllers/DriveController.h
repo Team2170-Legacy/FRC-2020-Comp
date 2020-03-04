@@ -11,7 +11,7 @@
 
 class DriveController {
  public:
-  typedef void SetWheelVelocityFunction(DriveTrain::*SetWheelVelocity)(double, double, int);
+  typedef void (*SetWheelVelocity)(double, double, int);
   //auto SetWheelVelocity = DriveTrain::SetWheelVelocity(double left, double right, int pidSlot);
   DriveController(SetWheelVelocity SetWheelVelocityFunction, int pidSlot_in);
   virtual std::pair<double, double> GetLeftRightMotorCommands(double throttle, double rotation);
