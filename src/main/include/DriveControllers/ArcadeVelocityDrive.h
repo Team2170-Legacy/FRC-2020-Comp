@@ -10,6 +10,6 @@
 
 class ArcadeVelocityDrive: public DriveController {
  public:
-  ArcadeVelocityDrive();
-  std::pair<double, double> GetLeftRightMotorCommands(double throttle, double rotation) override;
+  ArcadeVelocityDrive(SetWheelVelocityPercentage SetWheelVelocityPercentageFunction, int pidSlot_in);
+  std::pair<double, double> GetLeftRightMotorOutputs(double throttle, double rotation) override;
 };

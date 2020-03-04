@@ -372,6 +372,24 @@ double DriveTrain::GetAverageEncoderDistance( ) {
     return(m_leftEncoder.GetPosition() + m_rightEncoder.GetPosition()) /2.0;
 }
 
+
+/**
+ * @brief Set wheel velocity of left and right wheels as percentage of max velocity 
+ * Inputs should be between -1 and 1
+ * 
+ * @param left wheel velocity between -1 and 1
+ * @param right wheel velocity between -1 and 1
+ */
+void DriveTrain::SetWheelVelocityPercentage(double left, double right, int pidSlot) {
+    left = left * maxFeetPerSec;
+    right = right * maxFeetPerSec;
+    m_pidControllerL.SetReference(left, rev::ControlType::kVelocity, pidSlot);
+    m_pidControllerR.SetReference(right, rev::ControlType::kVelocity, pidSlot);
+    leftVelocityCommand = left;
+    rightVelocityCommand = right;
+    m_Drive.FeedWatchdog();
+}
+
 /**
  * @brief Set wheel velocity of left and right wheels (FPS)
  * 

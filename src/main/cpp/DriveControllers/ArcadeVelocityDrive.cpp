@@ -7,4 +7,62 @@
 
 #include "DriveControllers/ArcadeVelocityDrive.h"
 
-ArcadeVelocityDrive::ArcadeVelocityDrive() {}
+ArcadeVelocityDrive::ArcadeVelocityDrive(SetWheelVelocityPercentage SetWheelVelocityPercentageFunction, int pidSlot_in) 
+: DriveController(SetWheelVelocityPercentageFunction, pidSlot_in) {
+}
+
+std::pair<double, double> GetLeftRightMotorOutputs(double throttle, double rotation) override {
+
+    double moveValue = throttle;
+    double rotateValue = rotation;
+
+    // local variables to hold the computed PWM values for the motors
+    double leftMotorOutput = 0;
+    double rightMotorOutput = 0;
+
+    // LeftMove and leftRotate limits to +-1.0
+    if (moveValue > 1.0)
+    {
+        moveValue = 1.0;
+    }
+    if (moveValue < -1.0)
+    {
+        moveValue = -1.0;
+    }
+    if (rotateValue > 1.0)
+    {
+        rotateValue = 1.0;
+    }
+    if (rotateValue < -1.0)
+    {
+        rotateValue = -1.0;
+    }
+
+    if (moveValue > 0.0)
+    {
+        if (rotateValue > 0.0)
+        {
+            leftMotorOutput = moveValue - rotateValue;
+            rightMotorOutput = std::max(moveValue, rotateValue);
+        }
+        else
+        {
+            leftMotorOutput = std::max(moveValue, -rotateValue);
+            rightMotorOutput = moveValue + rotateValue;
+        }
+    }
+    else
+    {
+        if (rotateValue > 0.0)
+        {
+            leftMotorOutput = -std::max(-moveValue, rotateValue);
+            rightMotorOutput = moveValue + rotateValue;
+        }
+        else
+        {
+            leftMotorOutput = moveValue - rotateValue;
+            rightMotorOutput = -std::max(-moveValue, -rotateValue);
+        }
+    }
+    return std::pair<double, double>(leftMotorOutput, rightMotorOutput);
+}

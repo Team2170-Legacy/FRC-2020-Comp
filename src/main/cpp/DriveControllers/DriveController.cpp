@@ -7,13 +7,13 @@
 
 #include "DriveControllers/DriveController.h"
 
-DriveController::DriveController(SetWheelVelocity SetWheelVelocityFunction, int pidSlot_in) {
-    SetWheelVelocityFunctionPtr = SetWheelVelocityFunction;
+DriveController::DriveController(SetWheelVelocityPercentage SetWheelVelocityPercentageFunction, int pidSlot_in) {
+    SetWheelVelocityFunctionPercentagePtr = SetWheelVelocityPercentageFunction;
     pidSlot = pidSlot_in;
 }
 
 void DriveController::SetMotorCommands(double throttle, double rotation) {
-    std::pair<double, double> commands = GetLeftRightMotorCommands(throttle, rotation);
-    (SetWheelVelocityFunctionPtr)(commands.first, commands.second, pidSlot);
+    std::pair<double, double> commands = GetLeftRightMotorOutputs(throttle, rotation);
+    (SetWheelVelocityFunctionPercentagePtr)(commands.first, commands.second, pidSlot);
 }
 
