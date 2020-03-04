@@ -12,13 +12,10 @@
 class DriveController {
  public:
   typedef void (*SetWheelVelocityPercentage)(double, double, int);
-  //auto SetWheelVelocity = DriveTrain::SetWheelVelocity(double left, double right, int pidSlot);
   DriveController(SetWheelVelocityPercentage SetWheelVelocityFunction, int pidSlot_in);
   virtual std::pair<double, double> GetLeftRightMotorOutputs(double throttle, double rotation);
   void SetMotorCommands(double throttle, double rotation);
  private:
   SetWheelVelocityPercentage SetWheelVelocityFunctionPercentagePtr;
   int pidSlot;
-  
-
 };

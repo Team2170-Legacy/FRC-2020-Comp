@@ -12,6 +12,10 @@ DriveController::DriveController(SetWheelVelocityPercentage SetWheelVelocityPerc
     pidSlot = pidSlot_in;
 }
 
+std::pair<double, double> DriveController::GetLeftRightMotorOutputs(double throttle, double rotation) {
+    return std::pair<double, double>(0, 0);
+}
+
 void DriveController::SetMotorCommands(double throttle, double rotation) {
     std::pair<double, double> commands = GetLeftRightMotorOutputs(throttle, rotation);
     (SetWheelVelocityFunctionPercentagePtr)(commands.first, commands.second, pidSlot);
