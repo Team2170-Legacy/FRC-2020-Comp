@@ -10,7 +10,9 @@
 
 class CheesyDrive: public DriveController {
  public:
-  CheesyDrive();
-  std::pair<double, double> GetLeftRightMotorCommands(double throttle, double rotation) override;
-  
+  CheesyDrive(SetWheelVelocityPercentage SetWheelVelocityPercentageFunction, int pidSlot_in);
+  std::pair<double, double> GetLeftRightMotorOutputs(double throttle, double rotation) override;
+ private:
+  double kTurnSensitivity = 1.0;
+  double mQuickStopAccumulator = 0;
 };

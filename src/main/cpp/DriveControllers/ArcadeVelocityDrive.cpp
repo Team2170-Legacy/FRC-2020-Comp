@@ -11,7 +11,7 @@ ArcadeVelocityDrive::ArcadeVelocityDrive(SetWheelVelocityPercentage SetWheelVelo
 : DriveController(SetWheelVelocityPercentageFunction, pidSlot_in) {
 }
 
-std::pair<double, double> GetLeftRightMotorOutputs(double throttle, double rotation) override {
+std::pair<double, double> GetLeftRightMotorOutputs(double throttle, double rotation) {
 
     double moveValue = throttle;
     double rotateValue = rotation;
