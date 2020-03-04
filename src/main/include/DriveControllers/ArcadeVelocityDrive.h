@@ -11,4 +11,5 @@
 class ArcadeVelocityDrive: public DriveController {
  public:
   ArcadeVelocityDrive();
+  std::pair<double, double> GetLeftRightMotorCommands(double throttle, double rotation) override;
 };

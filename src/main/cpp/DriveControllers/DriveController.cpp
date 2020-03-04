@@ -7,4 +7,15 @@
 
 #include "DriveControllers/DriveController.h"
 
-DriveController::DriveController() {}
+DriveController::DriveController((DriveTrain::*SetWheelVelocity SetWheelVelocityFunction, int pidSlot_in) {
+    SetWheelVelocityFunctionPtr = SetWheelVelocityFunction;
+    pidSlot = pidSlot_in;
+}
+
+void DriveController::SetMotorCommands(double throttle, double rotation) {
+    double left = 0;
+    double right = 0;
+    (*SetWheelVelocityFunctionPtr)(left, right, pidSlot);
+    //*SetWheelVelocityFunctionPtr.SetWheelVelocity(left, right, pidSlot);
+}
+
