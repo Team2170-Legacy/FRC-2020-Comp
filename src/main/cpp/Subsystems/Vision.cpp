@@ -12,19 +12,8 @@
 
 Vision::Vision() {
 
-    // get all limelight network table entries
-    auto table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-    tx = table->GetEntry("tx");
-	ty = table->GetEntry("ty");
-    tv = table->GetEntry("tv");
-    tl = table->GetEntry("tl");
-    getPipe = table->GetEntry("getpipe");
-	ledMode = table->GetEntry("ledMode");
-	camMode = table->GetEntry("camMode");
-	setPipe = table->GetEntry("pipeline");
-	snapshot = table->GetEntry("snapshot");
-  
-    // add our own network table entries
+    // add our own network table entries to limelight table
+    auto table = nt::NetworkTableInstance::GetDefault().GetTable(limelightTableName);
     nt_distance = table->GetEntry("distance");
     nt_distance.SetDouble(0);
     nt_visionDrive = table->GetEntry("Vision Drive");
@@ -50,20 +39,20 @@ Vision::Vision() {
 
     if (competitionMode) {
      // LEDs should start off by default
-    SetCamMode(false);
-    SetLEDMode(forceOff);
+     limelight.SetCamMode(limelight.DriverCamera);
+     limelight.SetLEDMode(limelight.forceOff);
     }
 }
 
 void Vision::Periodic() {
     competitionMode = nt_competitionMode.GetBoolean(competitionMode);
-    bool targetLocked = TargetIsLocked();
+    bool targetLocked = limelight.TargetIsLocked();
     if (visionDriveActive) {  
         if (takePeriodicSnapshots) {
             loopsSinceLastImage++;
             if (loopsSinceLastImage >= loopsBetweenImages) {
                 loopsSinceLastImage = 0;
-                TakeSnapshot();
+                limelight.TakeSnapshot();
             }
         }
     }
@@ -74,7 +63,7 @@ void Vision::Periodic() {
         distanceSetpoint = frc::Preferences::GetInstance()->GetDouble(distanceSetpointPrefName, distanceSetpoint);
         distanceError =  distanceSetpoint - distance;
         distanceError_DB = distanceError;
-        angleError = GetXAngleToTarget();
+        angleError = limelight.GetHorizontalAngleToTarget();
         angleError_DB = angleError;
         speed = 0;
         omega = 0;    
@@ -89,25 +78,15 @@ void Vision::Periodic() {
         omega = 0;        
     }
     if (competitionMode && !visionDriveActive) {
-        SetCamMode(false);
-        SetLEDMode(forceOff);
+        limelight.SetCamMode(limelight.DriverCamera);
+        limelight.SetLEDMode(limelight.forceOff);
     }
     else if (!competitionMode) {
-        SetCamMode(true);
-        SetLEDMode(currentPipelineMode);
+       limelight.SetCamMode(limelight.VisionProcessor);
+       limelight.SetLEDMode(limelight.currentPipelineMode);
     }
     visionLogger.WriteVisionData(targetLocked, visionDriveActive, distance,
                                  distanceError, distanceError_DB, angleError, angleError_DB, speed, omega);
-}
-
-/**
- * @brief Checks if a target is locked. 
- * 
- * @return true when target locked
- * @return false when target not found
- */
-bool Vision::TargetIsLocked() {
-    return (tv.GetDouble(0) == 1);
 }
 
 /**
@@ -118,17 +97,7 @@ bool Vision::TargetIsLocked() {
  */
 bool Vision::IsAlignedWithTarget() {
     acceptableAlignmentError = frc::Preferences::GetInstance()->GetDouble(acceptableAlignmentErrorPrefName, acceptableAlignmentError);
-    return abs(GetXAngleToTarget()) <= acceptableAlignmentError && TargetIsLocked();
-}
-
-/**
- * @brief Returns tx from limelight network tables
- * Should only be called if a target is locked
- * 
- * @return x-angle from target in degrees
- */
-double Vision::GetXAngleToTarget() {
-   return tx.GetDouble(0);
+    return abs(limelight.GetHorizontalAngleToTarget()) <= acceptableAlignmentError && limelight.TargetIsLocked();
 }
 
 /**
@@ -138,69 +107,16 @@ double Vision::GetXAngleToTarget() {
  * @return distance from powerport 
  */
 double Vision::GetDistanceToPowerport() {
-    double angleToTarget = (cameraAngle + ty.GetDouble(0)) * Deg2Rad;
-    double camToPowerPortDistance  = (powerportVisionTargetHeight - cameraHeight) / tan(angleToTarget);
+    double camToPowerPortDistance = limelight.GetDistanceToTarget(cameraAngle, cameraHeight, powerportVisionTargetHeight);
     return camToPowerPortDistance - cameraDistanceFromFrontBumper;
 }
-
-/**
- * @brief gets combined latency of the pipeline and image capture in ms
- * 
- * @return combined latency of the pipeline and image capture in milliseconds
- */
-double Vision::GetLatency() {
-    return tl.GetDouble(0) + 11;
-}
-
-/**
- * @brief Sets the LED Mode of the camera
- * 
- * @param ledModeToSet LEDMode enum value
- */
-void Vision::SetLEDMode(LEDMode ledModeToSet) {
-    int ledModeValue = ledModeToSet;
-    ledMode.SetDouble((double)ledModeValue);
-}
-
-/**
- * @brief Switches between vision processing and drive mode
- * 
- * @param visionProcessingEnabled true enables vision processing, false stops vision processing and increases exposure
- */
-void Vision::SetCamMode(bool visionProcessingEnabled) {
-    if (visionProcessingEnabled)
-    {
-        camMode.SetDouble(0);
-    }
-    else
-    {
-        camMode.SetDouble(1);
-    }
-}
-
-/**
- * @brief Sets the current vision processing pipeline
- * 
- * @param pipeline the pipeline to use
- */
-void Vision::SetPipeline(Pipeline pipeline) {
-    int pipelineIndex = pipeline;
-    setPipe.SetDouble((double)pipelineIndex);
-}
-
-/**
- * @brief Saves a snapshot to the limelight.
- */
- void Vision::TakeSnapshot() {
-     snapshot.SetDouble(1);
- }
 
 /**
  * @brief prepares for vision drive
  */
 void Vision::VisionDriveInit() {
-    SetCamMode(true);
-    SetLEDMode(currentPipelineMode);
+    limelight.SetCamMode(limelight.VisionProcessor);
+    limelight.SetLEDMode(limelight.currentPipelineMode);
     loopsSinceLastImage = loopsBetweenImages;
     visionDriveActive = true;
     nt_visionDrive.SetBoolean(true);
@@ -224,7 +140,7 @@ std::pair<double, double> Vision::AlignWithLockedTarget() {
     angleErrorDeadband = nt_angle_DB.GetDouble(angleErrorDeadband);
 
     // get angle error
-    angleError = GetXAngleToTarget();
+    angleError = limelight.GetHorizontalAngleToTarget();
     angleError_DB = angleError;
 
     // deadband angle error
@@ -333,8 +249,8 @@ std::pair<double, double> Vision::DriveToLockedTarget() {
  */
 void Vision::VisionDriveEnd() {
     if (competitionMode) {
-    SetCamMode(false);
-    SetLEDMode(forceOff);
+    limelight.SetCamMode(limelight.DriverCamera);
+    limelight.SetLEDMode(limelight.forceOff);
     }
     visionDriveActive = false;
     nt_visionDrive.SetBoolean(false);

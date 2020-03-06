@@ -14,19 +14,17 @@
 #include "networktables/NetworkTable.h"
 #include "networktables/NetworkTableEntry.h"
 #include "networktables/NetworkTableInstance.h"
-#include "networktables/EntryListenerFlags.h"
 #include "frc/smartdashboard/SmartDashboard.h"
 #include "frc/Preferences.h"
 
+#include "Limelight.h"
 #include "DataLogger.h"
 #include "hwcfg.h"
-
 
 #include <math.h>
 #include <cmath>
 #include <tuple>
 
-#define Deg2Rad 3.14159/180
 #define inches 1.0/12
 
 /**
@@ -38,19 +36,12 @@ class Vision: public frc2::SubsystemBase {
 private:
 	// It's desirable that everything possible is private except
 	// for methods that implement subsystem capabilities
-	
-	// network table entries for limelight communication 
-	nt::NetworkTableEntry tx;
-	nt::NetworkTableEntry ty;
-	nt::NetworkTableEntry tv;
-	nt::NetworkTableEntry tl;
-	nt::NetworkTableEntry getPipe;
-	nt::NetworkTableEntry ledMode;
-	nt::NetworkTableEntry camMode;
-	nt::NetworkTableEntry setPipe;
-	nt::NetworkTableEntry snapshot;
 
-	// network table entries for vision drive
+	// custom limelight object for communication with limelight
+    const std::string limelightTableName = "limelight";
+	Limelight limelight = Limelight(limelightTableName);
+
+	// network table entries
 	nt::NetworkTableEntry nt_visionDrive;
 	nt::NetworkTableEntry nt_distance;
 	nt::NetworkTableEntry nt_kP_Omega;
@@ -106,19 +97,9 @@ private:
 public:
   Vision();
     enum Pipeline {powerport = 0};
-	enum LEDMode {currentPipelineMode = 0, forceOff = 1, forceBlink = 2, forceOn = 3};
-
 	void Periodic() override;
-
-	bool TargetIsLocked();
 	bool IsAlignedWithTarget();
-	double GetXAngleToTarget();
 	double GetDistanceToPowerport();
-	double GetLatency();
-	void SetLEDMode(LEDMode ledModeToSet);
-	void SetCamMode(bool visionProcessingEnabled);
-	void SetPipeline(Pipeline pipeline);
-	void TakeSnapshot();
 	void VisionDriveInit();
 	std::pair<double, double> AlignWithLockedTarget();
 	std::pair<double, double> DriveToDistanceSetpoint();
