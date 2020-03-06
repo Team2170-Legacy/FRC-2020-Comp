@@ -58,5 +58,4 @@ class RobotContainer {
   void ConfigureButtonBindings();
 
   frc::XboxController m_driver{HIDIDs::kDriver};
-  frc::XboxController m_operator{HIDIDs::kOperator};
 };
