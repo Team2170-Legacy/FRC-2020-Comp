@@ -107,15 +107,6 @@ void DriveTrain::InitDefaultCommand() {
 }
 
 void DriveTrain::Periodic() {
-    // Put code here to be run every loop
-    m_odometry.Update(frc::Rotation2d(units::degree_t(GetHeading())),
-                        units::foot_t(m_leftEncoder.GetPosition()),
-                        units::foot_t(m_rightEncoder.GetPosition()));
-    frc::SmartDashboard::PutNumber("Rotation", units::unit_cast<double>(m_odometry.GetPose().Rotation().Radians()));
-    frc::SmartDashboard::PutNumber("Translation X", units::unit_cast<double>(m_odometry.GetPose().Translation().X()));
-    frc::SmartDashboard::PutNumber("Translation Y", units::unit_cast<double>(m_odometry.GetPose().Translation().Y()));
-
-
     frc::SmartDashboard::PutNumber("Left Wheel Velocity", m_leftEncoder.GetVelocity());
     frc::SmartDashboard::PutNumber("Right Wheel Velocity", m_rightEncoder.GetVelocity());   
 

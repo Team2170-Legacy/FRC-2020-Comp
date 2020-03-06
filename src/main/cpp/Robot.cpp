@@ -43,13 +43,7 @@ void Robot::DisabledPeriodic() {
 	sendLEDCode(LEDCodes::Off);
 }
 
-void Robot::AutonomousInit() {
-	m_autonomousCommand = m_container.GetAutonomousCommand();
-
-	if (m_autonomousCommand != nullptr) {
-		m_autonomousCommand->Schedule();
-	}
-}
+void Robot::AutonomousInit() {}
 
 void Robot::AutonomousPeriodic() {
 }

@@ -69,7 +69,6 @@ private:
 	const bool kGyroReverse = true;
 
 	frc::DifferentialDrive m_Drive{m_leftLead, m_rightLead};
-	frc::DifferentialDriveOdometry m_odometry{frc::Rotation2d(units::degree_t(GetHeading()))};
 	frc::ADXRS450_Gyro m_gyro;
 
 	double leftVelocityCommand = 0;
@@ -98,7 +97,6 @@ DriveTrain();
 	void ResetEncoders();
 	double GetAverageEncoderDistance();
 	void SetMaxOutput(double maxOutput);
-	double GetHeading();
 	double GetTurnRate();
 	void InitDefaultCommand();
 	frc::Pose2d GetPose();
