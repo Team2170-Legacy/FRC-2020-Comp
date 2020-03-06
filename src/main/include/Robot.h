@@ -18,14 +18,7 @@
 #include "frc/DigitalOutput.h"
 
 #include "Commands/AutonomousCommand.h"
-#include "Subsystems/Climber.h"
 #include "Subsystems/DriveTrain.h"
-#include "Subsystems/Feeder.h"
-#include "Subsystems/Intake.h"
-#include "Subsystems/Loader.h"
-#include "Subsystems/Shooter.h"
-#include "Subsystems/Vision.h"
-
 #include "RobotContainer.h"
 #include "hwcfg.h"
 

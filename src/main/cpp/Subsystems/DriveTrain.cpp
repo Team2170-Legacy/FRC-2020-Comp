@@ -95,8 +95,6 @@ DriveTrain::DriveTrain() :
     m_rightEncoder.SetPosition(0.0);
 
     m_Drive.SetExpiration(1.0);
-        
-    driveTrainLogger.DriveTrainLogger("/home/lvuser/DriveTrainLogs/DriveTrainLog_" + DataLogger::GetTimestamp() + ".csv");
 }
 
 void DriveTrain::InitDefaultCommand() {
@@ -125,27 +123,6 @@ void DriveTrain::Periodic() {
     frc::SmartDashboard::PutNumber("Right Wheel Position", m_rightEncoder.GetPosition());  
 
     frc::SmartDashboard::PutNumber("Gyro Position", m_gyro.GetAngle());
-
-    if (m_LoggingEnabled) {
-    double leftEncoderPosition = m_leftEncoder.GetPosition();
-    double rightEncoderPosition = m_rightEncoder.GetPosition();
-    double leftVelocity = m_leftEncoder.GetVelocity(); 
-    double rightVelocity = m_rightEncoder.GetVelocity(); 
-    double leftLeadAppliedOutput = m_leftLead.GetAppliedOutput();
-    double leftFollowAppliedOutput = m_leftFollow.GetAppliedOutput();
-    double rightLeadAppliedOutput = m_rightLead.GetAppliedOutput();
-    double rightFollowAppliedOutput = m_rightFollow.GetAppliedOutput();
-
-    double leftLeadVoltage = m_leftLead.GetBusVoltage();
-    double leftFollowVoltage = m_leftFollow.GetBusVoltage();
-    double rightLeadVoltage = m_rightLead.GetBusVoltage();
-    double rightFollowVoltage = m_rightFollow.GetBusVoltage();
-    double leftLeadCurrent = m_leftLead.GetOutputCurrent();
-    double leftFollowCurrent = m_leftFollow.GetOutputCurrent();
-    double rightLeadCurrent = m_rightLead.GetOutputCurrent();
-    double rightFollowCurrent = m_rightFollow.GetOutputCurrent();
-    driveTrainLogger.WriteDriveTrainData(leftEncoderPosition, rightEncoderPosition, leftVelocityCommand, rightVelocityCommand, leftVelocity, rightVelocity, leftLeadAppliedOutput, leftFollowAppliedOutput, rightLeadAppliedOutput, rightFollowAppliedOutput, leftLeadVoltage, leftFollowVoltage, rightLeadVoltage, rightFollowVoltage, leftLeadCurrent, leftFollowCurrent, rightLeadCurrent, rightFollowCurrent);
-    }
 }
 
 void DriveTrain::ArcadeDrive(double xSpeed, double zRotation, bool squaredInputs)
@@ -249,80 +226,6 @@ void DriveTrain::VelocityArcadeDrive(double xSpeed, double zRotation, bool squar
     m_Drive.FeedWatchdog();
 }
 
-void DriveTrain::AutoVelocityArcadeDrive(double xSpeed, double zRotation)
-{
-    double moveValue = xSpeed;
-    double rotateValue = zRotation;
-
-    static bool reported = false;
-    if (!reported)
-    {
-        HAL_Report(HALUsageReporting::kResourceType_RobotDrive, 4,
-                   HALUsageReporting::kRobotDrive_ArcadeStandard);
-        reported = true;
-    }
-
-    // local variables to hold the computed PWM values for the motors
-    double leftMotorOutput;
-    double rightMotorOutput;
-
-    // LeftMove and leftRotate limits to +-1.0
-    if (moveValue > 1.0)
-    {
-        moveValue = 1.0;
-    }
-    if (moveValue < -1.0)
-    {
-        moveValue = -1.0;
-    }
-    if (rotateValue > 1.0)
-    {
-        rotateValue = 1.0;
-    }
-    if (rotateValue < -1.0)
-    {
-        rotateValue = -1.0;
-    }
-
-    if (moveValue > 0.0)
-    {
-        if (rotateValue > 0.0)
-        {
-            leftMotorOutput = moveValue - rotateValue;
-            rightMotorOutput = std::max(moveValue, rotateValue);
-        }
-        else
-        {
-            leftMotorOutput = std::max(moveValue, -rotateValue);
-            rightMotorOutput = moveValue + rotateValue;
-        }
-    }
-    else
-    {
-        if (rotateValue > 0.0)
-        {
-            leftMotorOutput = -std::max(-moveValue, rotateValue);
-            rightMotorOutput = moveValue + rotateValue;
-        }
-        else
-        {
-            leftMotorOutput = moveValue - rotateValue;
-            rightMotorOutput = -std::max(-moveValue, -rotateValue);
-        }
-    }
-
-    double leftMotorSpeed = leftMotorOutput * maxFeetPerSec;
-    double rightMotorSpeed = rightMotorOutput * maxFeetPerSec;
-
-    leftVelocityCommand = leftMotorSpeed;
-    rightVelocityCommand = rightMotorSpeed;
-
-    // Send setpoints to pid controllers
-    m_pidControllerL.SetReference(leftMotorSpeed, rev::ControlType::kVelocity, GainSelect::kDriverVelocity);
-    m_pidControllerR.SetReference(rightMotorSpeed, rev::ControlType::kVelocity, GainSelect::kDriverVelocity);
-    m_Drive.FeedWatchdog();
-}
-
 /**
  * @brief Set voltage for left and right wheel motors (open loop)
  * 
@@ -344,50 +247,8 @@ void DriveTrain::ResetEncoders() {
     m_rightEncoder.SetPosition(0.0);
 }
 
-void DriveTrain::ResetOdometry(frc::Pose2d pose) {
-    ResetEncoders();
-    m_odometry.ResetPosition(pose,
-                frc::Rotation2d(units::degree_t(GetHeading())));
-}
 void DriveTrain::SetMaxOutput(double maxOutput) {
     m_Drive.SetMaxOutput(maxOutput);
-}
-
-double DriveTrain::GetHeading() {
-    return std::remainder(m_gyro.GetAngle(), 360) * (kGyroReverse ? -1.0 : 1.0);
-}
-
-double DriveTrain::GetTurnRate() {
-    return m_gyro.GetRate() * (kGyroReverse ? -1.0 : 1.0);
-}
-
-frc::Pose2d DriveTrain::GetPose() {return m_odometry.GetPose();}
-
-frc::DifferentialDriveWheelSpeeds DriveTrain::GetWheelSpeeds(){
-    return {units::feet_per_second_t(m_leftEncoder.GetVelocity(),
-    units::feet_per_second_t(m_rightEncoder.GetVelocity()))};
-}
-
-double DriveTrain::GetAverageEncoderDistance( ) {
-    return(m_leftEncoder.GetPosition() + m_rightEncoder.GetPosition()) /2.0;
-}
-
-
-/**
- * @brief Set wheel velocity of left and right wheels as percentage of max velocity 
- * Inputs should be between -1 and 1
- * 
- * @param left wheel velocity between -1 and 1
- * @param right wheel velocity between -1 and 1
- */
-void DriveTrain::SetWheelVelocityPercentage(double left, double right, int pidSlot) {
-    left = left * maxFeetPerSec;
-    right = right * maxFeetPerSec;
-    m_pidControllerL.SetReference(left, rev::ControlType::kVelocity, pidSlot);
-    m_pidControllerR.SetReference(right, rev::ControlType::kVelocity, pidSlot);
-    leftVelocityCommand = left;
-    rightVelocityCommand = right;
-    m_Drive.FeedWatchdog();
 }
 
 /**
@@ -436,18 +297,4 @@ void DriveTrain::SetWheelPosition(units::meter_t left, units::meter_t right, int
     units::foot_t leftFt = left;
     units::foot_t rightFt = right;
     SetWheelPosition(units::unit_cast<double>(leftFt), units::unit_cast<double>(rightFt), pidSlot);
-}
-
-/**
- * @brief starts or resumes vision data logging
- */
-void DriveTrain::EnableLogging() {
-    driveTrainLogger.StartSession();
-}
-
-/**
- * @brief ends or pauses vision data logging
- */
-void DriveTrain::DisableLogging() {
-    driveTrainLogger.EndSession();
 }

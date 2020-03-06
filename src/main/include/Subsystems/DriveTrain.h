@@ -30,7 +30,6 @@
 #include <frc/ADXRS450_Gyro.h>
 #include <frc/geometry/Rotation2d.h>
 #include <units/units.h>
-#include "DataLogger.h"
 #include "hwcfg.h"
 
 /**
@@ -69,15 +68,10 @@ private:
 	const double maxAccelPerSec;
 	const bool kGyroReverse = true;
 
-
-
 	frc::DifferentialDrive m_Drive{m_leftLead, m_rightLead};
 	frc::DifferentialDriveOdometry m_odometry{frc::Rotation2d(units::degree_t(GetHeading()))};
 	frc::ADXRS450_Gyro m_gyro;
 
-	// for data logging
-	DataLogger driveTrainLogger;
-	bool m_LoggingEnabled = false;
 	double leftVelocityCommand = 0;
 	double rightVelocityCommand = 0;
 
@@ -92,10 +86,8 @@ DriveTrain();
 	// drive control methods
 	void VelocityArcadeDrive(double xSpeed, double zRotation, bool squaredInputs = true);
 	void ArcadeDrive(double xSpeed, double zRotation, bool squaredInputs = true);
-	void AutoVelocityArcadeDrive(double xSpeed, double zRotation);
 	void SetWheelVolts(double left, double right);
 	void SetWheelVolts(double voltage);
-	void SetWheelVelocityPercentage(double left, double right, int pidSlot = 0);
 	void SetWheelVelocity(double left, double right, int pidSlot = 0);
 	void SetWheelVelocity(double velocity, int pidSlot = 0);
 	void SetWheelVelocity(units::meters_per_second_t left, units::meters_per_second_t right, int pidSlot=0);
@@ -111,9 +103,7 @@ DriveTrain();
 	void InitDefaultCommand();
 	frc::Pose2d GetPose();
 	frc::DifferentialDriveWheelSpeeds GetWheelSpeeds();
-	void ResetOdometry(frc::Pose2d pose);
-	void EnableLogging();
-	void DisableLogging();
+
 
 	enum GainSelect {
 		kDriverVelocity = 0, 
