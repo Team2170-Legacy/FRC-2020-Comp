@@ -8,7 +8,7 @@
 #pragma once
 #include "JoystickAdapters/JoystickAdapter.h"
 
-class RateLimiter : public JoystickAdapter {
+class RateLimiter {
  public:
   RateLimiter();
 };

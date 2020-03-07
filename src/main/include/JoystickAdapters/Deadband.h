@@ -7,8 +7,13 @@
 
 #pragma once
 #include "JoystickAdapters/JoystickAdapter.h"
+#include "JoystickAdapters/JoystickConstants.h"
 
-class Deadband : public JoystickAdapter {
+class Deadband {
+ private:
+  JoystickAdapter* joystick;
+ double limit;
  public:
-  Deadband();
+  Deadband(JoystickAdapter* controller, double lim);
+  double GetRawAxis(int axis);
 };

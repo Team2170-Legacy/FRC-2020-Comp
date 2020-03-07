@@ -7,4 +7,9 @@
 
 #include "JoystickAdapters/JoystickAdapter.h"
 
-JoystickAdapter::JoystickAdapter() {}
+JoystickAdapter::JoystickAdapter(std::shared_ptr<frc::XboxController> stick) {
+    joystick = stick;
+}
+double JoystickAdapter::GetRawAxis(int i){
+    joystick->GetRawAxis(i);
+}

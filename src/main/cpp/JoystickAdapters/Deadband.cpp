@@ -7,4 +7,12 @@
 
 #include "JoystickAdapters/Deadband.h"
 
-Deadband::Deadband() {}
+Deadband::Deadband(JoystickAdapter* controller, double lim) {
+    joystick = controller;
+    limit = deadband_limit;
+}
+
+double Deadband::GetRawAxis(int i){
+    double axisInput = joystick->GetRawAxis(i);
+    return fabs(axisInput) > limit ? axisInput : 0.0;
+}

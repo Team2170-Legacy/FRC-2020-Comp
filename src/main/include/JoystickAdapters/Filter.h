@@ -7,8 +7,19 @@
 
 #pragma once
 #include "JoystickAdapters/JoystickAdapter.h"
+#include "frc/LinearFilter.h"
+#include "units/units.h"
+#include "frc/Preferences.h"
 
-class Filter : public JoystickAdapter {
+#include <frc2/command/CommandBase.h>
+#include <frc2/command/CommandHelper.h>
+
+class Filter {
+ private:
+  frc::LinearFilter<double> filter;
+  JoystickAdapter* joystick;
+
  public:
-  Filter();
+  Filter(JoystickAdapter* controller, char* str, double limit, units::time::second_t rate);
+  double GetRawAxis(int axis);
 };
