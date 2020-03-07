@@ -7,12 +7,14 @@
 
 #pragma once
 #include "JoystickAdapters/JoystickAdapter.h"
+#include <cmath>
+
 
 class RateLimiter {
  private:
   JoystickAdapter* joystick;
   double delta;
-  double tn-1;
+  double tn_1;
 
  public:
   RateLimiter(JoystickAdapter* controller, double d);

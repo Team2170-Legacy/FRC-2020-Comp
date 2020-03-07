@@ -13,8 +13,8 @@ RateLimiter::RateLimiter(JoystickAdapter* controller, double d) {
 }
 
 double RateLimiter::GetRawAxis(int i){
-    double tn = controller->GetRawAxix(i);
-    double diff = fabs(tn-1 - tn);
-    tn-1 = tn;
-    return diff < delta ? diff:delta;
+    double tn = joystick->GetRawAxis(i);
+    double diff = fabs(tn_1 - tn);
+    tn_1 = tn;
+    return (diff < delta ? diff:delta);
 }

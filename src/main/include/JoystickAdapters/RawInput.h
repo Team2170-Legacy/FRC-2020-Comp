@@ -17,5 +17,5 @@ class RawInput:JoystickAdapter {
 
  public:
   RawInput(std::shared_ptr<frc::XboxController> driver);
-  double GetRawAxis(int i){joystick->GetRawAxis(i);}
+  double GetRawAxis(int i){return joystick->GetRawAxis(i);}
 };

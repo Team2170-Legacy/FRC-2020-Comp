@@ -13,5 +13,5 @@ LowGear::LowGear(JoystickAdapter* controller, double r) {
 }
 
 double LowGear::GetRawAxis(int i){
-    return controller->GetRawAxis(i)*ratio;
+    return joystick->GetRawAxis(i)*ratio;
 }
