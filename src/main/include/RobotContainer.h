@@ -71,6 +71,9 @@
 #include "Automoves/To_Trench_R.h"
 #include "Automoves/Backwards_Long.h"
 #include "Automoves/Backwards_Short.h"
+#include "Automoves/SBO_Part1.h"
+#include "Automoves/SBO_Part2.h"
+#include "Automoves/To_PwrPort_Trench.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -93,7 +96,10 @@ class RobotContainer {
     ShootFromPwrPrt_L = 4,
     ShootFromPwrPrt_R = 5,
     ShootFromPwrPrt_C = 6,
-    GatherMoreBalls = 7
+    GatherMoreBalls_L = 7,
+    GatherMoreBalls_R = 8,
+    GatherMoreBalls_C = 9,
+    StealBalls = 10
   };
   
   void StartDataLogging(void);
