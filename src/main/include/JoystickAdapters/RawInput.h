@@ -5,4 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+#pragma once
+
+#include <memory>
+#include "frc/XboxController.h"
 #include "JoystickAdapters/JoystickAdapter.h"
+
+class RawInput:JoystickAdapter {
+  private:
+    std::shared_ptr<frc::XboxController> joystick;
+
+ public:
+  RawInput(std::shared_ptr<frc::XboxController> driver);
+  double GetRawAxis(int i){joystick->GetRawAxis(i);}
+};

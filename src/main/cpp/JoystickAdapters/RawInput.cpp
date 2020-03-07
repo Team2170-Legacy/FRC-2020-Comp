@@ -5,4 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "JoystickAdapters/JoystickAdapter.h"
+#include "JoystickAdapters/RawInput.h"
+
+RawInput::RawInput(std::shared_ptr<frc::XboxController> driver) {
+    joystick = driver;
+}

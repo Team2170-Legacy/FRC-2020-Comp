@@ -11,4 +11,6 @@
 class LowGear {
  public:
   LowGear();
+  double GetRawAxis(int i);
+
 };

@@ -8,3 +8,6 @@
 #include "JoystickAdapters/LowGear.h"
 
 LowGear::LowGear() {}
+double LowGear::GetRawAxis(int i){
+    return 0.0;
+}

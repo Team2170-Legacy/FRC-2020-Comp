@@ -8,3 +8,6 @@
 #include "JoystickAdapters/RateLimiter.h"
 
 RateLimiter::RateLimiter() {}
+double RateLimiter::GetRawAxis(int i){
+    return 0.0;
+}

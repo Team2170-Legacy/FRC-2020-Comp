@@ -9,10 +9,11 @@
 #include "JoystickAdapters/JoystickAdapter.h"
 #include "JoystickAdapters/JoystickConstants.h"
 
-class Deadband {
+class Deadband:JoystickAdapter{
  private:
   JoystickAdapter* joystick;
  double limit;
+
  public:
   Deadband(JoystickAdapter* controller, double lim);
   double GetRawAxis(int axis);

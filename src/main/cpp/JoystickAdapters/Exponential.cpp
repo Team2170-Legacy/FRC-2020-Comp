@@ -7,4 +7,10 @@
 
 #include "JoystickAdapters/Exponential.h"
 
-Exponential::Exponential() {}
+Exponential::Exponential(JoystickAdapter* controller) {
+    joystick = controller;
+}
+
+double Exponential::GetRawAxis(int i){
+    return exp2(joystick->GetRawAxis(i));
+}

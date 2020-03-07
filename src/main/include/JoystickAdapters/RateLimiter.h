@@ -11,4 +11,6 @@
 class RateLimiter {
  public:
   RateLimiter();
+  double GetRawAxis(int i);
+
 };

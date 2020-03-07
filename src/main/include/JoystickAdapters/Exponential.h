@@ -7,8 +7,11 @@
 
 #pragma once
 #include "JoystickAdapters/JoystickAdapter.h"
-
-class Exponential {
+#include <cmath>
+class Exponential:JoystickAdapter {
+ private:
+  JoystickAdapter* joystick;
  public:
-  Exponential();
+  Exponential(JoystickAdapter* controller);
+  double GetRawAxis(int i);
 };

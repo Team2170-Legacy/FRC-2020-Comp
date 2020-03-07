@@ -9,10 +9,10 @@
 
 Filter::Filter(JoystickAdapter* controller, char* str, double limit, units::time::second_t rate):
 filter(frc::LinearFilter<double>::SinglePoleIIR(
-      frc::Preferences::GetInstance()->GetDouble("Speed Time Constant", 0.01), 0.02_s)){
+      frc::Preferences::GetInstance()->GetDouble(str, limit), rate)){
           joystick = controller;
 }
 
 double Filter::GetRawAxis(int i){
-    filter.Calculate(joystick->GetRawAxis(i));
+   return filter.Calculate(joystick->GetRawAxis(i));
 }
