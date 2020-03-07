@@ -7,7 +7,14 @@
 
 #pragma once
 
+#include <memory>
+#include "frc/XboxController.h"
+
 class JoystickAdapter {
+  private:
+    std::shared_ptr<frc::XboxController> joystick;
+
  public:
-  JoystickAdapter();
+  JoystickAdapter(std::shared_ptr<frc::XboxController> driver);
+  double GetRawAxis(int i);
 };
