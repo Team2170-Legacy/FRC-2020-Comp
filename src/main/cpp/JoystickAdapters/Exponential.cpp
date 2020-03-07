@@ -12,5 +12,6 @@ Exponential::Exponential(JoystickAdapter* controller) {
 }
 
 double Exponential::GetRawAxis(int i){
-    return exp2(joystick->GetRawAxis(i)*4)/16.0;
+    double input = joystick->GetRawAxis(i);
+    return (exp2(fabs(input)*4)/16.0)* (input<0 ? -1:1);
 }
