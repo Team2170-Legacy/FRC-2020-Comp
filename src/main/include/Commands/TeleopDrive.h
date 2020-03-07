@@ -10,10 +10,19 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc/LinearFilter.h>
+#include "RobotContainer.h"
+#include "DriveControllers/DriveController.h"
 #include "Subsystems/DriveTrain.h"
+#include "hwcfg.h"
 
 class TeleopDrive :  public frc2::CommandHelper<frc2::CommandBase, TeleopDrive> {
  public:
+ enum DriveMode
+  {
+    ArcadeVelocity = 0,
+    Cheesy = 1
+  };
+  DriveController driveControllers[2]; 
   TeleopDrive(DriveTrain* subsystem);
   void Initialize() override;
   void Execute() override;
@@ -22,11 +31,5 @@ class TeleopDrive :  public frc2::CommandHelper<frc2::CommandBase, TeleopDrive> 
 
 private:
   DriveTrain* m_driveTrain;
-  bool kVoltageDrive;
-  frc::LinearFilter<double> m_xAxisFilter;
-  frc::LinearFilter<double> m_turnFilter;
-  const double kMaxXRate;
-  const double kMaxTurnRate;
-  double xAxis_prev;
-  double turn_Rate_prev;
+  DriveMode m_driveMode;
 };

@@ -95,7 +95,7 @@ DriveTrain();
 	void AutoVelocityArcadeDrive(double xSpeed, double zRotation);
 	void SetWheelVolts(double left, double right);
 	void SetWheelVolts(double voltage);
-	void SetWheelVelocityPercentage(double left, double right, int pidSlot = 0);
+	static void SetWheelVelocityPercentage(DriveTrain* driveTrain, double left, double right, int pidSlot = 0);
 	void SetWheelVelocity(double left, double right, int pidSlot = 0);
 	void SetWheelVelocity(double velocity, int pidSlot = 0);
 	void SetWheelVelocity(units::meters_per_second_t left, units::meters_per_second_t right, int pidSlot=0);

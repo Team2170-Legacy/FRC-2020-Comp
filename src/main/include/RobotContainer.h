@@ -72,6 +72,10 @@
 #include "Automoves/Backwards_Long.h"
 #include "Automoves/Backwards_Short.h"
 
+#include "DriveControllers/DriveController.h"
+#include "DriveControllers/ArcadeVelocityDrive.h"
+#include "DriveControllers/CheesyDrive.h"
+
 /**
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -95,7 +99,7 @@ class RobotContainer {
     ShootFromPwrPrt_C = 6,
     GatherMoreBalls = 7
   };
-  
+
   void StartDataLogging(void);
   void EndDataLogging(void);
 
