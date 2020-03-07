@@ -14,6 +14,10 @@
 #include "DriveControllers/DriveController.h"
 #include "Subsystems/DriveTrain.h"
 #include "hwcfg.h"
+#include "JoystickAdapters/JoystickConstants.h"
+#include "JoystickAdapters/JoystickAdapter.h"
+#include "JoystickAdapters/RawInput.h"
+#include "JoystickAdapters/Deadband.h"
 
 class TeleopDrive :  public frc2::CommandHelper<frc2::CommandBase, TeleopDrive> {
  public:
@@ -22,7 +26,7 @@ class TeleopDrive :  public frc2::CommandHelper<frc2::CommandBase, TeleopDrive> 
     ArcadeVelocity = 0,
     Cheesy = 1
   };
-  DriveController driveControllers[2]; 
+  DriveController* driveControllers[2]; 
   TeleopDrive(DriveTrain* subsystem);
   void Initialize() override;
   void Execute() override;
@@ -32,4 +36,5 @@ class TeleopDrive :  public frc2::CommandHelper<frc2::CommandBase, TeleopDrive> 
 private:
   DriveTrain* m_driveTrain;
   DriveMode m_driveMode;
+  JoystickAdapter* m_joystick;
 };

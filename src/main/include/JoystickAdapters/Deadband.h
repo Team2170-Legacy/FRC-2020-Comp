@@ -9,7 +9,7 @@
 #include "JoystickAdapters/JoystickAdapter.h"
 #include "JoystickAdapters/JoystickConstants.h"
 
-class Deadband:JoystickAdapter{
+class Deadband: public JoystickAdapter{
  private:
   JoystickAdapter* joystick;
  double limit;

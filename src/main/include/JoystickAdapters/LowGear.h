@@ -8,7 +8,7 @@
 #pragma once
 #include "JoystickAdapters/JoystickAdapter.h"
 
-class LowGear {
+class LowGear: public JoystickAdapter {
  private:
   JoystickAdapter* joystick;
   double ratio;

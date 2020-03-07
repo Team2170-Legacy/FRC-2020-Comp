@@ -12,7 +12,6 @@ ArcadeVelocityDrive::ArcadeVelocityDrive(SetWheelVelocityPercentage SetWheelVelo
 }
 
 std::pair<double, double> ArcadeVelocityDrive::GetLeftRightMotorOutputs(double throttle, double rotation) {
-
     double moveValue = throttle;
     double rotateValue = rotation;
 
@@ -64,5 +63,7 @@ std::pair<double, double> ArcadeVelocityDrive::GetLeftRightMotorOutputs(double t
             rightMotorOutput = -std::max(-moveValue, -rotateValue);
         }
     }
+    printf("leftMotorOutput: %f \n", leftMotorOutput);
+    printf("rightMotorOutput: %f \n", rightMotorOutput);
     return std::pair<double, double>(leftMotorOutput, rightMotorOutput);
 }

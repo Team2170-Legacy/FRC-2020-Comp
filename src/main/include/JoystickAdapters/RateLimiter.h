@@ -10,7 +10,7 @@
 #include <cmath>
 
 
-class RateLimiter {
+class RateLimiter : public JoystickAdapter {
  private:
   JoystickAdapter* joystick;
   double delta;

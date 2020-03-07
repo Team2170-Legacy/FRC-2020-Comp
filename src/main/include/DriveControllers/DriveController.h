@@ -14,7 +14,7 @@ class DriveController {
   typedef void (*SetWheelVelocityPercentage)(DriveTrain* driveTrain, double, double, int);
   DriveController() {};
   DriveController(SetWheelVelocityPercentage SetWheelVelocityFunction, int pidSlot_in);
-  virtual std::pair<double, double> GetLeftRightMotorOutputs(double throttle, double rotation);
+  virtual std::pair<double, double> GetLeftRightMotorOutputs(double throttle, double rotation) = 0;
   void SetMotorCommands(DriveTrain* driveTrain, double throttle, double rotation);
  private:
   SetWheelVelocityPercentage SetWheelVelocityFunctionPercentagePtr;

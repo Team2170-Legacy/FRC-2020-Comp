@@ -8,7 +8,7 @@
 #pragma once
 #include "JoystickAdapters/JoystickAdapter.h"
 #include <cmath>
-class Exponential:JoystickAdapter {
+class Exponential: public JoystickAdapter {
  private:
   JoystickAdapter* joystick;
  public:

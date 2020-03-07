@@ -11,11 +11,11 @@
 #include "frc/XboxController.h"
 #include "JoystickAdapters/JoystickAdapter.h"
 
-class RawInput:JoystickAdapter {
+class RawInput: public JoystickAdapter {
   private:
     std::shared_ptr<frc::XboxController> joystick;
 
  public:
   RawInput(std::shared_ptr<frc::XboxController> driver);
-  double GetRawAxis(int i){return joystick->GetRawAxis(i);}
+  double GetRawAxis(int i){return -joystick->GetRawAxis(i);}
 };

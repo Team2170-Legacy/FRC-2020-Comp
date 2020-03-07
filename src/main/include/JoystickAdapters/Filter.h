@@ -14,7 +14,7 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 
-class Filter:JoystickAdapter {
+class Filter: public JoystickAdapter {
  private:
   frc::LinearFilter<double> filter;
   JoystickAdapter* joystick;

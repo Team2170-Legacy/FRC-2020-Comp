@@ -13,9 +13,11 @@ TeleopDrive::TeleopDrive(DriveTrain* subsystem) : m_driveTrain{subsystem}
   // Use Requires() here to declare subsystem dependencies
   // eg. Requires(Robot::chassis.get());
  // Requires(Robot::driveTrain.get());
+ //m_joystick = new Deadband(new RawInput(Robot::oi->getDriverJoystick()),deadband_limit);
+ m_joystick = new RawInput(Robot::oi->getDriverJoystick());
  m_driveMode = (DriveMode)frc::Preferences::GetInstance()->GetInt("Drive Type",(int)ArcadeVelocity);
- driveControllers[ArcadeVelocity] = ArcadeVelocityDrive(m_driveTrain->SetWheelVelocityPercentage, m_driveTrain->GainSelect::kDriverVelocity);
- driveControllers[Cheesy] = CheesyDrive(m_driveTrain->SetWheelVelocityPercentage, m_driveTrain->GainSelect::kDriverVelocity);
+ driveControllers[ArcadeVelocity] = new ArcadeVelocityDrive(m_driveTrain->SetWheelVelocityPercentage, m_driveTrain->GainSelect::kDriverVelocity);
+ driveControllers[Cheesy] = new CheesyDrive(m_driveTrain->SetWheelVelocityPercentage, m_driveTrain->GainSelect::kDriverVelocity);
  AddRequirements({subsystem});
 }
 
@@ -27,14 +29,14 @@ void TeleopDrive::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void TeleopDrive::Execute()
 {
-   double yAxis = Robot::oi->getDriverJoystick()->GetRawAxis((int)JoystickAxes::yAxis);
-   double speedPos = Robot::oi->getDriverJoystick()->GetRawAxis((int)JoystickAxes::rTrigger);
-   double speedNeg = Robot::oi->getDriverJoystick()->GetRawAxis((int)JoystickAxes::lTrigger);
+   double yAxis = m_joystick->GetRawAxis((int)JoystickAxes::yAxis);
+   double speedPos = m_joystick->GetRawAxis((int)JoystickAxes::rTrigger);
+   double speedNeg = m_joystick->GetRawAxis((int)JoystickAxes::lTrigger);
 
    double turn_rate = speedPos - speedNeg;
 
    printf("Calling Set Motor Commands \n");
-   driveControllers[m_driveMode].SetMotorCommands(m_driveTrain, yAxis, turn_rate);
+   driveControllers[m_driveMode]->SetMotorCommands(m_driveTrain, yAxis, turn_rate);
 }
 
 // Make this return true when this Command no longer needs to run execute()

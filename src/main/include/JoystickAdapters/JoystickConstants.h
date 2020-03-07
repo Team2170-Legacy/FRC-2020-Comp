@@ -3,6 +3,8 @@
 
 #include "units/units.h"
 
+#pragma once
+
 static const int deadband_limit = 0.05;
 static const units::time::second_t sample_rate = 0.02_s;
 static const double speed_time_const = 0.01;

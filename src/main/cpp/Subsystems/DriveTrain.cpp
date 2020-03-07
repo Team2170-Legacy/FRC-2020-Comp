@@ -383,12 +383,16 @@ double DriveTrain::GetAverageEncoderDistance( ) {
 void DriveTrain::SetWheelVelocityPercentage(DriveTrain* driveTrain, double left, double right, int pidSlot) {
     left = left * driveTrain->maxFeetPerSec;
     right = right * driveTrain->maxFeetPerSec;
-    driveTrain->m_pidControllerL.SetReference(left, rev::ControlType::kVelocity, pidSlot);
-    driveTrain->m_pidControllerR.SetReference(right, rev::ControlType::kVelocity, pidSlot);
+    //driveTrain->m_pidControllerL.SetReference(left, rev::ControlType::kVelocity, pidSlot);
+    //driveTrain->m_pidControllerR.SetReference(right, rev::ControlType::kVelocity, pidSlot);
+    driveTrain->m_pidControllerL.SetReference(left, rev::ControlType::kVelocity, GainSelect::kDriverVelocity);
+    driveTrain->m_pidControllerR.SetReference(right, rev::ControlType::kVelocity, GainSelect::kDriverVelocity);
     driveTrain->leftVelocityCommand = left;
     driveTrain->rightVelocityCommand = right;
     driveTrain->m_Drive.FeedWatchdog();
     printf("Setting Wheel Velocity \n");
+    printf("left: %f.2\n",left);
+    printf("right: %f.2\n",right);
 }
 
 /**
