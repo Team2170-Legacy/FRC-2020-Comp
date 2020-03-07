@@ -8,7 +8,7 @@
 #pragma once
 #include "JoystickAdapters/JoystickAdapter.h"
 
-class LowGear : public JoystickAdapter {
+class LowGear {
  public:
   LowGear();
 };
