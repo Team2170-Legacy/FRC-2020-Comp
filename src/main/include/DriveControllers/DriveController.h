@@ -11,10 +11,11 @@
 
 class DriveController {
  public:
-  typedef void (*SetWheelVelocityPercentage)(double, double, int);
+  typedef void (*SetWheelVelocityPercentage)(DriveTrain* driveTrain, double, double, int);
+  DriveController() {};
   DriveController(SetWheelVelocityPercentage SetWheelVelocityFunction, int pidSlot_in);
   virtual std::pair<double, double> GetLeftRightMotorOutputs(double throttle, double rotation);
-  void SetMotorCommands(double throttle, double rotation);
+  void SetMotorCommands(DriveTrain* driveTrain, double throttle, double rotation);
  private:
   SetWheelVelocityPercentage SetWheelVelocityFunctionPercentagePtr;
   int pidSlot;

@@ -8,69 +8,32 @@
 #include "Commands/TeleopDrive.h"
 #include "Robot.h"
 
-TeleopDrive::TeleopDrive(DriveTrain* subsystem) : m_driveTrain{subsystem},
-    kVoltageDrive{frc::Preferences::GetInstance()->GetBoolean("Voltage Driving", false)}, 
-    m_xAxisFilter {frc::LinearFilter<double>::SinglePoleIIR(
-      frc::Preferences::GetInstance()->GetDouble("Speed Time Constant", 0.01), 0.02_s)},
-    m_turnFilter {frc::LinearFilter<double>::SinglePoleIIR(
-      frc::Preferences::GetInstance()->GetDouble("Turn Time Constant", 0.01), 0.02_s)},
-    kMaxXRate {frc::Preferences::GetInstance()->GetDouble("X Max Rate", 0.10)},
-    kMaxTurnRate {frc::Preferences::GetInstance()->GetDouble("Turn Max Rate", 0.10)}
+TeleopDrive::TeleopDrive(DriveTrain* subsystem) : m_driveTrain{subsystem}
 {
   // Use Requires() here to declare subsystem dependencies
   // eg. Requires(Robot::chassis.get());
  // Requires(Robot::driveTrain.get());
+ m_driveMode = (DriveMode)frc::Preferences::GetInstance()->GetInt("Drive Mode",(int)ArcadeVelocity);
+ driveControllers[ArcadeVelocity] = ArcadeVelocityDrive(m_driveTrain->SetWheelVelocityPercentage, m_driveTrain->GainSelect::kDriverVelocity);
+ driveControllers[Cheesy] = CheesyDrive(m_driveTrain->SetWheelVelocityPercentage, m_driveTrain->GainSelect::kDriverVelocity);
  AddRequirements({subsystem});
 }
 
 // Called just before this Command runs the first time
 void TeleopDrive::Initialize() 
 {
-	xAxis_prev 	    = 0.0;
-  turn_Rate_prev   = 0.0;
 }
 
 // Called repeatedly when this Command is scheduled to run
 void TeleopDrive::Execute()
 {
-  double xAxis = m_xAxisFilter.Calculate(Robot::oi->getDriverJoystick()->GetRawAxis(1));
+   double yAxis = Robot::oi->getDriverJoystick()->GetRawAxis((int)JoystickAxes::yAxis);
+   double speedPos = Robot::oi->getDriverJoystick()->GetRawAxis((int)JoystickAxes::rTrigger);
+   double speedNeg = Robot::oi->getDriverJoystick()->GetRawAxis((int)JoystickAxes::lTrigger);
 
-  double speedPos = Robot::oi->getDriverJoystick()->GetRawAxis(3);
-  double speedNeg = Robot::oi->getDriverJoystick()->GetRawAxis(2);
+   double turn_rate = speedPos - speedNeg;
 
-  double turn_Rate = m_turnFilter.Calculate(speedPos - speedNeg);
-
-  double delta_xAxis = xAxis - xAxis_prev;
-
-  if (delta_xAxis > kMaxXRate) {
-	    xAxis_prev 	= xAxis_prev +  kMaxXRate;
-  }
-  else if (delta_xAxis < -kMaxXRate) {
- 	    xAxis_prev 	= xAxis_prev - kMaxXRate;
-  }
-  else {
-      xAxis_prev 	= xAxis;
-  };
-
-  double delta_turn_Rate = turn_Rate - turn_Rate_prev;
-
-  if (delta_turn_Rate > kMaxTurnRate) {
-    turn_Rate_prev = turn_Rate_prev + kMaxTurnRate;
-  }
-  else if (delta_turn_Rate < -kMaxTurnRate) {
-    turn_Rate_prev = turn_Rate_prev - kMaxTurnRate;
-  }   
-  else {
-    turn_Rate_prev = turn_Rate;
-  };
-
-//  m_driveTrain->VelocityArcadeDrive(-xAxis_prev, -turn_Rate, true);
-  if (kVoltageDrive) {
-    m_driveTrain->ArcadeDrive(-xAxis_prev, turn_Rate, true);
-  }
-  else {
-    m_driveTrain->VelocityArcadeDrive(-xAxis_prev, turn_Rate, true);
-  }
+   driveControllers[m_driveMode].SetMotorCommands(m_driveTrain, yAxis, turn_rate);
 }
 
 // Make this return true when this Command no longer needs to run execute()
@@ -81,6 +44,6 @@ bool TeleopDrive::IsFinished() {
 // Called once after isFinished returns true
 void TeleopDrive::End(bool interrupted) 
  {
-      xAxis_prev      = 0.0;
-      turn_Rate_prev  = 0.0;
+
  }
+
