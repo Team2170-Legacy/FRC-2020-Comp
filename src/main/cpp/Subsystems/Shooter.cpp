@@ -11,6 +11,7 @@ Shooter::Shooter() :
     maxAccel(frc::Preferences::GetInstance()->GetDouble("Shoot Accel Max", 500.0)) {
     m_shooterEncoderLead.SetPositionConversionFactor(kGearRatio);
     m_shooterEncoderLead.SetVelocityConversionFactor(kGearRatio);
+    m_shooterLead.SetInverted(true);
     m_shooterFollow.Follow(m_shooterLead, true);
 
 
