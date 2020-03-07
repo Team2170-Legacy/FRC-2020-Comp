@@ -13,7 +13,7 @@ TeleopDrive::TeleopDrive(DriveTrain* subsystem) : m_driveTrain{subsystem}
   // Use Requires() here to declare subsystem dependencies
   // eg. Requires(Robot::chassis.get());
  // Requires(Robot::driveTrain.get());
- m_driveMode = (DriveMode)frc::Preferences::GetInstance()->GetInt("Drive Mode",(int)ArcadeVelocity);
+ m_driveMode = (DriveMode)frc::Preferences::GetInstance()->GetInt("Drive Type",(int)ArcadeVelocity);
  driveControllers[ArcadeVelocity] = ArcadeVelocityDrive(m_driveTrain->SetWheelVelocityPercentage, m_driveTrain->GainSelect::kDriverVelocity);
  driveControllers[Cheesy] = CheesyDrive(m_driveTrain->SetWheelVelocityPercentage, m_driveTrain->GainSelect::kDriverVelocity);
  AddRequirements({subsystem});
@@ -33,6 +33,7 @@ void TeleopDrive::Execute()
 
    double turn_rate = speedPos - speedNeg;
 
+   printf("Calling Set Motor Commands \n");
    driveControllers[m_driveMode].SetMotorCommands(m_driveTrain, yAxis, turn_rate);
 }
 

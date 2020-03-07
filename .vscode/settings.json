@@ -102,5 +102,5 @@
     "*.inc": "cpp",
     "__config": "cpp"
   },
-  "wpilib.autoStartRioLog": false
+  "wpilib.autoStartRioLog": true
 }

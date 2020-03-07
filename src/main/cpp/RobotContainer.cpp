@@ -19,6 +19,7 @@ RobotContainer::RobotContainer() :
   kLowShooterSpeed {frc::Preferences::GetInstance()->GetDouble("Low Shooter Speed", 20.0)},
   kAutoShootTime {(units::second_t)frc::Preferences::GetInstance()->GetDouble("Auto Shoot Time", 2.0)}
 {
+  std::cout << ("Setting Default Command to TeleopDrive") << std::endl;
   m_driveTrain.SetDefaultCommand(TeleopDrive(&m_driveTrain));
   m_intake.SetDefaultCommand(TeleopIntake(&m_intake));
 
