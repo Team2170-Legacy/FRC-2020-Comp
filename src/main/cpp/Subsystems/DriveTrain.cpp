@@ -388,6 +388,7 @@ void DriveTrain::SetWheelVelocityPercentage(DriveTrain* driveTrain, double left,
     driveTrain->leftVelocityCommand = left;
     driveTrain->rightVelocityCommand = right;
     driveTrain->m_Drive.FeedWatchdog();
+    printf("Setting Wheel Velocity \n");
 }
 
 /**
