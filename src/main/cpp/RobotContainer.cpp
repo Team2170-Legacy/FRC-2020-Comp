@@ -211,7 +211,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       return new frc2::SequentialCommandGroup {
         frc2::WaitCommand((units::second_t)delay),
          PullIntakeDown(&m_intake),
-         AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_C_L,&AutoMove_To_Trench_C_R),
+         // AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_C_L,&AutoMove_To_Trench_C_R),
          AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_Trench_L, &AutoMove_To_PwrPort_Trench_R),
          AutoSetShootHigh(&m_shooter, &m_feeder),
          AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder)
@@ -220,7 +220,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       return new frc2::SequentialCommandGroup {
         frc2::WaitCommand((units::second_t)delay),
         PullIntakeDown(&m_intake),
-        AutonomousMotionProfile(&m_driveTrain, &AutoMove_SBO_Part1_L, &AutoMove_SBO_Part1_R),
+      //  AutonomousMotionProfile(&m_driveTrain, &AutoMove_SBO_Part1_L, &AutoMove_SBO_Part1_R),
         AutonomousMotionProfile(&m_driveTrain, &AutoMove_SBO_Part2_L, &AutoMove_SBO_Part2_R),
         AutoSetShootHigh(&m_shooter, &m_feeder),
         AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder)
