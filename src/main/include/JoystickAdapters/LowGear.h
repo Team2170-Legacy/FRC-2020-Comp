@@ -9,8 +9,12 @@
 #include "JoystickAdapters/JoystickAdapter.h"
 
 class LowGear {
+ private:
+  JoystickAdapter* joystick;
+  double ratio;
+
  public:
-  LowGear();
+  LowGear(JoystickAdapter* controller, double r);
   double GetRawAxis(int i);
 
 };

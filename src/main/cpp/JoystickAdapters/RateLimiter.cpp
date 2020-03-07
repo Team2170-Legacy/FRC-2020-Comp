@@ -7,7 +7,14 @@
 
 #include "JoystickAdapters/RateLimiter.h"
 
-RateLimiter::RateLimiter() {}
+RateLimiter::RateLimiter(JoystickAdapter* controller, double d) {
+    joystick = controller;
+    delta = d;
+}
+
 double RateLimiter::GetRawAxis(int i){
-    return 0.0;
+    double tn = controller->GetRawAxix(i);
+    double diff = fabs(tn-1 - tn);
+    tn-1 = tn;
+    return diff < delta ? diff:delta;
 }

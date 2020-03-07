@@ -9,8 +9,12 @@
 #include "JoystickAdapters/JoystickAdapter.h"
 
 class RateLimiter {
- public:
-  RateLimiter();
-  double GetRawAxis(int i);
+ private:
+  JoystickAdapter* joystick;
+  double delta;
+  double tn-1;
 
+ public:
+  RateLimiter(JoystickAdapter* controller, double d);
+  double GetRawAxis(int i);
 };

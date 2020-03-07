@@ -7,7 +7,11 @@
 
 #include "JoystickAdapters/LowGear.h"
 
-LowGear::LowGear() {}
+LowGear::LowGear(JoystickAdapter* controller, double r) {
+    joystick = controller;
+    ratio = r;
+}
+
 double LowGear::GetRawAxis(int i){
-    return 0.0;
+    return controller->GetRawAxis(i)*ratio;
 }
