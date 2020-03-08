@@ -14,5 +14,7 @@ ConfigShooterLow::ConfigShooterLow(Shooter* mrnoll, Feeder* mrfoss):
   shooterSpeedLow(frc::Preferences::GetInstance()->GetDouble("Low Shooter Speed", 20.0)) {
   // Add your commands here, e.g.
   // AddCommands(FooCommand(), BarCommand());
-  AddCommands(SetHoodLow(mrnoll), SetShooterSpeed(mrnoll, shooterSpeedLow), SpinStorageCCW(mrfoss));  
+  AddCommands(SetHoodLow(mrnoll), 
+    SetShooterSpeed(mrnoll, shooterSpeedLow), 
+    SpinStorageCCW(mrfoss));  
 }

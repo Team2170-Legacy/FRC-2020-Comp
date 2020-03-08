@@ -30,7 +30,9 @@ DriveTrain::DriveTrain() :
     maxAccelPerSec{frc::Preferences::GetInstance()->GetDouble("Drive Accel FPS^2", 10.0)} {
     
     compressor.reset(new frc::Compressor(0));
+    compressor->ClearAllPCMStickyFaults();
     powerDistributionPanel.reset(new frc::PowerDistributionPanel(0));
+    powerDistributionPanel->ClearStickyFaults();
 
     // Set follow motors to leaders
     m_leftFollow.Follow(m_leftLead);
