@@ -39,7 +39,10 @@ RobotContainer::RobotContainer() :
   m_trajectoryChooser.AddOption("E. Shoot from PowerPort: Start Left", ShootFromPwrPrt_L);
   m_trajectoryChooser.AddOption("F. Shoot from PowerPort: Start Right", ShootFromPwrPrt_R);
   m_trajectoryChooser.AddOption("G. Shoot from PowerPort: Start Center", ShootFromPwrPrt_C);
-  //m_trajectoryChooser.AddOption("I. Gather more balls", ToPwrPort);
+  m_trajectoryChooser.AddOption("I. Gather more balls: Start Left", GatherMoreBalls_L);
+  m_trajectoryChooser.AddOption("J. Gather more balls: Start Right", GatherMoreBalls_R);
+  m_trajectoryChooser.AddOption("K. Gather more balls: Start Center", GatherMoreBalls_C);
+  m_trajectoryChooser.AddOption("L. Steal Balls and Shoot: Start Front of Enemy Trench", StealBalls);
   frc::SmartDashboard::PutData("Auto Trajectories", &m_trajectoryChooser);
 
   // set-up delay chooser
@@ -186,10 +189,41 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
         FireShooter(&m_shooter, &m_loader, &m_feeder),
         AutonomousMotionProfile(&m_driveTrain, &AutoMove_Backwards_Long_L, &AutoMove_Backwards_Long_R)   
       };
-    case GatherMoreBalls:
+    case GatherMoreBalls_L:
       return new frc2::SequentialCommandGroup {
         frc2::WaitCommand((units::second_t)delay),
-        // Trajectory not yet complete
+         PullIntakeDown(&m_intake),
+         AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_L_L,&AutoMove_To_Trench_L_R),
+         AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_Trench_L, &AutoMove_To_PwrPort_Trench_R),
+         AutoSetShootHigh(&m_shooter, &m_feeder),
+         AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder)
+      };
+    case GatherMoreBalls_R:
+      return new frc2::SequentialCommandGroup {
+        frc2::WaitCommand((units::second_t)delay),
+         PullIntakeDown(&m_intake),
+         AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_R_L,&AutoMove_To_Trench_R_R),
+         AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_Trench_L, &AutoMove_To_PwrPort_Trench_R),
+         AutoSetShootHigh(&m_shooter, &m_feeder),
+         AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder)
+      };
+    case GatherMoreBalls_C:
+      return new frc2::SequentialCommandGroup {
+        frc2::WaitCommand((units::second_t)delay),
+         PullIntakeDown(&m_intake),
+         // AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_Trench_C_L,&AutoMove_To_Trench_C_R),
+         AutonomousMotionProfile(&m_driveTrain, &AutoMove_To_PwrPort_Trench_L, &AutoMove_To_PwrPort_Trench_R),
+         AutoSetShootHigh(&m_shooter, &m_feeder),
+         AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder)
+      };
+    case StealBalls:
+      return new frc2::SequentialCommandGroup {
+        frc2::WaitCommand((units::second_t)delay),
+        PullIntakeDown(&m_intake),
+      //  AutonomousMotionProfile(&m_driveTrain, &AutoMove_SBO_Part1_L, &AutoMove_SBO_Part1_R),
+        AutonomousMotionProfile(&m_driveTrain, &AutoMove_SBO_Part2_L, &AutoMove_SBO_Part2_R),
+        AutoSetShootHigh(&m_shooter, &m_feeder),
+        AimFireShooter(&m_shooter, &m_vision, &m_loader, &m_driveTrain, &m_feeder)
       };
   }
 
