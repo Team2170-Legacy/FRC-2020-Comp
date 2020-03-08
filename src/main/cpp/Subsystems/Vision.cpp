@@ -12,19 +12,8 @@
 
 Vision::Vision() {
 
-    // get all limelight network table entries
-    auto table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-    tx = table->GetEntry("tx");
-	ty = table->GetEntry("ty");
-    tv = table->GetEntry("tv");
-    tl = table->GetEntry("tl");
-    getPipe = table->GetEntry("getpipe");
-	ledMode = table->GetEntry("ledMode");
-	camMode = table->GetEntry("camMode");
-	setPipe = table->GetEntry("pipeline");
-	snapshot = table->GetEntry("snapshot");
-  
-    // add our own network table entries
+    // add our own network table entries to limelight table
+    auto table = nt::NetworkTableInstance::GetDefault().GetTable(limelightTableName);
     nt_distance = table->GetEntry("distance");
     nt_distance.SetDouble(0);
     nt_visionDrive = table->GetEntry("Vision Drive");
@@ -37,32 +26,33 @@ Vision::Vision() {
     nt_kI_Omega.SetDouble(kI_Omega);
     nt_kP_Distance.SetDouble(kP_Distance);
     nt_angle_DB.SetDouble(angleErrorDeadband);
-    nt_takePeriodicSnapshots = table->GetEntry("Take Periodic Snapshots");
-    nt_takePeriodicSnapshots.SetBoolean(takePeriodicSnapshots);
     nt_competitionMode = table->GetEntry("Competition Mode Vision");
     nt_competitionMode.SetBoolean(competitionMode);
 
+    // get driverstation preferences
+    acceptableAlignmentError = frc::Preferences::GetInstance()->GetDouble(acceptableAlignmentErrorPrefName, acceptableAlignmentError);
+    distanceSetpoint = frc::Preferences::GetInstance()->GetDouble(distanceSetpointPrefName, distanceSetpoint);
+    takePeriodicSnapshots = frc::Preferences::GetInstance()->GetBoolean(takePeriodicSnapshotsPrefName, takePeriodicSnapshots);
+    
     // open a datalogging file
     visionLogger.VisionLogger("/home/lvuser/VisionLogs/VisionLog_" + DataLogger::GetTimestamp() + ".csv");
 
-   
     if (competitionMode) {
      // LEDs should start off by default
-    SetCamMode(false);
-    SetLEDMode(forceOff);
+     limelight.SetCamMode(limelight.DriverCamera);
+     limelight.SetLEDMode(limelight.forceOff);
     }
 }
 
 void Vision::Periodic() {
-    takePeriodicSnapshots = nt_takePeriodicSnapshots.GetBoolean(takePeriodicSnapshots);
     competitionMode = nt_competitionMode.GetBoolean(competitionMode);
-    bool targetLocked = TargetIsLocked();
+    bool targetLocked = limelight.TargetIsLocked();
     if (visionDriveActive) {  
         if (takePeriodicSnapshots) {
             loopsSinceLastImage++;
             if (loopsSinceLastImage >= loopsBetweenImages) {
                 loopsSinceLastImage = 0;
-                TakeSnapshot();
+                limelight.TakeSnapshot();
             }
         }
     }
@@ -70,10 +60,10 @@ void Vision::Periodic() {
         frc::SmartDashboard::PutNumber("LED Code",LEDCodes::VLock);
         distance = GetDistanceToPowerport();
         nt_distance.SetDouble(distance);
-        optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
-        distanceError =  optimalShootingDistance - distance;
+        distanceSetpoint = frc::Preferences::GetInstance()->GetDouble(distanceSetpointPrefName, distanceSetpoint);
+        distanceError =  distanceSetpoint - distance;
         distanceError_DB = distanceError;
-        angleError = GetXAngleToTarget();
+        angleError = limelight.GetHorizontalAngleToTarget();
         angleError_DB = angleError;
         speed = 0;
         omega = 0;    
@@ -88,35 +78,26 @@ void Vision::Periodic() {
         omega = 0;        
     }
     if (competitionMode && !visionDriveActive) {
-        SetCamMode(false);
-        SetLEDMode(forceOff);
+        limelight.SetCamMode(limelight.DriverCamera);
+        limelight.SetLEDMode(limelight.forceOff);
     }
     else if (!competitionMode) {
-        SetCamMode(true);
-        SetLEDMode(currentPipelineMode);
+       limelight.SetCamMode(limelight.VisionProcessor);
+       limelight.SetLEDMode(limelight.currentPipelineMode);
     }
     visionLogger.WriteVisionData(targetLocked, visionDriveActive, distance,
                                  distanceError, distanceError_DB, angleError, angleError_DB, speed, omega);
 }
 
 /**
- * @brief Checks if a target is locked. 
+ * @brief Checks if the error to the target is less than a certain alignment threshold
  * 
- * @return true when target locked
- * @return false when target not found
+ * @return true when error is less than alignment threshold and target is locked
+ * @return false when error is greater than alignment threshold or target not locked
  */
-bool Vision::TargetIsLocked() {
-    return (tv.GetDouble(0) == 1);
-}
-
-/**
- * @brief Returns tx from limelight network tables
- * Should only be called if a target is locked
- * 
- * @return x-angle from target in degrees
- */
-double Vision::GetXAngleToTarget() {
-   return tx.GetDouble(0);
+bool Vision::IsAlignedWithTarget() {
+    acceptableAlignmentError = frc::Preferences::GetInstance()->GetDouble(acceptableAlignmentErrorPrefName, acceptableAlignmentError);
+    return abs(limelight.GetHorizontalAngleToTarget()) <= acceptableAlignmentError && limelight.TargetIsLocked();
 }
 
 /**
@@ -126,83 +107,16 @@ double Vision::GetXAngleToTarget() {
  * @return distance from powerport 
  */
 double Vision::GetDistanceToPowerport() {
-    double angleToTarget = (cameraAngle + ty.GetDouble(0)) * Deg2Rad;
-    double camToPowerPortDistance  = (powerportVisionTargetHeight - cameraHeight) / tan(angleToTarget);
+    double camToPowerPortDistance = limelight.GetDistanceToTarget(cameraAngle, cameraHeight, powerportVisionTargetHeight);
     return camToPowerPortDistance - cameraDistanceFromFrontBumper;
 }
 
 /**
- * @brief gets combined latency of the pipeline and image capture in ms
- * 
- * @return combined latency of the pipeline and image capture in milliseconds
+ * @brief prepares for vision drive
  */
-double Vision::GetLatency() {
-    return tl.GetDouble(0) + 11;
-}
-
-/**
- * @brief Sets the LED Mode of the camera
- * 
- * @param ledModeToSet LEDMode enum value
- */
-void Vision::SetLEDMode(LEDMode ledModeToSet) {
-    int ledModeValue = ledModeToSet;
-    ledMode.SetDouble((double)ledModeValue);
-}
-
-/**
- * @brief Switches between vision processing and drive mode
- * 
- * @param visionProcessingEnabled true enables vision processing, false stops vision processing and increases exposure
- */
-void Vision::SetCamMode(bool visionProcessingEnabled) {
-    if (visionProcessingEnabled)
-    {
-        camMode.SetDouble(0);
-    }
-    else
-    {
-        camMode.SetDouble(1);
-    }
-}
-
-/**
- * @brief Toggles between vision processing and drive mode
- */
-void Vision::ToggleCamMode() {
-    if (camMode.GetDouble(1))
-    {
-        camMode.SetDouble(0);
-    }
-    else
-    {
-        camMode.SetDouble(1);
-    }
-}
-
-/**
- * @brief Sets the current vision processing pipeline
- * 
- * @param pipeline the pipeline to use
- */
-void Vision::SetPipeline(Pipeline pipeline) {
-    int pipelineIndex = pipeline;
-    setPipe.SetDouble((double)pipelineIndex);
-}
-
-/**
- * @brief Saves a snapshot to the limelight.
- */
- void Vision::TakeSnapshot() {
-     snapshot.SetDouble(1);
- }
-
-/**
- * @brief prepares for vision steer
- */
-void Vision::VisionSteerInit() {
-    SetCamMode(true);
-    SetLEDMode(currentPipelineMode);
+void Vision::VisionDriveInit() {
+    limelight.SetCamMode(limelight.VisionProcessor);
+    limelight.SetLEDMode(limelight.currentPipelineMode);
     loopsSinceLastImage = loopsBetweenImages;
     visionDriveActive = true;
     nt_visionDrive.SetBoolean(true);
@@ -210,22 +124,23 @@ void Vision::VisionSteerInit() {
 }
 
 /**
- * @brief calcuates speed and omega to steer to face the target and be the optimal distance away
+ * @brief calcuates pair of speed (always 0) and omega to align with the locked target
  * 
- * @returns a pair of speed and omega to be passed to VelocityArcadeDrive method in drivetrain
+ * @returns a pair of speed and omega to be passed to AutoVelocityArcadeDrive method in drivetrain
  */
-std::pair<double, double> Vision::SteerToLockedTarget() {
- 
-    frc::SmartDashboard::PutNumber("LED Code",LEDCodes::VDrive);
+std::pair<double, double> Vision::AlignWithLockedTarget() {   
     
-    // calulate distance error
-    optimalShootingDistance = frc::Preferences::GetInstance()->GetDouble("Optimal Shooting Distance", optimalShootingDistance);
-    distance = GetDistanceToPowerport();
-    distanceError = optimalShootingDistance - distance;
-    nt_distance.SetDouble(distance);
+    // reset omega and speed
+    omega = 0.0;
+    speed = 0.0;
+
+    // fetch gains from network tables
+    kP_Omega = nt_kP_Omega.GetDouble(kP_Omega);
+    kI_Omega = nt_kI_Omega.GetDouble(kI_Omega);
+    angleErrorDeadband = nt_angle_DB.GetDouble(angleErrorDeadband);
 
     // get angle error
-    angleError = GetXAngleToTarget();
+    angleError = limelight.GetHorizontalAngleToTarget();
     angleError_DB = angleError;
 
     // deadband angle error
@@ -241,14 +156,6 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
     {
         angleError_DB = angleError + angleErrorDeadband;
     }
-
-    // fetch gains from network tables
-    kP_Omega = nt_kP_Omega.GetDouble(kP_Omega);
-    kI_Omega = nt_kI_Omega.GetDouble(kI_Omega);
-    angleErrorDeadband = nt_angle_DB.GetDouble(angleErrorDeadband);
-    kP_Distance = nt_kP_Distance.GetDouble(kP_Distance);
-    omega = 0.0;
-    speed = 0.0;
 
     // omega PID calculations
     omegaIntegrator += angleError_DB * deltaTime;
@@ -268,50 +175,82 @@ std::pair<double, double> Vision::SteerToLockedTarget() {
         omegaIntegrator -= angleError_DB * deltaTime; // PI anti-windup
     }
 
-    if (angleError >  -5 && angleError < 5)
-    {
-
-        // deadband distance error
-        if (distanceError < distanceErrorDeadband && distanceError > -distanceErrorDeadband)
-        {
-            distanceError_DB = 0;
-        }
-        else if (angleError > angleErrorDeadband)
-        {
-            distanceError_DB = distanceError - distanceErrorDeadband;
-        }
-        else
-        {
-            distanceError_DB = distanceError + distanceErrorDeadband;
-        }
-
-
-        // speed PID calculations
-        speed = kP_Distance * distanceError_DB;
-
-        // limit speed
-        if (speed > speedLimiter)
-        {
-            speed = speedLimiter;
-        }
-        else if (speed < -speedLimiter)
-        {
-            speed = -speedLimiter;
-        }
-
-    }
-
- 
     return std::make_pair(speed, omega);
 }
 
 /**
- * @brief ends the vision steer
+ * @brief calcuates pair of speed and omega (always 0) to drive to the right distance from the powerport
+ * Assumes the robot is already aligned with the powerport.
+ * 
+ * @returns a pair of speed and omega to be passed to AutoVelocityArcadeDrive method in drivetrain
  */
-void Vision::VisionSteerEnd() {
+std::pair<double, double> Vision::DriveToDistanceSetpoint() {
+    
+    // reset speed and omega
+    speed = 0;
+    omega = 0;
+
+    // fetch gains and preferences
+    distanceSetpoint = frc::Preferences::GetInstance()->GetDouble(distanceSetpointPrefName, distanceSetpoint);
+    kP_Distance = nt_kP_Distance.GetDouble(kP_Distance);
+
+    // calculate distance error
+    distance = GetDistanceToPowerport();
+    distanceError = distanceSetpoint - distance;
+    nt_distance.SetDouble(distance);
+
+    // deadband distance error
+    if (distanceError < distanceErrorDeadband && distanceError > -distanceErrorDeadband)
+    {
+        distanceError_DB = 0;
+    }
+    else if (angleError > angleErrorDeadband)
+    {
+        distanceError_DB = distanceError - distanceErrorDeadband;
+    }
+    else
+    {
+        distanceError_DB = distanceError + distanceErrorDeadband;
+    }
+
+    // speed PID calculations
+    speed = kP_Distance * distanceError_DB;
+
+    // limit speed
+    if (speed > speedLimiter)
+    {
+        speed = speedLimiter;
+    }
+    else if (speed < -speedLimiter)
+    {
+        speed = -speedLimiter;
+    }
+
+    return std::make_pair(speed, omega);   
+}
+
+/**
+ * @brief calcuates speed and omega to steer to face the target and be the correct distance away
+ * 
+ * @returns a pair of speed and omega to be passed to AutoVelocityArcadeDrive method in drivetrain
+ */
+std::pair<double, double> Vision::DriveToLockedTarget() {
+    if (!IsAlignedWithTarget()) {
+        return AlignWithLockedTarget();
+    }
+    else {
+        return DriveToDistanceSetpoint();
+    }
+    return std::make_pair(0, 0);     
+}
+
+/**
+ * @brief ends the vision drive
+ */
+void Vision::VisionDriveEnd() {
     if (competitionMode) {
-    SetCamMode(false);
-    SetLEDMode(forceOff);
+    limelight.SetCamMode(limelight.DriverCamera);
+    limelight.SetLEDMode(limelight.forceOff);
     }
     visionDriveActive = false;
     nt_visionDrive.SetBoolean(false);

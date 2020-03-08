@@ -9,18 +9,17 @@
 #include <frc2/command/WaitCommand.h>
 #include <frc2/command/InstantCommand.h>
 #include "Commands/AimFireShooter.h"
-#include "Commands/VisionDriveAuto.h"
+#include "Commands/VisionAlign.h"
 #include "Commands/WaitForShooterSpeed.h"
 #include "Commands/LoaderUp.h"
 #include "Commands/LoaderOff.h"
 #include "Commands/ShooterOff.h"
 
 AimFireShooter::AimFireShooter(Shooter* shooter, Vision* vision, Loader* loader, DriveTrain* drivetrain, Feeder* feeder) :
-  kVisionDriveAcceptableError {frc::Preferences::GetInstance()->GetDouble("Vision Acceptable Error", 0.8)},
   kAutoShootTime {(units::second_t)frc::Preferences::GetInstance()->GetDouble("Auto Shoot Time", 2.0)}
 {
   AddCommands(
-    VisionDriveAuto(vision, drivetrain, kVisionDriveAcceptableError).WithTimeout(3.0_s),
+    VisionAlign(vision, drivetrain, true).WithTimeout(3.0_s),
     WaitForShooterSpeed(shooter).WithTimeout(kAutoShootTime),
     LoaderUp(loader),
     frc2::WaitCommand(kAutoShootTime),

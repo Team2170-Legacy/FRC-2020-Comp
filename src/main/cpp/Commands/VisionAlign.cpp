@@ -5,32 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Commands/VisionDriveAuto.h"
+#include "Commands/VisionAlign.h"
 
-VisionDriveAuto::VisionDriveAuto(Vision* vision, DriveTrain* drive, double acceptableError) : m_vision{vision}, m_drive{drive} {
+VisionAlign::VisionAlign(Vision* vision, DriveTrain* drive, bool inAutonomousPhase) : m_vision{vision}, m_drive{drive} {
   	AddRequirements(vision);
    AddRequirements(drive);
-   acceptableDegreeError = acceptableError;
+   inAutonomous = inAutonomousPhase;
 }
 
 // Called when the command is initially scheduled.
-void VisionDriveAuto::Initialize() {
-   m_vision->VisionSteerInit();
+void VisionAlign::Initialize() {
+   m_vision->VisionDriveInit();
 }
 
 // Called repeatedly when this Command is scheduled to run
-void VisionDriveAuto::Execute() {
-    std::pair<double, double> result = m_vision->SteerToLockedTarget();
+void VisionAlign::Execute() {
+    std::pair<double, double> result = m_vision->AlignWithLockedTarget();
     m_drive->AutoVelocityArcadeDrive(result.first, result.second);
 }
 
 // Called once the command ends or is interrupted.
-void VisionDriveAuto::End(bool interrupted) {
-   m_vision->VisionSteerEnd();
+void VisionAlign::End(bool interrupted) {
+   m_vision->VisionDriveEnd();
 }
 
 // Returns true when the command should end.
-bool VisionDriveAuto::IsFinished() { 
-  return ((abs(m_vision->GetXAngleToTarget()) <= acceptableDegreeError) &&
-               m_vision->TargetIsLocked());
+bool VisionAlign::IsFinished() { 
+   return inAutonomous && m_vision->IsAlignedWithTarget();
  }

@@ -54,7 +54,7 @@
 #include "Commands/WaitForShooterSpeed.h"
 #include "Commands/AutonomousMotionProfile.h"
 #include "Commands/VisionDrive.h"
-#include "Commands/VisionDriveAuto.h"
+#include "Commands/VisionAlign.h"
 #include "Commands/ExtendWinch.h"
 #include "Commands/RetractWinch.h"
 #include "Commands/SpinStorage.h"

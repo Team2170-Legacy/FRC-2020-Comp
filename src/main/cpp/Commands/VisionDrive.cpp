@@ -22,7 +22,7 @@ m_drive{drive} {
  * @brief Called just before this Command runs the first time
  */
 void VisionDrive::Initialize() {
-    m_vision->VisionSteerInit();
+    m_vision->VisionDriveInit();
 }
 
 /**
@@ -30,7 +30,7 @@ void VisionDrive::Initialize() {
  * 
  */
 void VisionDrive::Execute() {
-        std::pair<double, double> result = m_vision->SteerToLockedTarget();
+        std::pair<double, double> result = m_vision->DriveToLockedTarget();
         m_drive->AutoVelocityArcadeDrive(result.first, result.second);
 }
 
@@ -46,5 +46,5 @@ bool VisionDrive::IsFinished() {
  * @brief Called once after isFinished returns true
  */
 void VisionDrive::End(bool interrupted) {
-    m_vision->VisionSteerEnd();
+    m_vision->VisionDriveEnd();
 }

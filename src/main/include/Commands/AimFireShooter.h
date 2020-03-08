@@ -24,8 +24,5 @@ class AimFireShooter
   AimFireShooter(Shooter* shooter, Vision* vision, Loader* loader, DriveTrain* drivetrain, Feeder* feeder);
 
 private:
-  //Vision config parameters
-  const double kVisionDriveAcceptableError = 0.8; // VisionDrives during auto will terminate once they reach this error or less
-  const double kMaxVisionDriveTime = 3.0; // VisionDrives during auto will terminate if they take longer than this time
   const units::second_t kAutoShootTime;
 };
