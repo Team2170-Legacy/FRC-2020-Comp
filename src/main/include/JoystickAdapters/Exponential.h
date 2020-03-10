@@ -11,7 +11,8 @@
 class Exponential: public JoystickAdapter {
  private:
   JoystickAdapter* joystick;
+  double m_exponent;
  public:
-  Exponential(JoystickAdapter* controller);
-  double GetRawAxis(int i);
+  Exponential(JoystickAdapter* controller, double exponent);
+  double GetRawAxis(int i) override;
 };

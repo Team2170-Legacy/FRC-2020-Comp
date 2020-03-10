@@ -18,6 +18,8 @@
 #include "JoystickAdapters/JoystickAdapter.h"
 #include "JoystickAdapters/RawInput.h"
 #include "JoystickAdapters/Deadband.h"
+#include "JoystickAdapters/Exponential.h"
+#include <frc/XboxController.h>
 
 class TeleopDrive :  public frc2::CommandHelper<frc2::CommandBase, TeleopDrive> {
  public:
@@ -27,7 +29,7 @@ class TeleopDrive :  public frc2::CommandHelper<frc2::CommandBase, TeleopDrive> 
     Cheesy = 1
   };
   DriveController* driveControllers[2]; 
-  TeleopDrive(DriveTrain* subsystem);
+  TeleopDrive(DriveTrain* subsystem, frc::XboxController *driverJoystick);
   void Initialize() override;
   void Execute() override;
   bool IsFinished() override;

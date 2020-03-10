@@ -20,7 +20,7 @@ RobotContainer::RobotContainer() :
   kAutoShootTime {(units::second_t)frc::Preferences::GetInstance()->GetDouble("Auto Shoot Time", 2.0)}
 {
   std::cout << ("Setting Default Command to TeleopDrive") << std::endl;
-  m_driveTrain.SetDefaultCommand(TeleopDrive(&m_driveTrain));
+  m_driveTrain.SetDefaultCommand(TeleopDrive(&m_driveTrain, &m_driver));
   m_intake.SetDefaultCommand(TeleopIntake(&m_intake));
 
   // Initialize all of your commands and subsystems here

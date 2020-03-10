@@ -7,6 +7,6 @@
 
 #include "JoystickAdapters/RawInput.h"
 
-RawInput::RawInput(std::shared_ptr<frc::XboxController> driver) {
-    joystick = driver;
+RawInput::RawInput(frc::XboxController *driver) {
+    joystick.reset(driver);
 }
