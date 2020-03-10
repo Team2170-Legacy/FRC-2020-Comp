@@ -42,7 +42,8 @@ void Shooter::Periodic() {
     double leadAppliedOutput = m_shooterLead.GetAppliedOutput();
     double leadVoltage = m_shooterLead.GetBusVoltage();
     double leadCurrent = m_shooterLead.GetOutputCurrent();
-    shooterLogger.WriteShooterData(leadRPM, leadAppliedOutput, leadVoltage, leadCurrent);
+    double rpmSetpoint = GetShooterSpeed();
+    shooterLogger.WriteShooterData(leadRPM, rpmSetpoint, leadAppliedOutput, leadVoltage, leadCurrent);
     frc::SmartDashboard::PutNumber("Shooter RPM", GetMotorVelocity());
     frc::SmartDashboard::PutNumber("Shooter Error", GetMotorVelocity() - CommandedVelocity);
     frc::SmartDashboard::PutBoolean("Shooter at speed", ShooterAtSpeed());
